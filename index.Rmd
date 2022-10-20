@@ -4,9 +4,33 @@ output:
   html_document:
     toc: true
     toc_float: true
-    theme: cerulean
+    theme: cosmo
 ---
 
 # This is Jeff's awesome website
 
 ![](https://media.giphy.com/media/drXGoW1iudhKw/giphy.gif)
+
+
+Here's some text. I like the internet, I use [this](https://www.google.com/) all the time to search.
+
+
+This is the cat that I like 
+![](image/NationalGeographic_2572187_3x2.webp)
+
+```{r}
+library(tidyverse)
+sample = rnorm(1000)
+mean(sample)
+```
+
+
+Heres a direct link to about page [about](about.html).
+I also made a bonus [extra page](extra_page.html)
+
+Here is the font icon [font icon](https://fontawesome.com/icons)
+
+
+
+
+

@@ -26,13 +26,17 @@ mean(sample)
 
 
 Heres a direct link to about page [about](about.html).
-I also made a bonus [extra page](extra_page.html)
 
 Here is the font icon [font icon](https://fontawesome.com/icons)
 
 
 
 <br><br><img src="images/NationalGeographic_2572187_3x2.webp" style="width:75%"><br>
+
+## New section
+
+Here is the plotly page [here](plotly.html)
+
 
 
 

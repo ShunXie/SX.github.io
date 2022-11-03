@@ -1,472 +1,144 @@
 <!DOCTYPE html>
-
-<html>
-
-<head>
-
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
-
-
-
-
-<title>My awesome website</title>
-
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
-<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<style>h1 {font-size: 34px;}
-       h1.title {font-size: 38px;}
-       h2 {font-size: 30px;}
-       h3 {font-size: 24px;}
-       h4 {font-size: 18px;}
-       h5 {font-size: 16px;}
-       h6 {font-size: 12px;}
-       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
-       pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
-<script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
-
-<style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
-
-<style type="text/css">code{white-space: pre;}</style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
-}
-</script>
-
-
-
-
-
-
-
-
-
-<style type = "text/css">
-.main-container {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-}
-img {
-  max-width:100%;
-}
-.tabbed-pane {
-  padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
-}
-button.code-folding-btn:focus {
-  outline: none;
-}
-summary {
-  display: list-item;
-}
-details > summary > p:only-child {
-  display: inline;
-}
-pre code {
-  padding: 0;
-}
-</style>
-
-
-<style type="text/css">
-.dropdown-submenu {
-  position: relative;
-}
-.dropdown-submenu>.dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-submenu:hover>.dropdown-menu {
-  display: block;
-}
-.dropdown-submenu>a:after {
-  display: block;
-  content: " ";
-  float: right;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #cccccc;
-  margin-top: 5px;
-  margin-right: -10px;
-}
-.dropdown-submenu:hover>a:after {
-  border-left-color: #adb5bd;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  border-radius: 6px 0 6px 6px;
-}
-</style>
-
-<script type="text/javascript">
-// manage active state of menu based on current page
-$(document).ready(function () {
-  // active menu anchor
-  href = window.location.pathname
-  href = href.substr(href.lastIndexOf('/') + 1)
-  if (href === "")
-    href = "index.html";
-  var menuAnchor = $('a[href="' + href + '"]');
-
-  // mark the anchor link active (and if it's in a dropdown, also mark that active)
-  var dropdown = menuAnchor.closest('li.dropdown');
-  if (window.bootstrap) { // Bootstrap 4+
-    menuAnchor.addClass('active');
-    dropdown.find('> .dropdown-toggle').addClass('active');
-  } else { // Bootstrap 3
-    menuAnchor.parent().addClass('active');
-    dropdown.addClass('active');
-  }
-
-  // Navbar adjustments
-  var navHeight = $(".navbar").first().height() + 15;
-  var style = document.createElement('style');
-  var pt = "padding-top: " + navHeight + "px; ";
-  var mt = "margin-top: -" + navHeight + "px; ";
-  var css = "";
-  // offset scroll position for anchor links (for fixed navbar)
-  for (var i = 1; i <= 6; i++) {
-    css += ".section h" + i + "{ " + pt + mt + "}\n";
-  }
-  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
-  document.head.appendChild(style);
-});
-</script>
-
-<!-- tabsets -->
-
-<style type="text/css">
-.tabset-dropdown > .nav-tabs {
-  display: inline-table;
-  max-height: 500px;
-  min-height: 44px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs > li.active {
-  display: block;
-}
-
-.tabset-dropdown > .nav-tabs > li > a,
-.tabset-dropdown > .nav-tabs > li > a:focus,
-.tabset-dropdown > .nav-tabs > li > a:hover {
-  border: none;
-  display: inline-block;
-  border-radius: 4px;
-  background-color: transparent;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
-  display: block;
-  float: none;
-}
-
-.tabset-dropdown > .nav-tabs > li {
-  display: none;
-}
-</style>
-
-<!-- code folding -->
-
-
-
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
-
-</head>
-
-<body>
-
-
-<div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
-
-
-
-
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">Home</a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="about.html">About</a>
-</li>
-<li>
-  <a href="dashboard.html">Dashboard</a>
-</li>
-<li>
-  <a href="mailto:&lt;you@youremail.com&gt;">
-    <span class="fa fa-envelope fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="http://github.com/&lt;YOUR_GH_NAME&gt;/">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div><!--/.container -->
-</div><!--/.navbar -->
-
-<div id="header">
-
-
-
-<h1 class="title toc-ignore">My awesome website</h1>
-
-</div>
-
-
-<div id="this-is-jeffs-awesome-website" class="section level1">
-<h1>This is Jeff’s awesome website</h1>
-<p><img
-src="https://media.giphy.com/media/drXGoW1iudhKw/giphy.gif" /></p>
-<p>Here’s some text. I like the internet, I use <a
-href="https://www.google.com/">this</a> all the time to search.</p>
-<p>This is the cat that I like <img
-src="image/NationalGeographic_2572187_3x2.webp" /></p>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-## ✔ ggplot2 3.3.6      ✔ purrr   0.3.4 
-## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
-## ✔ tidyr   1.2.0      ✔ stringr 1.4.1 
-## ✔ readr   2.1.2      ✔ forcats 0.5.2 
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>sample = rnorm(1000)
-mean(sample)</code></pre>
-<pre><code>## [1] 0.03926983</code></pre>
-<p>Heres a direct link to about page <a href="about.html">about</a>.</p>
-<p>Here is the font icon <a href="https://fontawesome.com/icons">font
-icon</a></p>
-<p><br><br><img src="images/NationalGeographic_2572187_3x2.webp" style="width:75%"><br></p>
-<div id="new-section" class="section level2">
-<h2>New section</h2>
-<p>Here is the plotly page <a href="plotly.html">here</a></p>
-</div>
-</div>
-
-
-
-</div>
-</div>
-
-</div>
-
-<script>
-
-// add bootstrap table styles to pandoc tables
-function bootstrapStylePandocTables() {
-  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
-}
-$(document).ready(function () {
-  bootstrapStylePandocTables();
-});
-
-
-</script>
-
-<!-- tabsets -->
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open');
-  });
-});
-</script>
-
-<!-- code folding -->
-
-<script>
-$(document).ready(function ()  {
-
-    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
-    $('.unlisted.unnumbered').addClass('toc-ignore')
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
-
-</body>
-</html>
+<html style="font-size: 16px;" lang="en"><head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Portfolio, About Us, ​Build Great Products">
+    <meta name="description" content="">
+    <title>Page 1</title>
+    <link rel="stylesheet" href="nicepage.css" media="screen">
+<link rel="stylesheet" href="Page-1.css" media="screen">
+    <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
+    <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
+    <meta name="generator" content="Nicepage 4.20.1, nicepage.com">
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+    <link id="u-page-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i">
+    
+    
+    
+    <script type="application/ld+json">{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"name": "",
+		"logo": "images/default-logo.png"
+}</script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="Page 1">
+    <meta property="og:type" content="website">
+  </head>
+  <body data-home-page="Page-1.html" data-home-page-title="Page 1" class="u-body u-xl-mode" data-lang="en"><header class="u-clearfix u-header u-header" id="sec-71e5"><div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+        <a href="https://nicepage.com" class="u-image u-logo u-image-1">
+          <img src="images/default-logo.png" class="u-logo-image u-logo-image-1">
+        </a>
+        <nav class="u-menu u-menu-dropdown u-offcanvas u-menu-1">
+          <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
+            <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
+              <svg class="u-svg-link" viewBox="0 0 24 24"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#menu-hamburger"></use></svg>
+              <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect>
+</g></svg>
+            </a>
+          </div>
+          <div class="u-nav-container">
+            <ul class="u-nav u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="About.html" style="padding: 10px 20px;">About</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="Contact.html" style="padding: 10px 20px;">Contact</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="Page-1.html" style="padding: 10px 20px;">Page 1</a>
+</li></ul>
+          </div>
+          <div class="u-nav-container-collapse">
+            <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
+              <div class="u-inner-container-layout u-sidenav-overflow">
+                <div class="u-menu-close"></div>
+                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link" href="About.html">About</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="Contact.html">Contact</a>
+</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="Page-1.html">Page 1</a>
+</li></ul>
+              </div>
+            </div>
+            <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
+          </div>
+        </nav>
+      </div></header>
+    <section class="u-align-center u-clearfix u-image u-section-1" id="carousel_30c3" data-image-width="2250" data-image-height="1500">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <h2 class="u-custom-font u-font-raleway u-text u-text-body-alt-color u-text-default u-text-1">Portfolio</h2>
+        <div class="u-align-center-xs u-container-style u-expanded-width-xs u-group u-group-1">
+          <div class="u-container-layout u-valign-middle-xs u-container-layout-1">
+            <h4 class="u-text u-text-body-alt-color u-text-default u-text-2">Shun Xie</h4>
+          </div>
+        </div>
+        <p class="u-text u-text-body-alt-color u-text-default u-text-3">This is a Profolio of me</p>
+      </div>
+    </section>
+    <section class="u-clearfix u-grey-5 u-section-2" id="carousel_7b2b">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
+          <div class="u-layout">
+            <div class="u-layout-col">
+              <div class="u-size-30">
+                <div class="u-layout-row">
+                  <div class="u-align-center u-container-style u-layout-cell u-size-30 u-layout-cell-1">
+                    <div class="u-container-layout u-valign-top u-container-layout-1">
+                      <img class="u-image u-image-default u-image-1" src="images/pexels-photo-2120114.jpeg" alt="" data-image-width="720" data-image-height="1080">
+                    </div>
+                  </div>
+                  <div class="u-container-style u-layout-cell u-size-30 u-white u-layout-cell-2">
+                    <div class="u-container-layout u-container-layout-2">
+                      <h2 class="u-custom-font u-font-raleway u-text u-text-default u-text-1">About Us</h2>
+                      <h6 class="u-text u-text-2">Sample Headline</h6>
+                      <p class="u-align-justify u-custom-font u-font-montserrat u-text u-text-3"> Article evident arrived express highest men did boy. Mistress sensible entirely am so. Quick can manor smart money hopes worth too. Comfort produce husband boy her had hearing. Law others theirs passed but wishes. You day real less till dear read. Considered use dispatched melancholy sympathize discretion led. Oh feel if up to till like.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="u-size-30">
+                <div class="u-layout-row">
+                  <div class="u-align-justify u-container-style u-layout-cell u-size-60 u-white u-layout-cell-3">
+                    <div class="u-container-layout u-valign-middle u-container-layout-3">
+                      <p class="u-custom-font u-font-montserrat u-text u-text-4"> He an thing rapid these after going drawn or. Timed she his law the spoil round defer. In surprise concerns informed betrayed he learning is ye. Ignorant formerly so ye blessing. He as spoke avoid given downs money on we. Of properly carriage shutters ye as wandered up repeated moreover.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-align-justify u-container-style u-group u-palette-1-base u-group-1">
+          <div class="u-container-layout u-valign-top u-container-layout-4">
+            <p class="u-text u-text-5"> Article evident arrived express highest men did boy. Mistress sensible entirely am so. Quick can manor smart money hopes worth too. </p>
+            <div class="u-social-icons u-spacing-10 u-social-icons-1">
+              <a class="u-social-url" title="facebook" target="_blank" href="https://facebook.com/name"><span class="u-icon u-social-facebook u-social-icon u-text-white"><svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 112 112" style=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-0e85"></use></svg><svg class="u-svg-content" viewBox="0 0 112 112" x="0" y="0" id="svg-0e85"><path fill="currentColor" d="M75.5,28.8H65.4c-1.5,0-4,0.9-4,4.3v9.4h13.9l-1.5,15.8H61.4v45.1H42.8V58.3h-8.8V42.4h8.8V32.2
+c0-7.4,3.4-18.8,18.8-18.8h13.8v15.4H75.5z"></path></svg></span>
+              </a>
+              <a class="u-social-url" title="twitter" target="_blank" href="https://twitter.com/name"><span class="u-icon u-social-icon u-social-twitter u-text-white"><svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 112 112" style=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-0d23"></use></svg><svg class="u-svg-content" viewBox="0 0 112 112" x="0" y="0" id="svg-0d23"><path fill="currentColor" d="M92.2,38.2c0,0.8,0,1.6,0,2.3c0,24.3-18.6,52.4-52.6,52.4c-10.6,0.1-20.2-2.9-28.5-8.2
+	c1.4,0.2,2.9,0.2,4.4,0.2c8.7,0,16.7-2.9,23-7.9c-8.1-0.2-14.9-5.5-17.3-12.8c1.1,0.2,2.4,0.2,3.4,0.2c1.6,0,3.3-0.2,4.8-0.7
+	c-8.4-1.6-14.9-9.2-14.9-18c0-0.2,0-0.2,0-0.2c2.5,1.4,5.4,2.2,8.4,2.3c-5-3.3-8.3-8.9-8.3-15.4c0-3.4,1-6.5,2.5-9.2
+	c9.1,11.1,22.7,18.5,38,19.2c-0.2-1.4-0.4-2.8-0.4-4.3c0.1-10,8.3-18.2,18.5-18.2c5.4,0,10.1,2.2,13.5,5.7c4.3-0.8,8.1-2.3,11.7-4.5
+	c-1.4,4.3-4.3,7.9-8.1,10.1c3.7-0.4,7.3-1.4,10.6-2.9C98.9,32.3,95.7,35.5,92.2,38.2z"></path></svg></span>
+              </a>
+              <a class="u-social-url" title="instagram" target="_blank" href="https://instagram.com/name"><span class="u-icon u-social-icon u-social-instagram u-text-white"><svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 112 112" style=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-91bb"></use></svg><svg class="u-svg-content" viewBox="0 0 112 112" x="0" y="0" id="svg-91bb"><path fill="currentColor" d="M55.9,32.9c-12.8,0-23.2,10.4-23.2,23.2s10.4,23.2,23.2,23.2s23.2-10.4,23.2-23.2S68.7,32.9,55.9,32.9z
+	 M55.9,69.4c-7.4,0-13.3-6-13.3-13.3c-0.1-7.4,6-13.3,13.3-13.3s13.3,6,13.3,13.3C69.3,63.5,63.3,69.4,55.9,69.4z"></path><path fill="#FFFFFF" d="M79.7,26.8c-3,0-5.4,2.5-5.4,5.4s2.5,5.4,5.4,5.4c3,0,5.4-2.5,5.4-5.4S82.7,26.8,79.7,26.8z"></path><path fill="currentColor" d="M78.2,11H33.5C21,11,10.8,21.3,10.8,33.7v44.7c0,12.6,10.2,22.8,22.7,22.8h44.7c12.6,0,22.7-10.2,22.7-22.7
+	V33.7C100.8,21.1,90.6,11,78.2,11z M91,78.4c0,7.1-5.8,12.8-12.8,12.8H33.5c-7.1,0-12.8-5.8-12.8-12.8V33.7
+	c0-7.1,5.8-12.8,12.8-12.8h44.7c7.1,0,12.8,5.8,12.8,12.8V78.4z"></path></svg></span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    
+    <footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-6837"><div class="u-clearfix u-sheet u-sheet-1">
+        <p class="u-small-text u-text u-text-variant u-text-1">Sample text. Click to select the Text Element.</p>
+      </div></footer>
+    <section class="u-backlink u-clearfix u-grey-80">
+      <a class="u-link" href="https://nicepage.com/website-templates" target="_blank">
+        <span>Web Templates</span>
+      </a>
+      <p class="u-text">
+        <span>created with</span>
+      </p>
+      <a class="u-link" href="https://nicepage.me" target="_blank">
+        <span>Website Builder</span>
+      </a>. 
+    </section>
+  
+</body></html>

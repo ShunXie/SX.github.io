@@ -9,14 +9,15 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Youlan Shen(ys3637), Jingyi Yao(jy3269), Yuchen Zhang(yz4437), Shun Xie(sx2337)" />
 
 
-<title>My awesome website</title>
+<title>Proposal</title>
 
 <script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -29,9 +30,6 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -231,69 +229,6 @@ $(document).ready(function () {
 
 
 
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
 
 </head>
 
@@ -301,16 +236,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -357,20 +282,69 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">My awesome website</h1>
+<h1 class="title toc-ignore">Proposal</h1>
+<h4 class="author">Youlan Shen(ys3637), Jingyi Yao(jy3269), Yuchen
+Zhang(yz4437), Shun Xie(sx2337)</h4>
 
 </div>
 
 
-<div id="this-is-jeffs-awesome-website" class="section level1">
-<h1>This is Jeff’s awesome website</h1>
-<p>This awesome website is about page</p>
+<div id="the-tentative-project-title" class="section level2">
+<h2>The tentative project title:</h2>
+<p>World Life Expectancy—Live to thrive</p>
+</div>
+<div id="the-motivation-for-this-project" class="section level2">
+<h2>The motivation for this project:</h2>
+<p>It’s a survival instinct in blood that keeps us asking ourselves, how
+do we live, and how do we live longer. People in different regions have
+different life expectancies. Even in New York, life expectancy varies
+over regions due to different economic statuses, different
+infrastructures, etc. It is natural to wonder about the factors that
+could potentially have the most influential impact on life expectancy:
+social-economic factors, public health factors, or both.</p>
+</div>
+<div id="the-planned-analyses-visualizations-coding-challenges"
+class="section level2">
+<h2>The planned analyses / visualizations / coding challenges</h2>
+<div id="analyses" class="section level4">
+<h4>Analyses:</h4>
+<ul>
+<li>Hypothesis test : difference in mean life expectancy among regions,
+e.g. developed v.s. developing countries</li>
+<li>Linear model : Fit a linear model with Y = life expectancy and
+X=economic/environmental / health determinants</li>
+</ul>
+</div>
+<div id="visualizations" class="section level4">
+<h4>Visualizations:</h4>
+<ul>
+<li>EDA Plots: variable distribution / scatter plots with best line fit
+/ correlation plot of variable</li>
+<li>Time Series Plot : life expectancy over time</li>
+<li>Interactive World Map : life expectancy in different countries and
+years</li>
+</ul>
+</div>
+<div id="challenges" class="section level4">
+<h4>Challenges :</h4>
+<ul>
+<li>Missing data：Many variables in our major dataset have missing
+values Select reasonable variables: We need to find more variables for
+our dataset, in order to cover aspects of society, economics,
+environment, health, and so on.</li>
+<li>Website Design : We want to build a fancier website with advanced
+settings</li>
+<li>R-Shiny interactive dashboard : We plan to use R-Shiny to build an
+interactive platform.</li>
+<li>Model fitting : Our dataset contains many predictors of life
+expectancy. Variable selection and interpretation could be a
+challenge</li>
+</ul>
+</div>
 </div>
 
 
 
-</div>
-</div>
 
 </div>
 
@@ -403,35 +377,6 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
-<script>
-$(document).ready(function ()  {
-
-    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
-    $('.unlisted.unnumbered').addClass('toc-ignore')
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

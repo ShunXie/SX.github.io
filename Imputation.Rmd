@@ -1,0 +1,66 @@
+---
+title: "Imputation"
+
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+suppressMessages(library(tidyverse))
+suppressMessages(library(dbplyr))
+options(tibble.print_min = 5)
+
+```
+
+# Background Information of the data
+
+First, we load and merge the data:
+
+```{r}
+country_code = 
+  read_csv("data/country-codes.csv", show_col_types = FALSE) %>% 
+  select(`ISO3166-1-Alpha-3`, `Developed / Developing Countries`)
+
+
+
+#Guess the column type of life expectancy data
+LifeExpectancy = read_csv("data/who_life_exp.csv",col_types = cols(.default = col_guess())) %>% 
+  janitor::clean_names()
+
+merged_data = merge(LifeExpectancy, country_code, by.x = "country_code", by.y = "ISO3166-1-Alpha-3" )
+```
+
+
+# Impute
+
+```{r}
+raw_mat = 
+  LifeExpectancy %>% 
+  select(-country, -country_code, -region) %>% 
+  as.matrix()
+
+imputed_mat = filling::fill.KNNimpute(raw_mat, k = 2)
+
+```
+
+```{r}
+#colnames_exp = colnames(LifeExpectancy)
+Imputed_expectancy = merged_data
+for (i in 1:(length(merged_data)-4)) {
+  Imputed_expectancy[i+3][[1]] = imputed_mat[[1]][,i]
+}
+head(Imputed_expectancy)
+```
+
+```{r}
+write.table(Imputed_expectancy , file = "data/Imputed_expectation.csv")
+
+```
+

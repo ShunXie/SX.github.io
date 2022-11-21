@@ -378,13 +378,35 @@ options(tibble.print_min = 5)</code></pre>
 LifeExpectancy = read_csv(&quot;data/who_life_exp.csv&quot;,col_types = cols(.default = col_guess())) %&gt;% 
   janitor::clean_names()
 
-merged_data = merge(LifeExpectancy, country_code, by.x = &quot;country_code&quot;, by.y = &quot;ISO3166-1-Alpha-3&quot; )</code></pre>
+merged_data_PM = merge(LifeExpectancy, country_code, by.x = &quot;country_code&quot;, by.y = &quot;ISO3166-1-Alpha-3&quot; )</code></pre>
+<p>pm 2.5</p>
+<pre class="r"><code>PM_dataset = 
+  read_csv(&quot;data/pm2.5.csv&quot;, show_col_types = FALSE, skip = 4) </code></pre>
+<pre><code>## New names:
+## • `` -&gt; `...67`</code></pre>
+<pre class="r"><code>PM_dataset_clean = 
+  PM_dataset %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(-(x1960:x1999),-(x2017:x2021)) %&gt;% 
+  pivot_longer(
+    x2000:x2016,
+    names_to = &quot;year&quot;,
+    names_prefix = &quot;x&quot;,
+    values_to = &quot;PM_value&quot;
+  ) %&gt;% 
+  select(country_code, year, PM_value) %&gt;% 
+  mutate(year = as.numeric(year))
+
+merged_data = 
+  merged_data_PM %&gt;% 
+  left_join( PM_dataset_clean, by = c(&quot;country_code&quot;,&quot;year&quot;)) %&gt;% 
+  select(country_code:une_school,PM_value,`Developed / Developing Countries`)</code></pre>
 </div>
 <div id="impute" class="section level1">
 <h1>Impute</h1>
 <pre class="r"><code>raw_mat = 
-  LifeExpectancy %&gt;% 
-  select(-country, -country_code, -region) %&gt;% 
+  merged_data %&gt;% 
+  select(-country, -country_code, -region, -`Developed / Developing Countries`) %&gt;% 
   as.matrix()
 
 imputed_mat = filling::fill.KNNimpute(raw_mat, k = 2)</code></pre>
@@ -395,40 +417,40 @@ for (i in 1:(length(merged_data)-4)) {
 }
 head(Imputed_expectancy)</code></pre>
 <pre><code>##   country_code     country                region year life_expect life_exp60
-## 1          AFG Afghanistan Eastern Mediterranean 2000    47.33730   14.73400
-## 2          AFG Afghanistan Eastern Mediterranean 2001    48.19789   14.95963
-## 3          AFG Afghanistan Eastern Mediterranean 2002    49.42569   15.20010
-## 4          AFG Afghanistan Eastern Mediterranean 2003    50.50266   15.39144
-## 5          AFG Afghanistan Eastern Mediterranean 2004    51.52863   15.56860
-## 6          AFG Afghanistan Eastern Mediterranean 2005    52.72512   15.75107
-##   adult_mortality infant_mort age1_4mort alcohol  bmi age5_19thinness
-## 1        383.5583    0.137985   0.025695 1.47439 21.7            11.0
-## 2        372.3876    0.133675   0.024500 1.94025 21.8            10.9
-## 3        354.5147    0.128320   0.023260 2.07512 21.9            10.7
-## 4        343.2169    0.122040   0.021925 2.20275 22.0            10.5
-## 5        333.8711    0.115700   0.020545 2.41274 22.2            10.3
-## 6        322.7077    0.109205   0.018945 3.48640 22.3            10.2
+## 1          AFG Afghanistan Eastern Mediterranean 2000    55.89618   15.14620
+## 2          AFG Afghanistan Eastern Mediterranean 2001    56.52523   15.20886
+## 3          AFG Afghanistan Eastern Mediterranean 2002    57.43997   15.24703
+## 4          AFG Afghanistan Eastern Mediterranean 2003    57.97100   15.35566
+## 5          AFG Afghanistan Eastern Mediterranean 2004    58.42978   15.44257
+## 6          AFG Afghanistan Eastern Mediterranean 2005    58.90924   15.52284
+##   adult_mortality infant_mort age1_4mort    alcohol  bmi age5_19thinness
+## 1        316.0496    0.098245   0.011050 0.45620553 21.7            20.6
+## 2        307.2416    0.095925   0.010625 2.65835670 21.8            20.4
+## 3        292.3430    0.093330   0.010130 0.09606280 21.9            20.2
+## 4        286.4569    0.090470   0.009655 0.09573298 22.0            20.0
+## 5        281.8943    0.087595   0.009210 1.24710704 22.1            19.8
+## 6        277.1813    0.084630   0.008785 0.01623000 22.2            19.6
 ##   age5_19obesity hepatitis measles polio diphtheria basic_water   doctors
-## 1            0.5  41.44918      32    21         31    41.14431 2.4348729
-## 2            0.5  41.39812      60    28         42    42.25467 2.2510864
-## 3            0.6  42.11362      59    22         47    43.37680 0.6178465
-## 4            0.7  42.45999      44    21         46    44.36387 0.3481835
-## 5            0.8  42.39453      43    18         47    45.35134 0.6210000
-## 6            0.8  60.97879      21    14         47    46.33602 0.9034819
-##   hospitals gni_capita  gghe_d che_gdp  une_pop une_infant une_life une_hiv
-## 1 0.7102302       2190 1.11099 1.90860 16395.47      122.2   46.522     1.0
-## 2 0.6922662       2290 2.04631 4.48352 16945.75      118.9   47.059     1.1
-## 3 0.6067707       2690 1.30863 3.32946 17519.42      115.1   47.702     1.2
-## 4 0.5949045       2820 1.46560 3.54797 18121.48      110.8   48.440     1.3
-## 5 0.5775181       3080 1.68663 3.96720 18758.15      106.2   49.263     1.3
-## 6 0.5410495       3570 1.27876 2.85220 19433.60      101.3   50.165     1.4
-##   une_gni une_poverty une_edu_spend une_literacy une_school
-## 1    2530    32.30000      2.607530     61.34299   4.902891
-## 2    2630    39.04717      2.389692     67.40542   4.144258
-## 3    3180    60.92537      2.791274     70.96043   4.134169
-## 4    3260    60.98489      2.791807     60.40339   4.155547
-## 5    3560    60.27729      2.874390     64.61786   3.974715
-## 6    4060    80.96484      2.120110     25.15626   3.250495
+## 1            0.6  77.71900      27    24         24    27.77190 1.3918105
+## 2            0.7  78.06274      37    35         33    27.79726 1.8990000
+## 3            0.8  59.71021      35    36         36    29.90076 0.8168644
+## 4            0.9  45.72630      39    41         41    32.00507 0.6706889
+## 5            1.0  72.57173      48    50         50    34.12623 0.5540827
+## 6            1.1  75.00000      50    58         58    36.26526 0.8882858
+##   hospitals gni_capita    gghe_d  che_gdp  une_pop une_infant une_life une_hiv
+## 1  11.26078   802.1334 0.7777427 5.426191 20779.95       90.6   55.841     0.1
+## 2  11.13220  4537.1476 2.8719383 7.475627 21606.99       88.0   56.308     0.1
+## 3  18.57833   870.0000 0.0841800 9.443390 22600.77       85.4   56.784     0.1
+## 4  15.67779   920.0000 0.6509600 8.941260 23680.87       82.8   57.271     0.1
+## 5  14.23977   920.0000 0.5429300 9.808470 24726.68       80.1   57.772     0.1
+## 6  11.75452  1020.0000 0.5291800 9.948290 25654.28       77.4   58.290     0.1
+##     une_gni une_poverty une_edu_spend une_literacy une_school PM_value
+## 1  931.0142    67.87061      3.831208     33.33556   1.473312      100
+## 2 1225.1817    55.21501      3.617531     43.05221   1.466293      100
+## 3 1084.1678    50.52512      2.669494     23.04596   1.708960      100
+## 4 1431.1906    56.79214      3.040833     29.09950   2.285464      100
+## 5 1524.5696    53.99754      3.567654     34.23403   2.676606      100
+## 6 1312.1564    56.56416      2.268477     42.24542   2.455681      100
 ##   Developed / Developing Countries
 ## 1                       Developing
 ## 2                       Developing

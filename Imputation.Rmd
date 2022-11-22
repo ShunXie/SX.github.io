@@ -34,16 +34,46 @@ country_code =
 LifeExpectancy = read_csv("data/who_life_exp.csv",col_types = cols(.default = col_guess())) %>% 
   janitor::clean_names()
 
-merged_data = merge(LifeExpectancy, country_code, by.x = "country_code", by.y = "ISO3166-1-Alpha-3" )
+merged_data_PM = merge(LifeExpectancy, country_code, by.x = "country_code", by.y = "ISO3166-1-Alpha-3" )
 ```
+
+pm 2.5
+```{r}
+PM_dataset = 
+  read_csv("data/pm2.5.csv", show_col_types = FALSE, skip = 4) 
+
+PM_dataset_clean = 
+  PM_dataset %>% 
+  janitor::clean_names() %>% 
+  select(-(x1960:x1999),-(x2017:x2021)) %>% 
+  pivot_longer(
+    x2000:x2016,
+    names_to = "year",
+    names_prefix = "x",
+    values_to = "PM_value"
+  ) %>% 
+  select(country_code, year, PM_value) %>% 
+  mutate(year = as.numeric(year))
+
+merged_data = 
+  merged_data_PM %>% 
+  left_join( PM_dataset_clean, by = c("country_code","year")) %>% 
+  select(country_code:une_school,PM_value,`Developed / Developing Countries`)
+
+```
+
+
+
+
+
 
 
 # Impute
 
 ```{r}
 raw_mat = 
-  LifeExpectancy %>% 
-  select(-country, -country_code, -region) %>% 
+  merged_data %>% 
+  select(-country, -country_code, -region, -`Developed / Developing Countries`) %>% 
   as.matrix()
 
 imputed_mat = filling::fill.KNNimpute(raw_mat, k = 2)
@@ -57,10 +87,15 @@ for (i in 1:(length(merged_data)-4)) {
   Imputed_expectancy[i+3][[1]] = imputed_mat[[1]][,i]
 }
 head(Imputed_expectancy)
+
 ```
 
 ```{r}
 write.table(Imputed_expectancy , file = "data/Imputed_expectation.csv")
 
 ```
+
+
+
+
 

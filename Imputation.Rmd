@@ -60,6 +60,11 @@ merged_data =
   left_join( PM_dataset_clean, by = c("country_code","year")) %>% 
   select(country_code:une_school,PM_value,`Developed / Developing Countries`)
 
+
+
+
+write.table(merged_data , file = "data/Merged_expectation.csv")
+
 ```
 
 

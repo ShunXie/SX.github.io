@@ -63,7 +63,7 @@ merged_data =
 
 
 
-write.table(merged_data , file = "data/Merged_expectation.csv")
+write.csv(merged_data , file = "data/Merged_expectation.csv")
 
 ```
 
@@ -96,7 +96,7 @@ head(Imputed_expectancy)
 ```
 
 ```{r}
-write.table(Imputed_expectancy , file = "data/Imputed_expectation.csv")
+write.csv(Imputed_expectancy , file = "data/Imputed_expectation.csv")
 
 ```
 

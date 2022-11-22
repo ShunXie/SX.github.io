@@ -365,106 +365,69 @@ div.tocify {
 <pre class="r"><code>suppressMessages(library(tidyverse))
 suppressMessages(library(dbplyr))
 options(tibble.print_min = 5)</code></pre>
-<div id="background-information-of-the-data" class="section level1">
-<h1>Background Information of the data</h1>
-<p>First, we load and merge the data:</p>
-<pre class="r"><code>country_code = 
-  read_csv(&quot;data/country-codes.csv&quot;, show_col_types = FALSE) %&gt;% 
-  select(`ISO3166-1-Alpha-3`, `Developed / Developing Countries`)
-
-
-
-#Guess the column type of life expectancy data
-LifeExpectancy = read_csv(&quot;data/who_life_exp.csv&quot;,col_types = cols(.default = col_guess())) %&gt;% 
-  janitor::clean_names()
-
-merged_data_PM = merge(LifeExpectancy, country_code, by.x = &quot;country_code&quot;, by.y = &quot;ISO3166-1-Alpha-3&quot; )</code></pre>
-<p>pm 2.5</p>
-<pre class="r"><code>PM_dataset = 
-  read_csv(&quot;data/pm2.5.csv&quot;, show_col_types = FALSE, skip = 4) </code></pre>
+<pre class="r"><code>merged_data = 
+  read_csv(&quot;data/Merged_expectation.csv&quot;, show_col_types = FALSE)</code></pre>
 <pre><code>## New names:
-## • `` -&gt; `...67`</code></pre>
-<pre class="r"><code>PM_dataset_clean = 
-  PM_dataset %&gt;% 
-  janitor::clean_names() %&gt;% 
-  select(-(x1960:x1999),-(x2017:x2021)) %&gt;% 
-  pivot_longer(
-    x2000:x2016,
-    names_to = &quot;year&quot;,
-    names_prefix = &quot;x&quot;,
-    values_to = &quot;PM_value&quot;
+## • `` -&gt; `...1`</code></pre>
+<pre class="r"><code>imputed_data = read_csv(&quot;data/Imputed_expectation.csv&quot;, show_col_types = FALSE)</code></pre>
+<pre><code>## New names:
+## • `` -&gt; `...1`</code></pre>
+<p>#Time series plot</p>
+<pre class="r"><code>merged_data %&gt;% 
+  group_by(year, `Developed / Developing Countries`) %&gt;% 
+  summarize(
+    mean_val = mean(une_life)
   ) %&gt;% 
-  select(country_code, year, PM_value) %&gt;% 
-  mutate(year = as.numeric(year))
-
-merged_data = 
-  merged_data_PM %&gt;% 
-  left_join( PM_dataset_clean, by = c(&quot;country_code&quot;,&quot;year&quot;)) %&gt;% 
-  select(country_code:une_school,PM_value,`Developed / Developing Countries`)
-
-
-
-
-write.csv(merged_data , file = &quot;data/Merged_expectation.csv&quot;)</code></pre>
-</div>
-<div id="impute" class="section level1">
-<h1>Impute</h1>
-<pre class="r"><code>raw_mat = 
+  pivot_wider(
+    values_from = mean_val,
+    names_from = `Developed / Developing Countries`
+  ) %&gt;% 
+  ggplot()+
+  geom_line(aes(x=year, y=Developed, color=&#39;a&#39;))+
+  geom_line(aes(x=year, y=Developing, color=&#39;b&#39;))+
+  scale_color_manual(name = &#39; &#39;, 
+                     values =c(&quot;a&quot;=&#39;black&#39;,&quot;b&quot;=&#39;red&#39;), 
+                     labels = c(&#39;Developed&#39;,&#39;Developing&#39;))+
+  geom_point(aes(x=year, y=Developed, color=&#39;a&#39;),shape=19,size = 3)+
+  geom_point(aes(x=year, y=Developing, color=&#39;b&#39;),color = &quot;red&quot;, shape=19,size = 3)+
+  labs(title = sprintf(&quot;Time series plot for %s&quot;, &quot;Life Expectancy&quot;) )+
+  xlab(&quot;Year&quot;)+
+  ylab(sprintf(&quot;%s&quot;,&quot;Life Expectancy&quot;))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;year&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>Time_series_plot = function(variable,merged_data){
   merged_data %&gt;% 
-  select(-country, -country_code, -region, -`Developed / Developing Countries`) %&gt;% 
-  as.matrix()
-
-imputed_mat = filling::fill.KNNimpute(raw_mat, k = 2)</code></pre>
-<pre class="r"><code>#colnames_exp = colnames(LifeExpectancy)
-Imputed_expectancy = merged_data
-for (i in 1:(length(merged_data)-4)) {
-  Imputed_expectancy[i+3][[1]] = imputed_mat[[1]][,i]
+  group_by(year, `Developed / Developing Countries`) %&gt;% 
+  summarize_at(variable,mean) %&gt;% 
+  pivot_wider(
+    values_from = variable,
+    names_from = `Developed / Developing Countries`
+  ) %&gt;% 
+  ggplot()+
+  geom_line(aes(x=year, y=Developed, color=&#39;a&#39;))+
+  geom_line(aes(x=year, y=Developing, color=&#39;b&#39;))+
+  scale_color_manual(name = &#39; &#39;, 
+                     values =c(&quot;a&quot;=&#39;black&#39;,&quot;b&quot;=&#39;red&#39;), 
+                     labels = c(&#39;Developed&#39;,&#39;Developing&#39;))+
+  geom_point(aes(x=year, y=Developed, color=&#39;a&#39;),shape=19,size = 3)+
+  geom_point(aes(x=year, y=Developing, color=&#39;b&#39;),color = &quot;red&quot;, shape=19,size = 3)+
+  labs(title = sprintf(&quot;Time series plot for %s&quot;, variable) )+
+  xlab(&quot;Year&quot;)+
+  ylab(sprintf(&quot;%s&quot;,variable))
 }
-head(Imputed_expectancy)</code></pre>
-<pre><code>##   country_code     country                region year life_expect life_exp60
-## 1          AFG Afghanistan Eastern Mediterranean 2000    55.89618   15.14620
-## 2          AFG Afghanistan Eastern Mediterranean 2001    56.52523   15.20886
-## 3          AFG Afghanistan Eastern Mediterranean 2002    57.43997   15.24703
-## 4          AFG Afghanistan Eastern Mediterranean 2003    57.97100   15.35566
-## 5          AFG Afghanistan Eastern Mediterranean 2004    58.42978   15.44257
-## 6          AFG Afghanistan Eastern Mediterranean 2005    58.90924   15.52284
-##   adult_mortality infant_mort age1_4mort   alcohol  bmi age5_19thinness
-## 1        316.0496    0.098245   0.011050 0.4562055 21.7            20.6
-## 2        307.2416    0.095925   0.010625 3.5850006 21.8            20.4
-## 3        292.3430    0.093330   0.010130 2.4964202 21.9            20.2
-## 4        286.4569    0.090470   0.009655 1.4059016 22.0            20.0
-## 5        281.8943    0.087595   0.009210 1.2471070 22.1            19.8
-## 6        277.1813    0.084630   0.008785 0.0162300 22.2            19.6
-##   age5_19obesity hepatitis measles polio diphtheria basic_water   doctors
-## 1            0.6  76.13455      27    24         24    27.77190 1.3091821
-## 2            0.7  64.48179      37    35         33    27.79726 1.8990000
-## 3            0.8  59.58910      35    36         36    29.90076 0.8537491
-## 4            0.9  45.72630      39    41         41    32.00507 0.5131754
-## 5            1.0  72.57173      48    50         50    34.12623 0.9575233
-## 6            1.1  77.74015      50    58         58    36.26526 0.8882858
-##   hospitals gni_capita    gghe_d  che_gdp  une_pop une_infant une_life une_hiv
-## 1 0.4570982   802.1334 0.7777427 4.704074 20779.95       90.6   55.841     0.1
-## 2 0.4253471  1060.0000 2.8719383 7.475627 21606.99       88.0   56.308     0.1
-## 3 0.4383122   870.0000 0.0841800 9.443390 22600.77       85.4   56.784     0.1
-## 4 0.4454031   920.0000 0.6509600 8.941260 23680.87       82.8   57.271     0.1
-## 5 0.4427387   920.0000 0.5429300 9.808470 24726.68       80.1   57.772     0.1
-## 6 0.4017234  1020.0000 0.5291800 9.948290 25654.28       77.4   58.290     0.1
-##     une_gni une_poverty une_edu_spend une_literacy une_school PM_value
-## 1  931.0142    58.54064      3.696389     26.06914   1.375748      100
-## 2 1225.1817    45.13750      3.582721     43.05221   1.479084      100
-## 3 1164.8368    45.64839      2.079068     30.36625   1.312962      100
-## 4 1431.1906    50.94358      2.445967     66.24146   2.361979      100
-## 5 3199.4367    52.61218      2.489254     67.41440   2.335432      100
-## 6 1157.3764    49.71128      1.623665     60.69469   1.828931      100
-##   Developed / Developing Countries
-## 1                       Developing
-## 2                       Developing
-## 3                       Developing
-## 4                       Developing
-## 5                       Developing
-## 6                       Developing</code></pre>
-<pre class="r"><code>write.csv(Imputed_expectancy , file = &quot;data/Imputed_expectation.csv&quot;)</code></pre>
-</div>
+
+
+Time_series_plot(&quot;une_life&quot;,merged_data)</code></pre>
+<pre><code>## Note: Using an external vector in selections is ambiguous.
+## ℹ Use `all_of(variable)` instead of `variable` to silence this message.
+## ℹ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.
+## This message is displayed once per session.</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>Time_series_plot(&quot;bmi&quot;,imputed_data)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+<pre class="r"><code>Time_series_plot(&quot;gni_capita&quot;,imputed_data)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-4-3.png" width="672" /></p>
 
 
 

@@ -1,0 +1,33 @@
+---
+title: "Project report"
+date: "2022-11-23"
+output: html_document
+---
+# World Life Expectancy—Live to thrive
+
+## Motivation
+
+## Related work
+
+## Initial questions
+### new questions
+
+## Data
+###Data sources 
+
+Our main datasets is WHO Life Exp Dataset measures the life expectancy data and some variables from WHO with Pm2.5 DataSeta, Country Code Dataset and Income Level Dataset for merging and imputation.
+
+
+
+###Data cleaing 
+
+##Exploratory Analysis
+
+###World Life Expectancy and Interactive World Map
+
+##Additional analysis
+###Analysis Test Part
+
+###Linear Model
+
+##Discussion

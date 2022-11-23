@@ -11,7 +11,7 @@
 
 
 
-<title>Imputation</title>
+<title>EDA</title>
 
 <script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -357,22 +357,17 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Imputation</h1>
+<h1 class="title toc-ignore">EDA</h1>
 
 </div>
 
 
-<pre class="r"><code>suppressMessages(library(tidyverse))
-suppressMessages(library(dbplyr))
-options(tibble.print_min = 5)</code></pre>
 <pre class="r"><code>merged_data = 
-  read_csv(&quot;data/Merged_expectation.csv&quot;, show_col_types = FALSE)</code></pre>
-<pre><code>## New names:
-## • `` -&gt; `...1`</code></pre>
-<pre class="r"><code>imputed_data = read_csv(&quot;data/Imputed_expectation.csv&quot;, show_col_types = FALSE)</code></pre>
-<pre><code>## New names:
-## • `` -&gt; `...1`</code></pre>
-<p>#Time series plot</p>
+  read_csv(&quot;data/Merged_expectation.csv&quot;, show_col_types = FALSE)
+
+imputed_data = read_csv(&quot;data/Imputed_expectation.csv&quot;, show_col_types = FALSE)</code></pre>
+<div id="time-series-plot" class="section level1">
+<h1>Time series plot</h1>
 <pre class="r"><code>merged_data %&gt;% 
   group_by(year, `Developed / Developing Countries`) %&gt;% 
   summarize(
@@ -393,13 +388,11 @@ options(tibble.print_min = 5)</code></pre>
   labs(title = sprintf(&quot;Time series plot for %s&quot;, &quot;Life Expectancy&quot;) )+
   xlab(&quot;Year&quot;)+
   ylab(sprintf(&quot;%s&quot;,&quot;Life Expectancy&quot;))</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;year&#39;. You can override using the
-## `.groups` argument.</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>Time_series_plot = function(variable,merged_data){
   merged_data %&gt;% 
   group_by(year, `Developed / Developing Countries`) %&gt;% 
-  summarize_at(variable,mean) %&gt;% 
+  summarize_at(variable,mean,na.rm=TRUE) %&gt;% 
   pivot_wider(
     values_from = variable,
     names_from = `Developed / Developing Countries`
@@ -419,15 +412,246 @@ options(tibble.print_min = 5)</code></pre>
 
 
 Time_series_plot(&quot;une_life&quot;,merged_data)</code></pre>
-<pre><code>## Note: Using an external vector in selections is ambiguous.
-## ℹ Use `all_of(variable)` instead of `variable` to silence this message.
-## ℹ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.
-## This message is displayed once per session.</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<pre class="r"><code>Time_series_plot(&quot;bmi&quot;,imputed_data)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
-<pre class="r"><code>Time_series_plot(&quot;gni_capita&quot;,imputed_data)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-4-3.png" width="672" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>Time_series_plot(&quot;bmi&quot;,merged_data)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#Time_series_plot(&quot;bmi&quot;,imputed_data)
+Time_series_plot(&quot;gni_capita&quot;,merged_data)</code></pre>
+<pre><code>## Warning: Removed 3 row(s) containing missing values (geom_path).
+## Removed 3 row(s) containing missing values (geom_path).</code></pre>
+<pre><code>## Warning: Removed 3 rows containing missing values (geom_point).
+## Removed 3 rows containing missing values (geom_point).</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="correlation" class="section level1">
+<h1>Correlation:</h1>
+<div id="pearson-correlation" class="section level2">
+<h2>Pearson Correlation</h2>
+<p>Over the time:</p>
+<pre class="r"><code>Pearson_Correlation = function(varnum, merged_data){
+  
+  correlation_result = tibble(&quot;date&quot;=2000:2016, &quot;Pearson_cor&quot;=0,&quot;Pearson_pval&quot;=0)
+  
+  for (t in 2000:2016){
+    merged_data_temp = 
+      merged_data %&gt;% 
+      filter(year==t)
+    
+    correlation_result$Pearson_cor[t-1999] = 
+    cor(merged_data_temp[,varnum], merged_data_temp$une_life, method = &quot;pearson&quot;,use = &quot;complete.obs&quot;)[1]
+    
+    correlation_result$Pearson_pval[t-1999] = 
+    cor.test(merged_data_temp[,varnum][[1]], merged_data_temp$une_life, method = &quot;pearson&quot;,use = &quot;complete.obs&quot;)$p.value
+    
+  }
+  
+  return(correlation_result)
+  
+}
+
+#Pearson_Correlation(6,merged_data)
+
+Pearson_Correlation_result = tibble(&quot;date&quot;=2000:2016)
+
+colname = colnames(merged_data)
+Pearson_Correlation_result %&gt;%
+  mutate(une_exp = Pearson_Correlation(6,merged_data)$Pearson_cor,
+         une_exp_pval = Pearson_Correlation(6,merged_data)$Pearson_pval,
+         alcohol = Pearson_Correlation(11,merged_data)$Pearson_cor,
+         alcohol_pval = Pearson_Correlation(11,merged_data)$Pearson_pval
+         )</code></pre>
+<pre><code>## # A tibble: 17 × 5
+##     date une_exp une_exp_pval alcohol  alcohol_pval
+##    &lt;int&gt;   &lt;dbl&gt;        &lt;dbl&gt;   &lt;dbl&gt;         &lt;dbl&gt;
+##  1  2000   0.992    8.12e-163   0.392 0.0000000696 
+##  2  2001   0.995    7.98e-186   0.387 0.000000101  
+##  3  2002   0.996    2.62e-188   0.381 0.000000172  
+##  4  2003   0.995    1.68e-183   0.390 0.0000000781 
+##  5  2004   0.995    1.33e-181   0.398 0.0000000422 
+##  6  2005   0.995    4.62e-187   0.398 0.0000000331 
+##  7  2006   0.995    1.22e-179   0.396 0.0000000345 
+##  8  2007   0.994    5.51e-174   0.395 0.0000000383 
+##  9  2008   0.991    3.21e-162   0.403 0.0000000189 
+## 10  2009   0.992    2.80e-162   0.412 0.00000000849
+## 11  2010   0.969    3.07e-112   0.401 0.0000000217 
+## 12  2011   0.991    1.42e-161   0.404 0.0000000157 
+## 13  2012   0.990    1.38e-155   0.417 0.00000000482
+## 14  2013   0.989    2.73e-151   0.412 0.00000000761
+## 15  2014   0.987    6.60e-145   0.411 0.00000000853
+## 16  2015   0.989    8.73e-152   0.428 0.00000000175
+## 17  2016   0.989    7.65e-152   0.431 0.00000000127</code></pre>
+</div>
+<div id="distance-correlation" class="section level2">
+<h2>Distance Correlation</h2>
+<p>Distance correlation is a novel developed technique to discover the
+joint dependence of random variables developed by Székely et al. Unlike
+Pearson correlation, such Pairwise distance correlation is a distance
+method and therefore it can take into consideration of the non-linear
+relationship between two random variables, namely <span
+class="math inline">\(X\in \mathbb{R}^p\)</span> and <span
+class="math inline">\(Y\in \mathbb{R}^q\)</span> that can have arbitrary
+dimensions (p and q can be non-equal) to some extend. The correlation
+between two variables is said to be independent of distance correlation
+<span class="math inline">\(\mathcal{R}(X,Y)=0\)</span>.</p>
+<p>In my article, denote the scalar product of two vectors <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span> as &lt;<span
+class="math inline">\(a,b\)</span>&gt; and conjugate of complex function
+f as <span class="math inline">\(f\)</span>. Also define norm <span
+class="math inline">\(|x|_p\)</span> as Euclidean norm for <span
+class="math inline">\(x\in\mathbb{R}^p\)</span></p>
+<p><br> <br></p>
+<div id="definition-1" class="section level3">
+<h3>Definition 1</h3>
+<p>In weighted <span class="math inline">\(l_2\)</span> space, the <span
+class="math inline">\(||\cdot||_w\)</span>-norm for any complex function
+<span class="math inline">\(\zeta \in
+\mathbb{R}^p\times\mathbb{R}^q\)</span> is defined by: <span
+class="math display">\[
+\begin{equation}
+    ||\zeta( a, b )||^2
+_w =\int_{\mathbb{R}^{p+q}}|\zeta( a, b)|^2 w( a, b)\,d a\, d b
+\end{equation}
+\]</span> where <span class="math inline">\(w(a,b)\)</span> can be any
+arbitrary positive weighting function as long as the integral is
+well-defined.</p>
+<p><br> <br></p>
+</div>
+<div id="definition-2" class="section level3">
+<h3>Definition 2</h3>
+<p>Define the measure of dependence as: <span class="math display">\[
+\begin{equation}
+V^2(X,Y;w) = ||f_{X,Y}(a,b)-f_X(a)f_Y(b)||^2_w=
+\int_{\mathbb{R}^{p+q}}|f_{X,Y}(a,b)-f_X(a)f_Y(b)|^2 w( a, b)\,d a\, d b
+\end{equation}
+\]</span></p>
+<div id="proof" class="section level4">
+<h4>Proof</h4>
+<p><em>The criterion of independent means that for vectors <span
+class="math inline">\(a\)</span>, <span
+class="math inline">\(b\)</span>, the probability density function <span
+class="math inline">\(f_X(a)\)</span>, <span
+class="math inline">\(f_Y(b)\)</span> and their joint probability
+density function <span class="math inline">\(f_{X,Y}(a,b)\)</span>
+satisfies <span
+class="math inline">\(f_{X,Y}(a,b)=f_X(a)f_Y(b)\)</span>. Therefore, I
+have <span class="math inline">\(V^2(X,Y;w)=||0||^2_w=0\)</span> if they
+are independent hence the equation satisfy the condition that <span
+class="math inline">\(V^2=0\)</span> only if variables are
+independent.</em></p>
+<p><br> <br></p>
+<p>The choice of weighting function must satisfy invariance under
+transformations of random variables up to multiplication of a positive
+constant <span class="math inline">\(\epsilon\)</span>: <span
+class="math inline">\((X,Y)\rightarrow (\epsilon X, \epsilon Y)\)</span>
+and positiveness for any dependent variables. By the work of Szekely et.
+al., only non-integrable functions satisfy the condition for weight
+function. In order to specify the formula, I need the following
+lemma</p>
+<p><br> <br></p>
+</div>
+</div>
+<div id="lemma-1" class="section level3">
+<h3>Lemma 1</h3>
+<p>For all x in <span class="math inline">\(\mathbb{R}^d\)</span>: <span
+class="math display">\[
+\begin{equation}
+\int_{\mathbb{R}^d}\frac{1-cos&lt;y,x&gt;
+}{|y|^{d+1}_{d}}dy=c_d|x|=\frac{\pi ^{(1+d/2)}}{2 \Gamma ((d+1)/2)}|x|
+\end{equation}
+\]</span> where <span class="math inline">\(\Gamma(\cdot)\)</span> is
+the gamma function.</p>
+<p><br> <br></p>
+<p>Now I can choose weight function as following: <span
+class="math display">\[
+\begin{equation}
+w(a,b) = (c_p c_q |a|
+^{1+p}_p |b|
+^{1+q}_q )^{-1}
+\end{equation}
+\]</span></p>
+<p>By using such weight function and lemma 3.1, the definition of
+distance covariance will be well-defined. Note by the weight, I have
+<span class="math inline">\(dw = (c_p c_q |a| ^{1+p}_p |b| ^{1+q}_q
+)^{-1}dadb\)</span>. This is proven in the following definition. \</p>
+<p><br> <br></p>
+</div>
+<div id="deinition-4" class="section level3">
+<h3>Deinition 4</h3>
+<p>Define the distance covariance (dCov) for random vectors <span
+class="math inline">\(X\)</span> and <span
+class="math inline">\(Y\)</span> with finite expectation as the
+following non-negative figure: <span class="math display">\[
+\begin{equation}
+    V^2(X,Y) = ||f_{X,Y} (a,b)- f_X(a)f_Y (b)||^2
+= \frac{1}{c_pc_q}\int_{\mathbb{R}^{p+q}}\frac{|f_{X,Y} (a,b) -
+f_X(a)f_Y (b)|^2}{|a|^{1+p}_p|b|^{1+q}_q}da db
+\end{equation}
+\]</span> where <span class="math inline">\(a\in \mathbb{R}^p\)</span>,
+<span class="math inline">\(b\in \mathbb{R}^q\)</span> are two vectors
+that <span class="math inline">\(a\in X\)</span> and <span
+class="math inline">\(b\in Y\)</span></p>
+<p><br> <br></p>
+<div id="unnamed-chunk-5" class="theorem">
+<p>Here is my theorem.</p>
+</div>
+<pre class="r"><code>Distance_Correlation = function(varnum, merged_data){
+  
+  correlation_result = tibble(&quot;date&quot;=2000:2016, &quot;Distance_cor&quot;=0,&quot;Distance_pval&quot;=0)
+  
+  for (t in 2000:2016){
+    merged_data_temp = 
+      merged_data %&gt;% 
+      filter(year==t) %&gt;% 
+      select(27,varnum) %&gt;% 
+      na.omit()
+    
+    correlation_result$Distance_cor[t-1999] = 
+    dcor(merged_data_temp[,2], merged_data_temp$une_life,)[1]
+    
+    correlation_result$Distance_pval[t-1999] = 
+    dcor.test(merged_data_temp[,2][[1]], merged_data_temp$une_life,R=1000)$p.value
+    
+  }
+  
+  return(correlation_result)
+  
+}
+
+
+
+Distance_Correlation_result = tibble(&quot;date&quot;=2000:2016)
+
+colname = colnames(merged_data)
+Distance_Correlation_result %&gt;%
+  mutate(une_exp = Distance_Correlation(6,merged_data)$Distance_cor,
+         une_exp_pval = Distance_Correlation(6,merged_data)$Distance_pval,
+         alcohol = Distance_Correlation(11,merged_data)$Distance_cor,
+         alcohol_pval = Distance_Correlation(11,merged_data)$Distance_pval
+         )</code></pre>
+<pre><code>## # A tibble: 17 × 5
+##     date une_exp une_exp_pval alcohol alcohol_pval
+##    &lt;int&gt;   &lt;dbl&gt;        &lt;dbl&gt;   &lt;dbl&gt;        &lt;dbl&gt;
+##  1  2000   0.992     0.000999   0.416     0.000999
+##  2  2001   0.994     0.000999   0.413     0.000999
+##  3  2002   0.995     0.000999   0.405     0.000999
+##  4  2003   0.994     0.000999   0.413     0.000999
+##  5  2004   0.993     0.000999   0.419     0.000999
+##  6  2005   0.994     0.000999   0.420     0.000999
+##  7  2006   0.993     0.000999   0.422     0.000999
+##  8  2007   0.992     0.000999   0.418     0.000999
+##  9  2008   0.990     0.000999   0.430     0.000999
+## 10  2009   0.991     0.000999   0.440     0.000999
+## 11  2010   0.989     0.000999   0.426     0.000999
+## 12  2011   0.990     0.000999   0.432     0.000999
+## 13  2012   0.987     0.000999   0.444     0.000999
+## 14  2013   0.985     0.000999   0.441     0.000999
+## 15  2014   0.983     0.000999   0.434     0.000999
+## 16  2015   0.984     0.000999   0.452     0.000999
+## 17  2016   0.984     0.000999   0.458     0.000999</code></pre>
+</div>
+</div>
+</div>
 
 
 

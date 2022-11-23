@@ -1,5 +1,5 @@
 ---
-title: "Imputation"
+title: "EDA"
 
 output: 
   html_document:
@@ -8,16 +8,48 @@ output:
     theme: cosmo
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
-```{r}
-suppressMessages(library(tidyverse))
+```{r defaults, echo = FALSE, message = FALSE, warning = FALSE}
+# load necessary packages
+library(tidyverse)
+library(patchwork)
+library(reshape2)
+library(rstatix)
+library(patchwork)
+library(ggridges)
+library(spatstat)
+#library(ggpubr)
+#library(GGally)
 suppressMessages(library(dbplyr))
+suppressMessages(library(energy))
+suppressMessages(library(bookdown))
 options(tibble.print_min = 5)
-
+# set knitr defaults
+knitr::opts_chunk$set(
+    echo      = TRUE
+  , message   = FALSE
+  , fig.align = "center"
+)
+# set theme defaults
+theme_set(
+  theme_bw() +
+  theme(
+    legend.position = "bottom"
+    , plot.title    = element_text(hjust = 0.5)
+    , plot.subtitle = element_text(hjust = 0.5)    
+    , plot.caption  = element_text(hjust = 0.0)
+  )
+)
+# set color scale defaults
+options(
+    ggplot2.continuous.colour = "viridis"
+  , ggplot2.continuous.fill   = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete   = scale_fill_viridis_d
 ```
+
+
 
 ```{r}
 merged_data = 
@@ -27,7 +59,7 @@ imputed_data = read_csv("data/Imputed_expectation.csv", show_col_types = FALSE)
 ```
 
 
-#Time series plot
+# Time series plot
 ```{r}
 
 merged_data %>% 
@@ -63,7 +95,7 @@ merged_data %>%
 Time_series_plot = function(variable,merged_data){
   merged_data %>% 
   group_by(year, `Developed / Developing Countries`) %>% 
-  summarize_at(variable,mean) %>% 
+  summarize_at(variable,mean,na.rm=TRUE) %>% 
   pivot_wider(
     values_from = variable,
     names_from = `Developed / Developing Countries`
@@ -83,11 +115,198 @@ Time_series_plot = function(variable,merged_data){
 
 
 Time_series_plot("une_life",merged_data)
-Time_series_plot("bmi",imputed_data)
-Time_series_plot("gni_capita",imputed_data)
+
+Time_series_plot("bmi",merged_data)
+#Time_series_plot("bmi",imputed_data)
+Time_series_plot("gni_capita",merged_data)
+
+```
+
+
+
+
+# Correlation:
+
+## Pearson Correlation
+
+Over the time:
+```{r}
+
+Pearson_Correlation = function(varnum, merged_data){
+  
+  correlation_result = tibble("date"=2000:2016, "Pearson_cor"=0,"Pearson_pval"=0)
+  
+  for (t in 2000:2016){
+    merged_data_temp = 
+      merged_data %>% 
+      filter(year==t)
+    
+    correlation_result$Pearson_cor[t-1999] = 
+    cor(merged_data_temp[,varnum], merged_data_temp$une_life, method = "pearson",use = "complete.obs")[1]
+    
+    correlation_result$Pearson_pval[t-1999] = 
+    cor.test(merged_data_temp[,varnum][[1]], merged_data_temp$une_life, method = "pearson",use = "complete.obs")$p.value
+    
+  }
+  
+  return(correlation_result)
+  
+}
+
+#Pearson_Correlation(6,merged_data)
+
+Pearson_Correlation_result = tibble("date"=2000:2016)
+
+colname = colnames(merged_data)
+Pearson_Correlation_result %>%
+  mutate(une_exp = Pearson_Correlation(6,merged_data)$Pearson_cor,
+         une_exp_pval = Pearson_Correlation(6,merged_data)$Pearson_pval,
+         alcohol = Pearson_Correlation(11,merged_data)$Pearson_cor,
+         alcohol_pval = Pearson_Correlation(11,merged_data)$Pearson_pval
+         )
+
+
 
 
 ```
+
+## Distance Correlation
+
+Distance correlation is a novel developed technique to discover the joint dependence of random variables developed by Székely et al. Unlike Pearson correlation, such Pairwise distance 
+correlation is a distance method and therefore it can take into consideration of the non-linear relationship between two random variables, namely $X\in \mathbb{R}^p$ and $Y\in \mathbb{R}^q$ that can have arbitrary dimensions (p and q can be non-equal) to some extend. The correlation between two variables is said to be independent of distance correlation $\mathcal{R}(X,Y)=0$. 
+
+In my article, denote the scalar product of two vectors $a$ and $b$ as <$a,b$> and conjugate of complex function f as $f$. Also define norm $|x|_p$ as Euclidean norm for $x\in\mathbb{R}^p$
+
+<br>
+<br>
+
+### Definition 1
+In weighted $l_2$ space, the $||\cdot||_w$-norm for any complex function $\zeta \in \mathbb{R}^p\times\mathbb{R}^q$ is defined by:
+\[
+\begin{equation}
+    ||\zeta( a, b )||^2
+_w =\int_{\mathbb{R}^{p+q}}|\zeta( a, b)|^2 w( a, b)\,d a\, d b
+\end{equation}
+\]
+where $w(a,b)$ can be any arbitrary positive weighting function as long as the integral is well-defined. 
+
+<br>
+<br>
+
+
+### Definition 2
+Define the measure of dependence as:
+\[
+\begin{equation}
+V^2(X,Y;w) = ||f_{X,Y}(a,b)-f_X(a)f_Y(b)||^2_w= \int_{\mathbb{R}^{p+q}}|f_{X,Y}(a,b)-f_X(a)f_Y(b)|^2 w( a, b)\,d a\, d b
+\end{equation}
+\]
+
+#### Proof
+*The criterion of independent means that for vectors $a$, $b$, the probability density function $f_X(a)$, $f_Y(b)$ and their joint probability density function $f_{X,Y}(a,b)$ satisfies $f_{X,Y}(a,b)=f_X(a)f_Y(b)$. Therefore, I have $V^2(X,Y;w)=||0||^2_w=0$ if they are independent hence the equation satisfy the condition that $V^2=0$ only if variables are independent.*
+
+
+
+<br>
+<br>
+
+The choice of weighting function must satisfy invariance under transformations of random variables up to multiplication of a positive constant $\epsilon$: $(X,Y)\rightarrow (\epsilon X, \epsilon Y)$ and positiveness for any dependent variables. By the work of Szekely et. al., only non-integrable functions satisfy the condition for weight function. In order to specify the formula, I need the following lemma
+
+<br>
+<br>
+
+
+### Lemma 1
+For all x in $\mathbb{R}^d$:
+\[
+\begin{equation}
+\int_{\mathbb{R}^d}\frac{1-cos<y,x> }{|y|^{d+1}_{d}}dy=c_d|x|=\frac{\pi ^{(1+d/2)}}{2 \Gamma ((d+1)/2)}|x|
+\end{equation}
+\]
+where $\Gamma(\cdot)$ is the gamma function.
+
+
+<br>
+<br>
+
+Now I can choose weight function as following:
+\[
+\begin{equation}
+w(a,b) = (c_p c_q |a|
+^{1+p}_p |b|
+^{1+q}_q )^{-1}
+\end{equation}
+\]
+
+By using such weight function and lemma 3.1, the definition of distance covariance will be well-defined. Note by the weight, I have $dw = (c_p c_q |a|
+^{1+p}_p |b|
+^{1+q}_q )^{-1}dadb$. This is proven in the following definition. \\
+
+<br>
+<br>
+
+### Deinition 4
+Define the distance covariance (dCov) for random vectors $X$ and $Y$ with finite expectation as the following non-negative figure:
+\[
+\begin{equation}
+    V^2(X,Y) = ||f_{X,Y} (a,b)- f_X(a)f_Y (b)||^2
+= \frac{1}{c_pc_q}\int_{\mathbb{R}^{p+q}}\frac{|f_{X,Y} (a,b) - f_X(a)f_Y (b)|^2}{|a|^{1+p}_p|b|^{1+q}_q}da db
+\end{equation}
+\]
+where $a\in \mathbb{R}^p$, $b\in \mathbb{R}^q$ are two vectors that $a\in X$ and $b\in Y$\cite{szekely2007measuring}
+
+<br>
+<br>
+
+
+
+```{theorem}
+Here is my theorem.
+```
+
+
+
+```{r}
+Distance_Correlation = function(varnum, merged_data){
+  
+  correlation_result = tibble("date"=2000:2016, "Distance_cor"=0,"Distance_pval"=0)
+  
+  for (t in 2000:2016){
+    merged_data_temp = 
+      merged_data %>% 
+      filter(year==t) %>% 
+      select(27,varnum) %>% 
+      na.omit()
+    
+    correlation_result$Distance_cor[t-1999] = 
+    dcor(merged_data_temp[,2], merged_data_temp$une_life,)[1]
+    
+    correlation_result$Distance_pval[t-1999] = 
+    dcor.test(merged_data_temp[,2][[1]], merged_data_temp$une_life,R=1000)$p.value
+    
+  }
+  
+  return(correlation_result)
+  
+}
+
+
+
+Distance_Correlation_result = tibble("date"=2000:2016)
+
+colname = colnames(merged_data)
+Distance_Correlation_result %>%
+  mutate(une_exp = Distance_Correlation(6,merged_data)$Distance_cor,
+         une_exp_pval = Distance_Correlation(6,merged_data)$Distance_pval,
+         alcohol = Distance_Correlation(11,merged_data)$Distance_cor,
+         alcohol_pval = Distance_Correlation(11,merged_data)$Distance_pval
+         )
+
+
+
+```
+
+
 
 
 

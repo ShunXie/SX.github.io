@@ -380,7 +380,8 @@ LifeExpectancy = read_csv(&quot;data/who_life_exp.csv&quot;,col_types = cols(.de
 
 merged_data_PM = merge(LifeExpectancy, country_code, by.x = &quot;country_code&quot;, by.y = &quot;ISO3166-1-Alpha-3&quot; )</code></pre>
 <p>pm 2.5</p>
-<pre class="r"><code>PM_dataset = 
+<pre class="r"><code>#read pm2.5 data
+PM_dataset = 
   read_csv(&quot;data/pm2.5.csv&quot;, show_col_types = FALSE, skip = 4) </code></pre>
 <pre><code>## New names:
 ## • `` -&gt; `...67`</code></pre>
@@ -395,29 +396,35 @@ merged_data_PM = merge(LifeExpectancy, country_code, by.x = &quot;country_code&q
     values_to = &quot;PM_value&quot;
   ) %&gt;% 
   select(country_code, year, PM_value) %&gt;% 
-  mutate(year = as.numeric(year))
-
-merged_data = 
+  mutate(year = as.numeric(year))</code></pre>
+<p>Developed / Developing Countries</p>
+<pre class="r"><code>#merged data with developed/ developing countries
+merged_data_d = 
   merged_data_PM %&gt;% 
-  left_join( PM_dataset_clean, by = c(&quot;country_code&quot;,&quot;year&quot;)) %&gt;% 
-  select(country_code:une_school,PM_value,`Developed / Developing Countries`)
-
-
-
-
-write.csv(merged_data , file = &quot;data/Merged_expectation.csv&quot;)</code></pre>
+  left_join(PM_dataset_clean, by = c(&quot;country_code&quot;,&quot;year&quot;))</code></pre>
+<p>income level</p>
+<pre class="r"><code>#read income level data
+Income_dataset = read_csv(&quot;data/income_level.csv&quot;, show_col_types = FALSE) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(country_code,income_group)</code></pre>
+<pre><code>## New names:
+## • `` -&gt; `...6`</code></pre>
+<pre class="r"><code>#merged data with income level
+merged_data = merged_data_d %&gt;% 
+  left_join( Income_dataset, by = c(&quot;country_code&quot;)) %&gt;% 
+  select(country_code:une_school,PM_value,income_group,`Developed / Developing Countries`)</code></pre>
 </div>
 <div id="impute" class="section level1">
 <h1>Impute</h1>
 <pre class="r"><code>raw_mat = 
   merged_data %&gt;% 
-  select(-country, -country_code, -region, -`Developed / Developing Countries`) %&gt;% 
+  select(-country, -country_code, -region,-income_group, -`Developed / Developing Countries`) %&gt;% 
   as.matrix()
 
 imputed_mat = filling::fill.KNNimpute(raw_mat, k = 2)</code></pre>
 <pre class="r"><code>#colnames_exp = colnames(LifeExpectancy)
 Imputed_expectancy = merged_data
-for (i in 1:(length(merged_data)-4)) {
+for (i in 1:(length(merged_data)-5)) {
   Imputed_expectancy[i+3][[1]] = imputed_mat[[1]][,i]
 }
 head(Imputed_expectancy)</code></pre>
@@ -436,34 +443,34 @@ head(Imputed_expectancy)</code></pre>
 ## 5        281.8943    0.087595   0.009210 1.2471070 22.1            19.8
 ## 6        277.1813    0.084630   0.008785 0.0162300 22.2            19.6
 ##   age5_19obesity hepatitis measles polio diphtheria basic_water   doctors
-## 1            0.6  76.13455      27    24         24    27.77190 1.3091821
-## 2            0.7  64.48179      37    35         33    27.79726 1.8990000
-## 3            0.8  59.58910      35    36         36    29.90076 0.8537491
-## 4            0.9  45.72630      39    41         41    32.00507 0.5131754
-## 5            1.0  72.57173      48    50         50    34.12623 0.9575233
-## 6            1.1  77.74015      50    58         58    36.26526 0.8882858
+## 1            0.6  76.13455      27    24         24    27.77190 1.3880322
+## 2            0.7  71.38447      37    35         33    27.79726 1.8990000
+## 3            0.8  45.33811      35    36         36    29.90076 0.6974327
+## 4            0.9  45.72630      39    41         41    32.00507 0.6248355
+## 5            1.0  72.57173      48    50         50    34.12623 0.4813195
+## 6            1.1  75.00000      50    58         58    36.26526 0.8882858
 ##   hospitals gni_capita    gghe_d  che_gdp  une_pop une_infant une_life une_hiv
-## 1 0.4570982   802.1334 0.7777427 4.704074 20779.95       90.6   55.841     0.1
-## 2 0.4253471  1060.0000 2.8719383 7.475627 21606.99       88.0   56.308     0.1
-## 3 0.4383122   870.0000 0.0841800 9.443390 22600.77       85.4   56.784     0.1
-## 4 0.4454031   920.0000 0.6509600 8.941260 23680.87       82.8   57.271     0.1
-## 5 0.4427387   920.0000 0.5429300 9.808470 24726.68       80.1   57.772     0.1
-## 6 0.4017234  1020.0000 0.5291800 9.948290 25654.28       77.4   58.290     0.1
+## 1 0.5951028   802.1334 0.7777427 4.704074 20779.95       90.6   55.841     0.1
+## 2 0.4887608  1060.0000 2.8719383 3.767918 21606.99       88.0   56.308     0.1
+## 3 0.4508002   870.0000 0.0841800 9.443390 22600.77       85.4   56.784     0.1
+## 4 0.4503120   920.0000 0.6509600 8.941260 23680.87       82.8   57.271     0.1
+## 5 0.4503778   920.0000 0.5429300 9.808470 24726.68       80.1   57.772     0.1
+## 6 0.4442700  1020.0000 0.5291800 9.948290 25654.28       77.4   58.290     0.1
 ##     une_gni une_poverty une_edu_spend une_literacy une_school PM_value
-## 1  931.0142    58.54064      3.696389     26.06914   1.375748      100
-## 2 1225.1817    45.13750      3.582721     43.05221   1.479084      100
-## 3 1164.8368    45.64839      2.079068     30.36625   1.312962      100
-## 4 1431.1906    50.94358      2.445967     66.24146   2.361979      100
-## 5 3199.4367    52.61218      2.489254     67.41440   2.335432      100
-## 6 1157.3764    49.71128      1.623665     60.69469   1.828931      100
-##   Developed / Developing Countries
-## 1                       Developing
-## 2                       Developing
-## 3                       Developing
-## 4                       Developing
-## 5                       Developing
-## 6                       Developing</code></pre>
-<pre class="r"><code>write.csv(Imputed_expectancy , file = &quot;data/Imputed_expectation.csv&quot;)</code></pre>
+## 1  931.0142    64.69292      3.831208     27.25568   2.031382      100
+## 2 1225.1817    55.53447      3.928875     42.14190   1.398141      100
+## 3 1164.8368    35.56763      3.052640     23.04596   1.768035      100
+## 4 1431.1906    50.96637      3.040833     25.61598   2.345726      100
+## 5 1524.5696    74.11713      3.567654     31.68558   2.409576      100
+## 6 1157.3764    51.47757      2.268477     51.14937   1.954417      100
+##   income_group Developed / Developing Countries
+## 1   Low income                       Developing
+## 2   Low income                       Developing
+## 3   Low income                       Developing
+## 4   Low income                       Developing
+## 5   Low income                       Developing
+## 6   Low income                       Developing</code></pre>
+<pre class="r"><code>write.table(Imputed_expectancy , file = &quot;data/Imputed_expectation.csv&quot;)</code></pre>
 </div>
 
 

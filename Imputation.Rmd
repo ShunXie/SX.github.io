@@ -22,7 +22,6 @@ options(tibble.print_min = 5)
 # Background Information of the data
 
 First, we load and merge the data:
-
 ```{r}
 country_code = 
   read_csv("data/country-codes.csv", show_col_types = FALSE) %>% 
@@ -39,6 +38,8 @@ merged_data_PM = merge(LifeExpectancy, country_code, by.x = "country_code", by.y
 
 pm 2.5
 ```{r}
+
+#read pm2.5 data
 PM_dataset = 
   read_csv("data/pm2.5.csv", show_col_types = FALSE, skip = 4) 
 
@@ -54,23 +55,28 @@ PM_dataset_clean =
   ) %>% 
   select(country_code, year, PM_value) %>% 
   mutate(year = as.numeric(year))
-
-merged_data = 
-  merged_data_PM %>% 
-  left_join( PM_dataset_clean, by = c("country_code","year")) %>% 
-  select(country_code:une_school,PM_value,`Developed / Developing Countries`)
-
-
-
-
-write.csv(merged_data , file = "data/Merged_expectation.csv")
-
 ```
 
+Developed / Developing Countries
+```{r}
+#merged data with developed/ developing countries
+merged_data_d = 
+  merged_data_PM %>% 
+  left_join(PM_dataset_clean, by = c("country_code","year"))
+```
 
+income level
+```{r}
+#read income level data
+Income_dataset = read_csv("data/income_level.csv", show_col_types = FALSE) %>% 
+  janitor::clean_names() %>% 
+  select(country_code,income_group)
 
-
-
+#merged data with income level
+merged_data = merged_data_d %>% 
+  left_join( Income_dataset, by = c("country_code")) %>% 
+  select(country_code:une_school,PM_value,income_group,`Developed / Developing Countries`)
+```
 
 
 # Impute
@@ -78,7 +84,7 @@ write.csv(merged_data , file = "data/Merged_expectation.csv")
 ```{r}
 raw_mat = 
   merged_data %>% 
-  select(-country, -country_code, -region, -`Developed / Developing Countries`) %>% 
+  select(-country, -country_code, -region,-income_group, -`Developed / Developing Countries`) %>% 
   as.matrix()
 
 imputed_mat = filling::fill.KNNimpute(raw_mat, k = 2)
@@ -88,7 +94,7 @@ imputed_mat = filling::fill.KNNimpute(raw_mat, k = 2)
 ```{r}
 #colnames_exp = colnames(LifeExpectancy)
 Imputed_expectancy = merged_data
-for (i in 1:(length(merged_data)-4)) {
+for (i in 1:(length(merged_data)-5)) {
   Imputed_expectancy[i+3][[1]] = imputed_mat[[1]][,i]
 }
 head(Imputed_expectancy)
@@ -96,7 +102,7 @@ head(Imputed_expectancy)
 ```
 
 ```{r}
-write.csv(Imputed_expectancy , file = "data/Imputed_expectation.csv")
+write.table(Imputed_expectancy , file = "data/Imputed_expectation.csv")
 
 ```
 

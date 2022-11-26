@@ -22,7 +22,7 @@ options(tibble.print_min = 5)
 # Background Information of the data
 
 First, we load and merge the data:
-```{r}
+```{r,message=FALSE, warning=FALSE}
 country_code = 
   read_csv("data/country-codes.csv", show_col_types = FALSE) %>% 
   select(`ISO3166-1-Alpha-3`, `Developed / Developing Countries`)
@@ -37,7 +37,7 @@ merged_data_PM = merge(LifeExpectancy, country_code, by.x = "country_code", by.y
 ```
 
 pm 2.5
-```{r}
+```{r,message=FALSE, warning=FALSE}
 
 #read pm2.5 data
 PM_dataset = 
@@ -58,7 +58,7 @@ PM_dataset_clean =
 ```
 
 Developed / Developing Countries
-```{r}
+```{r,message=FALSE, warning=FALSE}
 #merged data with developed/ developing countries
 merged_data_d = 
   merged_data_PM %>% 
@@ -66,22 +66,37 @@ merged_data_d =
 ```
 
 income level
-```{r}
+```{r,message=FALSE, warning=FALSE}
 #read income level data
 Income_dataset = read_csv("data/income_level.csv", show_col_types = FALSE) %>% 
   janitor::clean_names() %>% 
   select(country_code,income_group)
 
 #merged data with income level
-merged_data = merged_data_d %>% 
+merged_data_i = merged_data_d %>% 
   left_join( Income_dataset, by = c("country_code")) %>% 
   select(country_code:une_school,PM_value,income_group,`Developed / Developing Countries`)
+```
+
+Health expenditure
+```{r,message=FALSE, warning=FALSE}
+health_exp = read_csv("data/government_compulsory_health expenditure_from_1970_2020.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate("country_code"=location,
+         "year" = time) %>% 
+  select(country_code,year, value)
+
+merged_data = 
+  merged_data_i %>% 
+  left_join(health_exp, by = c("country_code","year")) %>% 
+  mutate("health_exp" = value) %>% 
+  select(country_code:une_school,PM_value,income_group,health_exp,`Developed / Developing Countries`)
 ```
 
 
 # Impute
 
-```{r}
+```{r,message=FALSE, warning=FALSE}
 raw_mat = 
   merged_data %>% 
   select(-country, -country_code, -region,-income_group, -`Developed / Developing Countries`) %>% 
@@ -102,7 +117,8 @@ head(Imputed_expectancy)
 ```
 
 ```{r}
-write.table(Imputed_expectancy , file = "data/Imputed_expectation.csv")
+write.csv(merged_data , file = "data/Merged_expectation.csv")
+write.csv(Imputed_expectancy , file = "data/Imputed_expectation.csv")
 
 ```
 

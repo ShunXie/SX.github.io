@@ -121,19 +121,48 @@ Time_series_plot = function(variable,merged_data){
 
 
 Time_series_plot("une_life",merged_data)
+```
 
+Life expectancy as our dependent variable has similar trends for both developed and developing countries. Two life expectancy indices have a persistent increase over time. However, the expectancy for developed countries is 10 years higher than the developing countries over 16 years.
+
+```{r,message = FALSE, warning = FALSE}
 Time_series_plot("bmi",merged_data)
+```
+
+BMI for developed and developing countries also increases over time. Developing countries has a higher rate of increase as indicated by a steeper line (higher tangent) according to the time series plot.
+
+```{r,message = FALSE, warning = FALSE}
 #Time_series_plot("bmi",imputed_data)
 Time_series_plot("gni_capita",merged_data)
-
 ```
 
 
+The gni per capita is different for developed and developing country over the year. While developing countries have a relative stable curve at 10000 dollar per capita, developed countries increases from 20000 dollar to 30000 dollar per capita. 
+
+```{r,message = FALSE, warning = FALSE}
+
+Time_series_plot("measles",merged_data)
+
+```
+
+Measles vaccination coverage increases for developing countries and developed countries have a persistently high vaccination coverage. 
+
+```{r,message = FALSE, warning = FALSE}
+Time_series_plot("hospitals",merged_data)
+```
+
+
+
+```{r,message = FALSE, warning = FALSE}
+Time_series_plot("health_exp",merged_data)
+```
 
 
 # Correlation:
 
 ## Pearson Correlation
+Pearson correlation is a common EDA method that ...
+
 
 Over the time:
 ```{r,message = FALSE, warning = FALSE}
@@ -170,12 +199,23 @@ colname = colnames(merged_data)
 Pearson_Corr_res = 
 Pearson_Correlation_result %>%
   mutate(une_exp = Pearson_Correlation(6,merged_data)$Pearson_cor,
+         alcohol = Pearson_Correlation(11,merged_data)$Pearson_cor
+         )
+
+
+Pearson_Corr_pval = 
+Pearson_Correlation_result %>%
+  mutate(
          une_exp_pval = Pearson_Correlation(6,merged_data)$Pearson_pval,
-         alcohol = Pearson_Correlation(11,merged_data)$Pearson_cor,
          alcohol_pval = Pearson_Correlation(11,merged_data)$Pearson_pval
          )
 
 grid.table(Pearson_Corr_res)
+
+
+```
+```{r,message=FALSE,warning=FALSE}
+grid.table(Pearson_Corr_pval)
 
 
 ```
@@ -206,7 +246,7 @@ where $w(a,b)$ can be any arbitrary positive weighting function as long as the i
 <br>
 
 
-### Definition 2
+#### Definition 2
 Define the measure of dependence as:
 \[
 \begin{equation}
@@ -214,7 +254,7 @@ V^2(X,Y;w) = ||f_{X,Y}(a,b)-f_X(a)f_Y(b)||^2_w= \int_{\mathbb{R}^{p+q}}|f_{X,Y}(
 \end{equation}
 \]
 
-#### Proof
+##### Proof
 *The criterion of independent means that for vectors $a$, $b$, the probability density function $f_X(a)$, $f_Y(b)$ and their joint probability density function $f_{X,Y}(a,b)$ satisfies $f_{X,Y}(a,b)=f_X(a)f_Y(b)$. Therefore, I have $V^2(X,Y;w)=||0||^2_w=0$ if they are independent hence the equation satisfy the condition that $V^2=0$ only if variables are independent. (see [paper](https://d1wqtxts1xzle7.cloudfront.net/61217354/solucionario_estadistica_papoulis20191114-47174-4f1occ-with-cover-page-v2.pdf?Expires=1669433644&Signature=PaZvHQ0E9kQ6FyxALEPJ5A1LFgJ3-4zYvgbzSUP7obp~cfIuvZe~8QTXle4i6usOg6MOXKs-KkOUzwVgAz60n4dm5r595qPuZPhzyfu9pE~2hydHWubyH8dfZa-59DF07O3hPFdPgPDrvSGiOWFtfuD2HXBXN2IQ4nm~UJ94pPMG7K8q0jh4WYqDp7WbQ-9WQ5hFULnUKGIH2ok7rwAFEbHqMBR6FAIHJO8gtUjaTtMhc6K4OIAmzBnoqgSOInEE6kXy4agsg1sboDLyxxJMOfJa33GPNRlwrU1Yv69wcb3rsjtjL2s9JGM4mJATS6xpRspz0RBDDZqXSIngfjmE0w__&Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA))*
 
 
@@ -228,7 +268,7 @@ The choice of weighting function must satisfy invariance under transformations o
 <br>
 
 
-### Lemma 1
+#### Lemma 1
 For all x in $\mathbb{R}^d$:
 \[
 \begin{equation}
@@ -257,7 +297,7 @@ By using such weight function and lemma 3.1, the definition of distance covarian
 <br>
 <br>
 
-### Deinition 4
+#### Deinition 4
 Define the distance covariance (dCov) for random vectors $X$ and $Y$ with finite expectation as the following non-negative figure:
 \[
 \begin{equation}
@@ -273,7 +313,7 @@ where $a\in \mathbb{R}^p$, $b\in \mathbb{R}^q$ are two vectors that $a\in X$ and
 
 
 
-
+### Result
 
 ```{r,message = FALSE, warning = FALSE}
 Distance_Correlation = function(varnum, merged_data){
@@ -319,6 +359,12 @@ result_pval =
          )
 
 
+grid.table(result_corr)
+
+```
+
+```{r,message=FALSE,warning=FALSE}
+grid.table(result_pval)
 
 
 ```

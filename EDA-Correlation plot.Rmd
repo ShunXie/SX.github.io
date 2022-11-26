@@ -10,6 +10,7 @@ output:
 
 ```{r}
 library(tidyverse)
+library(ggridges)
 ```
 
 
@@ -21,6 +22,7 @@ merged_data =
 merged_data
 ```
 ```{r}
+merged_data_bmi_alcohol =
 merged_data %>% 
   select(year, life_expect, bmi, alcohol) %>% 
   filter(year > 2012)
@@ -33,7 +35,14 @@ par(mfrow = c(2, 2)) # Create a 2 x 2 plotting matrix
 # The next 4 plots created will be plotted next to each other
 
 # 2013
-hist(rnorm(100))
+merged_data_bmi_alcohol %>% 
+  ggplot(aes(x = activity, y = activity_counts, color = day)) +
+  geom_smooth(se= FALSE)+
+  labs(
+    title = "24-hour activity time courses",
+    x = "Minutes_from_midnight(minute)",
+    y = "Activity counts"
+  
 
 # 2014
 hist(rnorm(100))

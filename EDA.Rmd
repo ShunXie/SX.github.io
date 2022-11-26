@@ -1,11 +1,12 @@
 ---
-title: "EDA"
+title: "Exploratory Data Analysis"
 
 output: 
   html_document:
     toc: true
     toc_float: true
     theme: cosmo
+    code_folding: hide
 ---
 
 
@@ -18,12 +19,15 @@ library(rstatix)
 library(patchwork)
 library(ggridges)
 library(spatstat)
+library(grid)
+library(gridExtra)
 #library(ggpubr)
 #library(GGally)
 suppressMessages(library(dbplyr))
 suppressMessages(library(energy))
 suppressMessages(library(bookdown))
 options(tibble.print_min = 5)
+options(digits=2)
 # set knitr defaults
 knitr::opts_chunk$set(
     echo      = TRUE
@@ -50,8 +54,11 @@ scale_fill_discrete   = scale_fill_viridis_d
 ```
 
 
+# Time series plot
 
-```{r}
+With our existence data, we need to evaluate the overall trend with respect to different types of countries. One way to differentiate country is to identify that whether the country is classified as developed or developing country. In the work by [SP Heyneman](https://www.journals.uchicago.edu/doi/pdf/10.1086/451180?casa_token=9gJkljIq_ukAAAAA:j3C4Kv-0Jp_gUpmVKvxFAxT1oGg8ryzRaHR_hdBX7QlqrAPGKU36A43QBGZ65AItaKU-LrLn6NE), he claimed that the change of economic status and school has a big difference between developed and developing country. We treat these variables as our predictors to the life expectancy. Therefore, it is likely that the predictors are different between developed and developing country. Therefore, we plot over different predictors and identify the trends over time. 
+
+```{r,message = FALSE, warning = FALSE}
 merged_data = 
   read_csv("data/Merged_expectation.csv", show_col_types = FALSE)
 
@@ -59,8 +66,7 @@ imputed_data = read_csv("data/Imputed_expectation.csv", show_col_types = FALSE)
 ```
 
 
-# Time series plot
-```{r}
+```{r,message = FALSE, warning = FALSE}
 
 merged_data %>% 
   group_by(year, `Developed / Developing Countries`) %>% 
@@ -91,7 +97,7 @@ merged_data %>%
 
 
 
-```{r}
+```{r,message = FALSE, warning = FALSE}
 Time_series_plot = function(variable,merged_data){
   merged_data %>% 
   group_by(year, `Developed / Developing Countries`) %>% 
@@ -130,7 +136,7 @@ Time_series_plot("gni_capita",merged_data)
 ## Pearson Correlation
 
 Over the time:
-```{r}
+```{r,message = FALSE, warning = FALSE}
 
 Pearson_Correlation = function(varnum, merged_data){
   
@@ -157,7 +163,11 @@ Pearson_Correlation = function(varnum, merged_data){
 
 Pearson_Correlation_result = tibble("date"=2000:2016)
 
+
 colname = colnames(merged_data)
+
+
+Pearson_Corr_res = 
 Pearson_Correlation_result %>%
   mutate(une_exp = Pearson_Correlation(6,merged_data)$Pearson_cor,
          une_exp_pval = Pearson_Correlation(6,merged_data)$Pearson_pval,
@@ -165,14 +175,16 @@ Pearson_Correlation_result %>%
          alcohol_pval = Pearson_Correlation(11,merged_data)$Pearson_pval
          )
 
-
+grid.table(Pearson_Corr_res)
 
 
 ```
 
 ## Distance Correlation
 
-Distance correlation is a novel developed technique to discover the joint dependence of random variables developed by Székely et al. Unlike Pearson correlation, such Pairwise distance 
+### Theory
+
+Distance correlation is a novel developed technique to discover the joint dependence of random variables developed by [Székely et al](https://projecteuclid.org/journals/annals-of-statistics/volume-35/issue-6/Measuring-and-testing-dependence-by-correlation-of-distances/10.1214/009053607000000505.full). Unlike Pearson correlation, such Pairwise distance 
 correlation is a distance method and therefore it can take into consideration of the non-linear relationship between two random variables, namely $X\in \mathbb{R}^p$ and $Y\in \mathbb{R}^q$ that can have arbitrary dimensions (p and q can be non-equal) to some extend. The correlation between two variables is said to be independent of distance correlation $\mathcal{R}(X,Y)=0$. 
 
 In my article, denote the scalar product of two vectors $a$ and $b$ as <$a,b$> and conjugate of complex function f as $f$. Also define norm $|x|_p$ as Euclidean norm for $x\in\mathbb{R}^p$
@@ -180,7 +192,7 @@ In my article, denote the scalar product of two vectors $a$ and $b$ as <$a,b$> a
 <br>
 <br>
 
-### Definition 1
+#### Definition 1
 In weighted $l_2$ space, the $||\cdot||_w$-norm for any complex function $\zeta \in \mathbb{R}^p\times\mathbb{R}^q$ is defined by:
 \[
 \begin{equation}
@@ -203,7 +215,7 @@ V^2(X,Y;w) = ||f_{X,Y}(a,b)-f_X(a)f_Y(b)||^2_w= \int_{\mathbb{R}^{p+q}}|f_{X,Y}(
 \]
 
 #### Proof
-*The criterion of independent means that for vectors $a$, $b$, the probability density function $f_X(a)$, $f_Y(b)$ and their joint probability density function $f_{X,Y}(a,b)$ satisfies $f_{X,Y}(a,b)=f_X(a)f_Y(b)$. Therefore, I have $V^2(X,Y;w)=||0||^2_w=0$ if they are independent hence the equation satisfy the condition that $V^2=0$ only if variables are independent.*
+*The criterion of independent means that for vectors $a$, $b$, the probability density function $f_X(a)$, $f_Y(b)$ and their joint probability density function $f_{X,Y}(a,b)$ satisfies $f_{X,Y}(a,b)=f_X(a)f_Y(b)$. Therefore, I have $V^2(X,Y;w)=||0||^2_w=0$ if they are independent hence the equation satisfy the condition that $V^2=0$ only if variables are independent. (see [paper](https://d1wqtxts1xzle7.cloudfront.net/61217354/solucionario_estadistica_papoulis20191114-47174-4f1occ-with-cover-page-v2.pdf?Expires=1669433644&Signature=PaZvHQ0E9kQ6FyxALEPJ5A1LFgJ3-4zYvgbzSUP7obp~cfIuvZe~8QTXle4i6usOg6MOXKs-KkOUzwVgAz60n4dm5r595qPuZPhzyfu9pE~2hydHWubyH8dfZa-59DF07O3hPFdPgPDrvSGiOWFtfuD2HXBXN2IQ4nm~UJ94pPMG7K8q0jh4WYqDp7WbQ-9WQ5hFULnUKGIH2ok7rwAFEbHqMBR6FAIHJO8gtUjaTtMhc6K4OIAmzBnoqgSOInEE6kXy4agsg1sboDLyxxJMOfJa33GPNRlwrU1Yv69wcb3rsjtjL2s9JGM4mJATS6xpRspz0RBDDZqXSIngfjmE0w__&Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA))*
 
 
 
@@ -223,7 +235,7 @@ For all x in $\mathbb{R}^d$:
 \int_{\mathbb{R}^d}\frac{1-cos<y,x> }{|y|^{d+1}_{d}}dy=c_d|x|=\frac{\pi ^{(1+d/2)}}{2 \Gamma ((d+1)/2)}|x|
 \end{equation}
 \]
-where $\Gamma(\cdot)$ is the gamma function.
+where $\Gamma(\cdot)$ is the gamma function. This is proved by [Szekely et. al.](https://home.ipipan.waw.pl/j.mielniczuk/Szekely-Rizzo_2005.pdf)
 
 
 <br>
@@ -260,13 +272,10 @@ where $a\in \mathbb{R}^p$, $b\in \mathbb{R}^q$ are two vectors that $a\in X$ and
 
 
 
-```{theorem}
-Here is my theorem.
-```
 
 
 
-```{r}
+```{r,message = FALSE, warning = FALSE}
 Distance_Correlation = function(varnum, merged_data){
   
   correlation_result = tibble("date"=2000:2016, "Distance_cor"=0,"Distance_pval"=0)
@@ -295,12 +304,20 @@ Distance_Correlation = function(varnum, merged_data){
 Distance_Correlation_result = tibble("date"=2000:2016)
 
 colname = colnames(merged_data)
+
+result_corr = 
 Distance_Correlation_result %>%
   mutate(une_exp = Distance_Correlation(6,merged_data)$Distance_cor,
-         une_exp_pval = Distance_Correlation(6,merged_data)$Distance_pval,
          alcohol = Distance_Correlation(11,merged_data)$Distance_cor,
+         )
+
+result_pval = 
+  Distance_Correlation_result %>%
+  mutate(
+         une_exp_pval = Distance_Correlation(6,merged_data)$Distance_pval,
          alcohol_pval = Distance_Correlation(11,merged_data)$Distance_pval
          )
+
 
 
 

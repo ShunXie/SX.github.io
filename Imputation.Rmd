@@ -82,6 +82,7 @@ Health expenditure
 ```{r,message=FALSE, warning=FALSE}
 health_exp = read_csv("data/government_compulsory_health expenditure_from_1970_2020.csv") %>% 
   janitor::clean_names() %>% 
+  filter(measure=="PC_GDP") %>% 
   mutate("country_code"=location,
          "year" = time) %>% 
   select(country_code,year, value)

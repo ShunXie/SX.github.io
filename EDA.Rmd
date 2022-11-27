@@ -133,11 +133,11 @@ BMI for developed and developing countries also increases over time. Developing 
 
 ```{r,message = FALSE, warning = FALSE}
 #Time_series_plot("bmi",imputed_data)
-Time_series_plot("gni_capita",merged_data)
+Time_series_plot("une_gni",merged_data)
 ```
 
 
-The gni per capita is different for developed and developing country over the year. While developing countries have a relative stable curve at 10000 dollar per capita, developed countries increases from 20000 dollar to 30000 dollar per capita. 
+The gni is different for developed and developing country over the year. While developing countries have a relative stable curve at 10000 dollar per capita, developed countries increases from 20000 dollar to 40000 dollar per capita. 
 
 ```{r,message = FALSE, warning = FALSE}
 
@@ -157,12 +157,40 @@ Time_series_plot("hospitals",merged_data)
 Time_series_plot("health_exp",merged_data)
 ```
 
+Health expenditure in developed countries soar over the years from 2000 to 2016, from 4% to 5% of total GDP. Developing countries also have an increase in the health expenditure, but with a lower rate. 
+
+<br>
+<br>
 
 # Correlation:
 
+<br>
 ## Pearson Correlation
-Pearson correlation is a common EDA method that ...
 
+### Theory
+
+Pearson correlation is a common EDA method that measures the strength of the linear relation between
+two variables [paper](https://link.springer.com/chapter/10.1007/978-3-642-00296-0_5). It has the formula defined in following definition:
+
+<br>
+<br>
+
+#### Definition Pearson
+
+Let x and y be two random variables with zero mean and $x,y\in \mathbb R$, the pearson correlation coefficient is defined as:
+
+\[
+\rho (x,y) = \frac{cov(x,y)}{\sigma_x\sigma_y}
+\]
+
+where $\sigma_x=\sqrt{var(x)}$ and $\sigma_y=\sqrt{var(y)}$. 
+
+<br>
+<br>
+
+The coefficient as a value between $-1\leq\rho(x,y)\leq1$. If the coefficient is zero, then x and y does not have correlation at all. If the coefficient is closer to a value of +1 or -1, then the correlation between the two variable is stronger. A +1 coefficient means the two variables have a perfect positive correlation whereas a -1 value means the two variables have a perfect negative correlation. 
+
+#### Results
 
 Over the time:
 ```{r,message = FALSE, warning = FALSE}
@@ -177,10 +205,10 @@ Pearson_Correlation = function(varnum, merged_data){
       filter(year==t)
     
     correlation_result$Pearson_cor[t-1999] = 
-    cor(merged_data_temp[,varnum], merged_data_temp$une_life, method = "pearson",use = "complete.obs")[1]
+    round(cor(merged_data_temp[,varnum], merged_data_temp$une_life, method = "pearson",use = "complete.obs")[1],2)
     
     correlation_result$Pearson_pval[t-1999] = 
-    cor.test(merged_data_temp[,varnum][[1]], merged_data_temp$une_life, method = "pearson",use = "complete.obs")$p.value
+    round(cor.test(merged_data_temp[,varnum][[1]], merged_data_temp$une_life, method = "pearson",use = "complete.obs")$p.value,2)
     
   }
   
@@ -196,10 +224,14 @@ Pearson_Correlation_result = tibble("date"=2000:2016)
 colname = colnames(merged_data)
 
 
+
 Pearson_Corr_res = 
 Pearson_Correlation_result %>%
   mutate(une_exp = Pearson_Correlation(6,merged_data)$Pearson_cor,
-         alcohol = Pearson_Correlation(11,merged_data)$Pearson_cor
+         alcohol = Pearson_Correlation(11,merged_data)$Pearson_cor,
+         bmi = Pearson_Correlation(12,merged_data)$Pearson_cor,
+         measles = Pearson_Correlation(16,merged_data)$Pearson_cor,
+         gni_capita = Pearson_Correlation(29,merged_data)$Pearson_cor
          )
 
 
@@ -207,18 +239,22 @@ Pearson_Corr_pval =
 Pearson_Correlation_result %>%
   mutate(
          une_exp_pval = Pearson_Correlation(6,merged_data)$Pearson_pval,
-         alcohol_pval = Pearson_Correlation(11,merged_data)$Pearson_pval
+         alcohol_pval = Pearson_Correlation(11,merged_data)$Pearson_pval,
+         bmi_pval = Pearson_Correlation(12,merged_data)$Pearson_pval,
+         measles_pval = Pearson_Correlation(16,merged_data)$Pearson_pval,
+         gni_capita_pval = Pearson_Correlation(29,merged_data)$Pearson_pval
          )
 
 grid.table(Pearson_Corr_res)
-
-
-```
-```{r,message=FALSE,warning=FALSE}
-grid.table(Pearson_Corr_pval)
-
+#grid.table(Pearson_Corr_pval)
 
 ```
+
+
+
+
+<br>
+<br>
 
 ## Distance Correlation
 
@@ -328,10 +364,10 @@ Distance_Correlation = function(varnum, merged_data){
       na.omit()
     
     correlation_result$Distance_cor[t-1999] = 
-    dcor(merged_data_temp[,2], merged_data_temp$une_life,)[1]
+    round(dcor(merged_data_temp[,2], merged_data_temp$une_life,)[1],2)
     
     correlation_result$Distance_pval[t-1999] = 
-    dcor.test(merged_data_temp[,2][[1]], merged_data_temp$une_life,R=1000)$p.value
+    round(dcor.test(merged_data_temp[,2][[1]], merged_data_temp$une_life,R=1000)$p.value,2)
     
   }
   
@@ -349,25 +385,27 @@ result_corr =
 Distance_Correlation_result %>%
   mutate(une_exp = Distance_Correlation(6,merged_data)$Distance_cor,
          alcohol = Distance_Correlation(11,merged_data)$Distance_cor,
+         bmi = Distance_Correlation(12,merged_data)$Distance_cor,
+         measles = Distance_Correlation(16,merged_data)$Distance_cor,
+         gni_capita = Distance_Correlation(29,merged_data)$Distance_cor
          )
 
 result_pval = 
   Distance_Correlation_result %>%
   mutate(
          une_exp_pval = Distance_Correlation(6,merged_data)$Distance_pval,
-         alcohol_pval = Distance_Correlation(11,merged_data)$Distance_pval
+         alcohol_pval = Distance_Correlation(11,merged_data)$Distance_pval,
+         bmi = Distance_Correlation(12,merged_data)$Distance_pval,
+         measles = Distance_Correlation(16,merged_data)$Distance_pval,
+         gni_capita = Distance_Correlation(29,merged_data)$Distance_pval
          )
 
 
 grid.table(result_corr)
+#grid.table(result_pval)
 
 ```
 
-```{r,message=FALSE,warning=FALSE}
-grid.table(result_pval)
-
-
-```
 
 
 

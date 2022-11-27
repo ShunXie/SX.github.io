@@ -447,12 +447,12 @@ years.</p>
 Developing countries has a higher rate of increase as indicated by a
 steeper line (higher tangent) according to the time series plot.</p>
 <pre class="r"><code>#Time_series_plot(&quot;bmi&quot;,imputed_data)
-Time_series_plot(&quot;gni_capita&quot;,merged_data)</code></pre>
+Time_series_plot(&quot;une_gni&quot;,merged_data)</code></pre>
 <p><img src="EDA_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>The gni per capita is different for developed and developing country
-over the year. While developing countries have a relative stable curve
-at 10000 dollar per capita, developed countries increases from 20000
-dollar to 30000 dollar per capita.</p>
+<p>The gni is different for developed and developing country over the
+year. While developing countries have a relative stable curve at 10000
+dollar per capita, developed countries increases from 20000 dollar to
+40000 dollar per capita.</p>
 <pre class="r"><code>Time_series_plot(&quot;measles&quot;,merged_data)</code></pre>
 <p><img src="EDA_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Measles vaccination coverage increases for developing countries and
@@ -461,12 +461,42 @@ developed countries have a persistently high vaccination coverage.</p>
 <p><img src="EDA_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>Time_series_plot(&quot;health_exp&quot;,merged_data)</code></pre>
 <p><img src="EDA_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Health expenditure in developed countries soar over the years from
+2000 to 2016, from 4% to 5% of total GDP. Developing countries also have
+an increase in the health expenditure, but with a lower rate.</p>
+<p><br> <br></p>
 </div>
 <div id="correlation" class="section level1">
 <h1>Correlation:</h1>
-<div id="pearson-correlation" class="section level2">
-<h2>Pearson Correlation</h2>
-<p>Pearson correlation is a common EDA method that …</p>
+<p><br> ## Pearson Correlation</p>
+<div id="theory" class="section level3">
+<h3>Theory</h3>
+<p>Pearson correlation is a common EDA method that measures the strength
+of the linear relation between two variables <a
+href="https://link.springer.com/chapter/10.1007/978-3-642-00296-0_5">paper</a>.
+It has the formula defined in following definition:</p>
+<p><br> <br></p>
+<div id="definition-pearson" class="section level4">
+<h4>Definition Pearson</h4>
+<p>Let x and y be two random variables with zero mean and <span
+class="math inline">\(x,y\in \mathbb R\)</span>, the pearson correlation
+coefficient is defined as:</p>
+<p><span class="math display">\[
+\rho (x,y) = \frac{cov(x,y)}{\sigma_x\sigma_y}
+\]</span></p>
+<p>where <span class="math inline">\(\sigma_x=\sqrt{var(x)}\)</span> and
+<span class="math inline">\(\sigma_y=\sqrt{var(y)}\)</span>.</p>
+<p><br> <br></p>
+<p>The coefficient as a value between <span
+class="math inline">\(-1\leq\rho(x,y)\leq1\)</span>. If the coefficient
+is zero, then x and y does not have correlation at all. If the
+coefficient is closer to a value of +1 or -1, then the correlation
+between the two variable is stronger. A +1 coefficient means the two
+variables have a perfect positive correlation whereas a -1 value means
+the two variables have a perfect negative correlation.</p>
+</div>
+<div id="results" class="section level4">
+<h4>Results</h4>
 <p>Over the time:</p>
 <pre class="r"><code>Pearson_Correlation = function(varnum, merged_data){
   
@@ -478,10 +508,10 @@ developed countries have a persistently high vaccination coverage.</p>
       filter(year==t)
     
     correlation_result$Pearson_cor[t-1999] = 
-    cor(merged_data_temp[,varnum], merged_data_temp$une_life, method = &quot;pearson&quot;,use = &quot;complete.obs&quot;)[1]
+    round(cor(merged_data_temp[,varnum], merged_data_temp$une_life, method = &quot;pearson&quot;,use = &quot;complete.obs&quot;)[1],2)
     
     correlation_result$Pearson_pval[t-1999] = 
-    cor.test(merged_data_temp[,varnum][[1]], merged_data_temp$une_life, method = &quot;pearson&quot;,use = &quot;complete.obs&quot;)$p.value
+    round(cor.test(merged_data_temp[,varnum][[1]], merged_data_temp$une_life, method = &quot;pearson&quot;,use = &quot;complete.obs&quot;)$p.value,2)
     
   }
   
@@ -497,10 +527,14 @@ Pearson_Correlation_result = tibble(&quot;date&quot;=2000:2016)
 colname = colnames(merged_data)
 
 
+
 Pearson_Corr_res = 
 Pearson_Correlation_result %&gt;%
   mutate(une_exp = Pearson_Correlation(6,merged_data)$Pearson_cor,
-         alcohol = Pearson_Correlation(11,merged_data)$Pearson_cor
+         alcohol = Pearson_Correlation(11,merged_data)$Pearson_cor,
+         bmi = Pearson_Correlation(12,merged_data)$Pearson_cor,
+         measles = Pearson_Correlation(16,merged_data)$Pearson_cor,
+         gni_capita = Pearson_Correlation(29,merged_data)$Pearson_cor
          )
 
 
@@ -508,17 +542,21 @@ Pearson_Corr_pval =
 Pearson_Correlation_result %&gt;%
   mutate(
          une_exp_pval = Pearson_Correlation(6,merged_data)$Pearson_pval,
-         alcohol_pval = Pearson_Correlation(11,merged_data)$Pearson_pval
+         alcohol_pval = Pearson_Correlation(11,merged_data)$Pearson_pval,
+         bmi_pval = Pearson_Correlation(12,merged_data)$Pearson_pval,
+         measles_pval = Pearson_Correlation(16,merged_data)$Pearson_pval,
+         gni_capita_pval = Pearson_Correlation(29,merged_data)$Pearson_pval
          )
 
 grid.table(Pearson_Corr_res)</code></pre>
 <p><img src="EDA_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>grid.table(Pearson_Corr_pval)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#grid.table(Pearson_Corr_pval)</code></pre>
+<p><br> <br></p>
+</div>
 </div>
 <div id="distance-correlation" class="section level2">
 <h2>Distance Correlation</h2>
-<div id="theory" class="section level3">
+<div id="theory-1" class="section level3">
 <h3>Theory</h3>
 <p>Distance correlation is a novel developed technique to discover the
 joint dependence of random variables developed by <a
@@ -649,10 +687,10 @@ class="math inline">\(b\in Y\)</span></p>
       na.omit()
     
     correlation_result$Distance_cor[t-1999] = 
-    dcor(merged_data_temp[,2], merged_data_temp$une_life,)[1]
+    round(dcor(merged_data_temp[,2], merged_data_temp$une_life,)[1],2)
     
     correlation_result$Distance_pval[t-1999] = 
-    dcor.test(merged_data_temp[,2][[1]], merged_data_temp$une_life,R=1000)$p.value
+    round(dcor.test(merged_data_temp[,2][[1]], merged_data_temp$une_life,R=1000)$p.value,2)
     
   }
   
@@ -670,20 +708,25 @@ result_corr =
 Distance_Correlation_result %&gt;%
   mutate(une_exp = Distance_Correlation(6,merged_data)$Distance_cor,
          alcohol = Distance_Correlation(11,merged_data)$Distance_cor,
+         bmi = Distance_Correlation(12,merged_data)$Distance_cor,
+         measles = Distance_Correlation(16,merged_data)$Distance_cor,
+         gni_capita = Distance_Correlation(29,merged_data)$Distance_cor
          )
 
 result_pval = 
   Distance_Correlation_result %&gt;%
   mutate(
          une_exp_pval = Distance_Correlation(6,merged_data)$Distance_pval,
-         alcohol_pval = Distance_Correlation(11,merged_data)$Distance_pval
+         alcohol_pval = Distance_Correlation(11,merged_data)$Distance_pval,
+         bmi = Distance_Correlation(12,merged_data)$Distance_pval,
+         measles = Distance_Correlation(16,merged_data)$Distance_pval,
+         gni_capita = Distance_Correlation(29,merged_data)$Distance_pval
          )
 
 
 grid.table(result_corr)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>grid.table(result_pval)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#grid.table(result_pval)</code></pre>
 </div>
 </div>
 </div>

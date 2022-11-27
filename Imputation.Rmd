@@ -12,26 +12,38 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Background Information of the datasets
+
+We choose WHO Life Expectancy Dataset as our main dataset in our study. The code is read as following:
+
 ```{r}
 suppressMessages(library(tidyverse))
 suppressMessages(library(dbplyr))
 options(tibble.print_min = 5)
 
+#Get life expectancy data
+LifeExpectancy = read_csv("data/who_life_exp.csv",col_types = cols(.default = col_guess())) %>% 
+  janitor::clean_names()
+
+
 ```
 
-# Background Information of the data
+Life expectancy datasets contains a total of ```r length(unique(LifeExpectancy$country))``` countries with year ranging from ```r min(unique(LifeExpectancy$year))``` to ```r max(unique(LifeExpectancy$year))```. There are a total of ```r length(LifeExpectancy)``` variables. 
+
+
+
+
+
+
 
 First, we load and merge the data:
+
 ```{r,message=FALSE, warning=FALSE}
 country_code = 
   read_csv("data/country-codes.csv", show_col_types = FALSE) %>% 
   select(`ISO3166-1-Alpha-3`, `Developed / Developing Countries`)
 
 
-
-#Guess the column type of life expectancy data
-LifeExpectancy = read_csv("data/who_life_exp.csv",col_types = cols(.default = col_guess())) %>% 
-  janitor::clean_names()
 
 merged_data_PM = merge(LifeExpectancy, country_code, by.x = "country_code", by.y = "ISO3166-1-Alpha-3" )
 ```
@@ -94,10 +106,15 @@ merged_data =
   select(country_code:une_school,PM_value,income_group,health_exp,`Developed / Developing Countries`)
 ```
 
+Store the data
+```{r}
+write.csv(merged_data , file = "data/Merged_expectation.csv")
+```
+
 
 # Impute
 
-```{r,message=FALSE, warning=FALSE}
+```{r,message=FALSE, warning=FALSE, eval=FALSE}
 raw_mat = 
   merged_data %>% 
   select(-country, -country_code, -region,-income_group, -`Developed / Developing Countries`) %>% 
@@ -107,7 +124,7 @@ imputed_mat = filling::fill.KNNimpute(raw_mat, k = 2)
 
 ```
 
-```{r}
+```{r,eval=FALSE}
 #colnames_exp = colnames(LifeExpectancy)
 Imputed_expectancy = merged_data
 for (i in 1:(length(merged_data)-5)) {
@@ -115,13 +132,10 @@ for (i in 1:(length(merged_data)-5)) {
 }
 head(Imputed_expectancy)
 
-```
-
-```{r}
-write.csv(merged_data , file = "data/Merged_expectation.csv")
 write.csv(Imputed_expectancy , file = "data/Imputed_expectation.csv")
-
 ```
+
+
 
 
 

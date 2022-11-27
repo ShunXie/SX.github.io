@@ -1,0 +1,29 @@
+---
+title: "EDA-correlation"
+author: "Yuchen Zhang"
+date: "2022-11-27"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+
+
+```{r}
+merged_data = 
+  read_csv("data/Merged_expectation.csv", show_col_types = FALSE) %>% 
+  filter(year == 2015) %>% 
+  select(-...1,-country_code,-country,-region,-year,-life_exp60,-income_group,-`Developed / Developing Countries`)
+
+
+merged_data
+```
+
+
+```{r}
+res = cor(merged_data)
+round(res, 2)
+```
+

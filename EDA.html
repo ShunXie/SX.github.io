@@ -468,7 +468,119 @@ an increase in the health expenditure, but with a lower rate.</p>
 </div>
 <div id="scatter-plot" class="section level1">
 <h1>Scatter Plot:</h1>
-<p>Sc</p>
+<p>Visualization via scatter plot is a way to further discover the
+pairwise relation between two chosen variable.<br />
+Since we choose Life expectancy as our response variable, we can plot
+the scatter plot between life expectancy and other chosen predictors to
+see the correlation between variables.</p>
+<pre class="r"><code>#bmi
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, life_expect, bmi) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = bmi, y = life_expect))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]],labels = c(2013,2014))
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]],labels = c(2015,2016))
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and bmi&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#measles
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, life_expect, measles) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = measles, y = life_expect))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]],labels = c(2013,2014))
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]],labels = c(2015,2016))
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and measles&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#health_exp
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, life_expect, health_exp) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = health_exp, y = life_expect))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]],labels = c(2013,2014))
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]],labels = c(2015,2016))
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and health_exp&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><br> <br></p>
 </div>
 <div id="correlation" class="section level1">
@@ -562,7 +674,7 @@ Pearson_Correlation_result %&gt;%
          )
 
 grid.table(Pearson_Corr_res)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#grid.table(Pearson_Corr_pval)</code></pre>
 <p><br> <br></p>
 </div>
@@ -746,7 +858,7 @@ result_pval =
 
 
 grid.table(result_corr)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#grid.table(result_pval)</code></pre>
 </div>
 </div>

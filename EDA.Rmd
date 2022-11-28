@@ -21,6 +21,7 @@ library(ggridges)
 library(spatstat)
 library(grid)
 library(gridExtra)
+library(cowplot)
 #library(ggpubr)
 #library(GGally)
 suppressMessages(library(dbplyr))
@@ -164,7 +165,140 @@ Health expenditure in developed countries soar over the years from 2000 to 2016,
 
 # Scatter Plot:
 
-Sc
+Visualization via scatter plot is a way to further discover the pairwise relation between two chosen variable.  
+Since we choose Life expectancy as our response variable, we can plot the scatter plot between life expectancy and other chosen predictors to see the correlation between variables. 
+
+
+
+```{r,message = FALSE, warning = FALSE}
+#bmi
+merged_data_temp =
+merged_data %>% 
+  select(year, life_expect, bmi) %>% 
+  filter(year > 2012)
+
+
+
+myplots <- vector('list', 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %>% 
+      filter(year == i) %>% 
+      ggplot(aes(x = bmi, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+  
+  }
+  
+plot_row1 <- plot_grid(myplots[[1]], myplots[[2]],labels = c(2013,2014))
+plot_row2 <- plot_grid(myplots[[3]], myplots[[4]],labels = c(2015,2016))
+# title
+title <- ggdraw() + 
+  draw_label(
+    "Scatter Plot for Life Expectancy and bmi",
+    fontface = 'bold',
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))
+
+
+
+```
+
+
+
+```{r,message = FALSE, warning = FALSE}
+#measles
+merged_data_temp =
+merged_data %>% 
+  select(year, life_expect, measles) %>% 
+  filter(year > 2012)
+
+
+
+myplots <- vector('list', 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %>% 
+      filter(year == i) %>% 
+      ggplot(aes(x = measles, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+  
+  }
+  
+plot_row1 <- plot_grid(myplots[[1]], myplots[[2]],labels = c(2013,2014))
+plot_row2 <- plot_grid(myplots[[3]], myplots[[4]],labels = c(2015,2016))
+# title
+title <- ggdraw() + 
+  draw_label(
+    "Scatter Plot for Life Expectancy and measles",
+    fontface = 'bold',
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))
+
+
+
+```
+
+
+
+
+```{r,message = FALSE, warning = FALSE}
+#health_exp
+merged_data_temp =
+merged_data %>% 
+  select(year, life_expect, health_exp) %>% 
+  filter(year > 2012)
+
+
+
+myplots <- vector('list', 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %>% 
+      filter(year == i) %>% 
+      ggplot(aes(x = health_exp, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+  
+  }
+  
+plot_row1 <- plot_grid(myplots[[1]], myplots[[2]],labels = c(2013,2014))
+plot_row2 <- plot_grid(myplots[[3]], myplots[[4]],labels = c(2015,2016))
+# title
+title <- ggdraw() + 
+  draw_label(
+    "Scatter Plot for Life Expectancy and health_exp",
+    fontface = 'bold',
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))
+
+
+
+```
+
+
 
 <br>
 <br>

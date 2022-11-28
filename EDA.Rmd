@@ -357,6 +357,10 @@ where $a\in \mathbb{R}^p$, $b\in \mathbb{R}^q$ are two vectors that $a\in X$ and
 <br>
 <br>
 
+Different to the Pearson method, the distance correlation have a non-negative value as it is a distance method. Therefore, although we have a better ability to measure nonlinear correlation, we cannot identify the direction of the correlation. In other word, we cannot tell whether the correlation is positively correlated or negatively correlated. 
+
+<br>
+
 
 
 

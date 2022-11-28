@@ -14,6 +14,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Background Information of the datasets
 
+<br>
+<br>
+
+
+### Life Expectancy Dataset
+
 We choose WHO Life Expectancy Dataset as our main dataset in our study. The code is read as following:
 
 ```{r}
@@ -27,16 +33,50 @@ LifeExpectancy = read_csv("data/who_life_exp.csv",col_types = cols(.default = co
 
 
 ```
+Life expectancy datasets contains a total of ```r length(unique(LifeExpectancy$country))``` countries with year ranging from ```r min(unique(LifeExpectancy$year))``` to ```r max(unique(LifeExpectancy$year))```. There are a total of ```r length(LifeExpectancy)``` variables. Out of which, we consider the main 
 
-Life expectancy datasets contains a total of ```r length(unique(LifeExpectancy$country))``` countries with year ranging from ```r min(unique(LifeExpectancy$year))``` to ```r max(unique(LifeExpectancy$year))```. There are a total of ```r length(LifeExpectancy)``` variables. 
+*```r colnames(LifeExpectancy)[1]```: country name
+
+*```r colnames(LifeExpectancy)[2]```: Three letter of the country id
+
+*```r colnames(LifeExpectancy)[3]```: The region of the country
+
+*```r colnames(LifeExpectancy)[4]```: year of all values stored
+
+*```r colnames(LifeExpectancy)[7]```: Adult Mortality Rates of both sexes (probability of dying between 15 and 60 years per 1000 population)
+
+*```r colnames(LifeExpectancy)[8]```: Death rate up to age 1
+
+*```r colnames(LifeExpectancy)[9]```: Death rate between ages 1 and 4
+
+*```r colnames(LifeExpectancy)[10]```: Alcohol, recorded per capita (15+) consumption (in litres of pure alcohol)
+
+*```r colnames(LifeExpectancy)[11]```: Mean BMI (kg/$m^2$) (18+) (age-standardized estimate)
+
+*```r colnames(LifeExpectancy)[14]```: Hepatitis B (HepB) immunization coverage among 1-year-olds (%)
+
+*```r colnames(LifeExpectancy)[15]```: Measles-containing-vaccine first-dose (MCV1) immunization coverage among 1-year-olds (%)
+
+*```r colnames(LifeExpectancy)[16]```: Polio (Pol3) immunization coverage among 1-year-olds (%)
+
+*```r colnames(LifeExpectancy)[17]```: Diphtheria tetanus toxoid and pertussis (DTP3) immunization coverage among 1-year-olds (%)
+
+*```r colnames(LifeExpectancy)[20]```: Total density per 100 000 population: Hospitals
+
+*```r colnames(LifeExpectancy)[26]```: (Our response variable) Life expectancy at birth, total (years)
+
+*```r colnames(LifeExpectancy)[28]```: GNI per capita, PPP (current international $)
 
 
 
+<br>
+<br>
+
+### Country Code Dataset
 
 
+Country code dataset contains the status of countries, such as the information of the independence status and its capital city. We include the variable specifies whether the country is a developed or developing country. The data is read in the following code and is merged by the code.  
 
-
-First, we load and merge the data:
 
 ```{r,message=FALSE, warning=FALSE}
 country_code = 
@@ -47,6 +87,14 @@ country_code =
 
 merged_data_PM = merge(LifeExpectancy, country_code, by.x = "country_code", by.y = "ISO3166-1-Alpha-3" )
 ```
+
+
+<br>
+<br>
+
+
+### PM2.5 dataset
+PM2.5 dataset is a dataset that specifies the percentage of total population exposed to levels exceeding WHO guideline value. Such value exists over year 1960 to 2021 but most of the value before 2010 and after 2017 are missing.The following code read and clean the dataset.
 
 merge the data with dataset contain pm 2.5 information:
 ```{r,message=FALSE, warning=FALSE}
@@ -69,7 +117,8 @@ PM_dataset_clean =
   mutate(year = as.numeric(year))
 ```
 
-merge the data with dataset contain Developed / Developing Countries information
+The following code is used to merge with all dataset.
+
 ```{r,message=FALSE, warning=FALSE}
 #merged data with developed/ developing countries
 merged_data_d = 
@@ -77,7 +126,14 @@ merged_data_d =
   left_join(PM_dataset_clean, by = c("country_code","year"))
 ```
 
-merge the data with dataset contain income level information
+
+<br>
+<br>
+
+### Income level data
+
+Income level data is a dataset specifies the income status. It is a factor variable with four levels, namely high income, low income, lower middle income and upper middle income. The dataset is cleaned and merged in the following code. 
+
 ```{r,message=FALSE, warning=FALSE}
 #read income level data
 Income_dataset = read_csv("data/income_level.csv", show_col_types = FALSE) %>% 
@@ -90,11 +146,19 @@ merged_data_i = merged_data_d %>%
   select(country_code:une_school,PM_value,income_group,`Developed / Developing Countries`)
 ```
 
-merge the data with dataset contain Health expenditure information
+<br>
+<br>
+
+
+### Health expenditure
+
+Health expenditure dataset measures the health expenditure from government with respect to different countries. The dataset is measured in percentage of GDP or dollar value per capita. We choose percentage of GDP as our unit because the dataset measured in percentage of GDP has more complete values. Here is the coding for read, clean and merge the Health expenditure dataset to original dataset. 
+
 ```{r,message=FALSE, warning=FALSE}
 health_exp = read_csv("data/government_compulsory_health expenditure_from_1970_2020.csv") %>% 
   janitor::clean_names() %>% 
-  filter(measure=="PC_GDP") %>% 
+  filter(measure=="PC_GDP") %>%
+  filter(subject=="TOT") %>% 
   mutate("country_code"=location,
          "year" = time) %>% 
   select(country_code,year, value)
@@ -106,7 +170,14 @@ merged_data_h =
   select(country_code:une_school,PM_value,income_group,health_exp,`Developed / Developing Countries`)
 ```
 
-merge the data with dataset contain women in parliaments information
+<br>
+<br>
+
+
+### Parliament Information
+
+Parliament information data is a dataset that measured the percentage of women in parliament over different years for different countries. The following code cleans and merge the data:
+
 ```{r}
 women_in_parliament <-
   read_csv("data/around_2019_women_percent_in_national_parliaments.csv", skip = 5) %>% 

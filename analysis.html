@@ -868,9 +868,14 @@ broom::tidy(bonferroni_result) %&gt;%
 </div>
 <div id="tukeys-method" class="section level3">
 <h3>Tukey’s Method</h3>
-<pre class="r"><code>tukey_result &lt;- TukeyHSD(anova_result_1)
+<pre class="r"><code>tukey_result &lt;- TukeyHSD(anova_result_1) %&gt;% 
+  broom::tidy() %&gt;% 
+  select(contrast,estimate, conf.low,conf.high)
 
-plot(tukey_result)</code></pre>
+ggplot(tukey_result, aes(x = fct_reorder(contrast, estimate), y = estimate)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = `conf.low`, ymax = `conf.high`)) +
+  labs(title = &quot;Contrast Estimates and 95% CI&quot;, ) + ylab(&quot;Estimate&quot;) + xlab(&quot;Contrast&quot;) + theme(axis.text.x = element_text(hjust = 1, angle = 45,size = 7))</code></pre>
 <p><img src="analysis_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
  
 </div>
@@ -971,9 +976,15 @@ broom::tidy(bonferroni_result) %&gt;%
 </div>
 <div id="tukeys-method-1" class="section level3">
 <h3>Tukey’s Method</h3>
-<pre class="r"><code>tukey_result &lt;- TukeyHSD(anova_result_2)
+<pre class="r"><code>tukey_result &lt;- TukeyHSD(anova_result_2)%&gt;% 
+  broom::tidy() %&gt;% 
+  select(contrast,estimate, conf.low,conf.high)
 
-plot(tukey_result)</code></pre>
+
+ggplot(tukey_result, aes(x = fct_reorder(contrast, estimate), y = estimate)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = `conf.low`, ymax = `conf.high`)) +
+  labs(title = &quot;Contrast Estimates and 95% CI&quot;, ) + ylab(&quot;Estimate&quot;) + xlab(&quot;Contrast&quot;) + theme(axis.text.x = element_text(hjust = 1, angle = 45,size = 7))</code></pre>
 <p><img src="analysis_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
  
 </div>

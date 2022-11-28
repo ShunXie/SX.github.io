@@ -166,9 +166,15 @@ broom::tidy(bonferroni_result) %>%
 \ \par
 ### Tukey's Method
 ```{r}
-tukey_result <- TukeyHSD(anova_result_1)
+tukey_result <- TukeyHSD(anova_result_1) %>% 
+  broom::tidy() %>% 
+  select(contrast,estimate, conf.low,conf.high)
 
-plot(tukey_result)
+ggplot(tukey_result, aes(x = fct_reorder(contrast, estimate), y = estimate)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = `conf.low`, ymax = `conf.high`)) +
+  labs(title = "Contrast Estimates and 95% CI", ) + ylab("Estimate") + xlab("Contrast") + theme(axis.text.x = element_text(hjust = 1, angle = 45,size = 7))
+
 
 ```
 
@@ -199,9 +205,15 @@ broom::tidy(bonferroni_result) %>%
 \ \par
 ### Tukey's Method
 ```{r}
-tukey_result <- TukeyHSD(anova_result_2)
+tukey_result <- TukeyHSD(anova_result_2)%>% 
+  broom::tidy() %>% 
+  select(contrast,estimate, conf.low,conf.high)
 
-plot(tukey_result)
+
+ggplot(tukey_result, aes(x = fct_reorder(contrast, estimate), y = estimate)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = `conf.low`, ymax = `conf.high`)) +
+  labs(title = "Contrast Estimates and 95% CI", ) + ylab("Estimate") + xlab("Contrast") + theme(axis.text.x = element_text(hjust = 1, angle = 45,size = 7))
 
 ```
 

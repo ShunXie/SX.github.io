@@ -364,6 +364,8 @@ div.tocify {
 
 <div id="background-information-of-the-datasets" class="section level1">
 <h1>Background Information of the datasets</h1>
+<p>We choose WHO Life Expectancy Dataset as our main dataset in our
+study. The code is read as following:</p>
 <pre class="r"><code>suppressMessages(library(tidyverse))
 suppressMessages(library(dbplyr))
 options(tibble.print_min = 5)
@@ -371,8 +373,9 @@ options(tibble.print_min = 5)
 #Get life expectancy data
 LifeExpectancy = read_csv(&quot;data/who_life_exp.csv&quot;,col_types = cols(.default = col_guess())) %&gt;% 
   janitor::clean_names()</code></pre>
-<p>We choose WHO Life Expectancy Dataset as our main dataset in our
-study. Life expectancy datasets contains a total of</p>
+<p>Life expectancy datasets contains a total of <code>183</code>
+countries with year ranging from <code>2000</code> to <code>2016</code>.
+There are a total of <code>32</code> variables.</p>
 <p>First, we load and merge the data:</p>
 <pre class="r"><code>country_code = 
   read_csv(&quot;data/country-codes.csv&quot;, show_col_types = FALSE) %&gt;% 
@@ -381,7 +384,7 @@ study. Life expectancy datasets contains a total of</p>
 
 
 merged_data_PM = merge(LifeExpectancy, country_code, by.x = &quot;country_code&quot;, by.y = &quot;ISO3166-1-Alpha-3&quot; )</code></pre>
-<p>pm 2.5</p>
+<p>merge the data with dataset contain pm 2.5 information:</p>
 <pre class="r"><code>#read pm2.5 data
 PM_dataset = 
   read_csv(&quot;data/pm2.5.csv&quot;, show_col_types = FALSE, skip = 4) 
@@ -398,12 +401,13 @@ PM_dataset_clean =
   ) %&gt;% 
   select(country_code, year, PM_value) %&gt;% 
   mutate(year = as.numeric(year))</code></pre>
-<p>Developed / Developing Countries</p>
+<p>merge the data with dataset contain Developed / Developing Countries
+information</p>
 <pre class="r"><code>#merged data with developed/ developing countries
 merged_data_d = 
   merged_data_PM %&gt;% 
   left_join(PM_dataset_clean, by = c(&quot;country_code&quot;,&quot;year&quot;))</code></pre>
-<p>income level</p>
+<p>merge the data with dataset contain income level information</p>
 <pre class="r"><code>#read income level data
 Income_dataset = read_csv(&quot;data/income_level.csv&quot;, show_col_types = FALSE) %&gt;% 
   janitor::clean_names() %&gt;% 
@@ -413,7 +417,8 @@ Income_dataset = read_csv(&quot;data/income_level.csv&quot;, show_col_types = FA
 merged_data_i = merged_data_d %&gt;% 
   left_join( Income_dataset, by = c(&quot;country_code&quot;)) %&gt;% 
   select(country_code:une_school,PM_value,income_group,`Developed / Developing Countries`)</code></pre>
-<p>Health expenditure</p>
+<p>merge the data with dataset contain Health expenditure
+information</p>
 <pre class="r"><code>health_exp = read_csv(&quot;data/government_compulsory_health expenditure_from_1970_2020.csv&quot;) %&gt;% 
   janitor::clean_names() %&gt;% 
   filter(measure==&quot;PC_GDP&quot;) %&gt;% 
@@ -421,11 +426,40 @@ merged_data_i = merged_data_d %&gt;%
          &quot;year&quot; = time) %&gt;% 
   select(country_code,year, value)
 
-merged_data = 
+merged_data_h = 
   merged_data_i %&gt;% 
   left_join(health_exp, by = c(&quot;country_code&quot;,&quot;year&quot;)) %&gt;% 
   mutate(&quot;health_exp&quot; = value) %&gt;% 
   select(country_code:une_school,PM_value,income_group,health_exp,`Developed / Developing Countries`)</code></pre>
+<p>merge the data with dataset contain women in parliaments
+information</p>
+<pre class="r"><code>women_in_parliaments = read_csv(&quot;data/around_2019_women_percent_in_national_parliaments.csv&quot;, skip = 5) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  mutate(&quot;country&quot;=x2,
+         &quot;women_percent&quot; = percent_w_6) %&gt;% 
+  select(country, women_percent)</code></pre>
+<pre><code>## New names:
+## Rows: 193 Columns: 10
+## ── Column specification
+## ──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+## (7): ...1, ...2, Elections...3, Elections...7, Seats*...8, Women...9, % ... dbl
+## (3): Seats*...4, Women...5, % W...6
+## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## • `` -&gt; `...1`
+## • `` -&gt; `...2`
+## • `Elections` -&gt; `Elections...3`
+## • `Seats*` -&gt; `Seats*...4`
+## • `Women` -&gt; `Women...5`
+## • `% W` -&gt; `% W...6`
+## • `Elections` -&gt; `Elections...7`
+## • `Seats*` -&gt; `Seats*...8`
+## • `Women` -&gt; `Women...9`
+## • `% W` -&gt; `% W...10`</code></pre>
+<pre class="r"><code>merged_data = 
+  merged_data_h %&gt;% 
+  left_join(women_in_parliaments, by = c(&quot;country&quot;)) %&gt;% 
+  select(country_code:une_school,PM_value,income_group,health_exp, women_percent,`Developed / Developing Countries`)</code></pre>
 <p>Store the data</p>
 <pre class="r"><code>write.csv(merged_data , file = &quot;data/Merged_expectation.csv&quot;)</code></pre>
 </div>

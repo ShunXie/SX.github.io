@@ -48,7 +48,7 @@ country_code =
 merged_data_PM = merge(LifeExpectancy, country_code, by.x = "country_code", by.y = "ISO3166-1-Alpha-3" )
 ```
 
-pm 2.5
+merge the data with dataset contain pm 2.5 information:
 ```{r,message=FALSE, warning=FALSE}
 
 #read pm2.5 data
@@ -69,7 +69,7 @@ PM_dataset_clean =
   mutate(year = as.numeric(year))
 ```
 
-Developed / Developing Countries
+merge the data with dataset contain Developed / Developing Countries information
 ```{r,message=FALSE, warning=FALSE}
 #merged data with developed/ developing countries
 merged_data_d = 
@@ -77,7 +77,7 @@ merged_data_d =
   left_join(PM_dataset_clean, by = c("country_code","year"))
 ```
 
-income level
+merge the data with dataset contain income level information
 ```{r,message=FALSE, warning=FALSE}
 #read income level data
 Income_dataset = read_csv("data/income_level.csv", show_col_types = FALSE) %>% 
@@ -90,7 +90,7 @@ merged_data_i = merged_data_d %>%
   select(country_code:une_school,PM_value,income_group,`Developed / Developing Countries`)
 ```
 
-Health expenditure
+merge the data with dataset contain Health expenditure information
 ```{r,message=FALSE, warning=FALSE}
 health_exp = read_csv("data/government_compulsory_health expenditure_from_1970_2020.csv") %>% 
   janitor::clean_names() %>% 
@@ -99,12 +99,28 @@ health_exp = read_csv("data/government_compulsory_health expenditure_from_1970_2
          "year" = time) %>% 
   select(country_code,year, value)
 
-merged_data = 
+merged_data_h = 
   merged_data_i %>% 
   left_join(health_exp, by = c("country_code","year")) %>% 
   mutate("health_exp" = value) %>% 
   select(country_code:une_school,PM_value,income_group,health_exp,`Developed / Developing Countries`)
 ```
+
+merge the data with dataset contain women in parliaments information
+```{r}
+women_in_parliaments = read_csv("data/around_2019_women_percent_in_national_parliaments.csv", skip = 5) %>% 
+  janitor::clean_names() %>% 
+  mutate("country"=x2,
+         "women_percent" = percent_w_6) %>% 
+  select(country, women_percent)
+
+merged_data = 
+  merged_data_h %>% 
+  left_join(women_in_parliaments, by = c("country")) %>% 
+  select(country_code:une_school,PM_value,income_group,health_exp, women_percent,`Developed / Developing Countries`)
+
+```
+
 
 Store the data
 ```{r}

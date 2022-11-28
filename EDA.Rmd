@@ -162,7 +162,17 @@ Health expenditure in developed countries soar over the years from 2000 to 2016,
 <br>
 <br>
 
+# Scatter Plot:
+
+Sc
+
+<br>
+<br>
+
+
 # Correlation:
+
+Although scatter plot gives us some visualization of correlation between variables, we can not know to what extend the two variables are correlated. Therefore, correlation, as a numeric value, is of a great help to resolve the problem. The correlation value gives us a value that indicates how correlated two variables are using Pearson method or distance methods. 
 
 <br>
 

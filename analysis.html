@@ -291,16 +291,9 @@ $(document).ready(function () {
 
 
 <pre class="r"><code>library(tidyverse)</code></pre>
+ 
 <pre class="r"><code>data = read_csv(&quot;./data/Merged_expectation.csv&quot;)</code></pre>
-<pre><code>## New names:
-## Rows: 3111 Columns: 38
-## ── Column specification
-## ──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
-## (5): country_code, country, region, income_group, Developed / Developin... dbl
-## (33): ...1, year, life_expect, life_exp60, adult_mortality, infant_mort,...
-## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-## Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## • `` -&gt; `...1`</code></pre>
+ 
 <div id="average-life-expectancy-by-year-2000---2016"
 class="section level2">
 <h2>1. Average Life Expectancy by Year (2000 - 2016)</h2>
@@ -310,8 +303,10 @@ class="section level2">
   summarise(avg_by_year = mean(life_expect,na.rm = T)) %&gt;% 
   ggplot(aes(x = year,y = avg_by_year)) +
   geom_point() +
-  geom_line()</code></pre>
+  geom_line() +
+  labs(title = &quot;Average Life Expectancy from 2000 to 2016&quot;) + xlab(&quot;Year&quot;) + ylab(&quot;Average  Life  Expectancy (years)&quot;)</code></pre>
 <p><img src="analysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+ 
 </div>
 <div id="average-life-expectation-by-regions" class="section level2">
 <h2>2. Average Life Expectation by Regions</h2>
@@ -355,541 +350,12 @@ class="section level2">
 </tr>
 </tbody>
 </table>
+ 
 </div>
 <div id="average-life-expectancy-by-region-year-combination"
 class="section level2">
 <h2>3. Average Life Expectancy by (region, year) Combination</h2>
 <pre class="r"><code>data %&gt;% 
-  janitor::clean_names() %&gt;% 
-  group_by(region,year) %&gt;% 
-  summarise(avg_by_year_region = mean(life_expect,na.rm = T)) %&gt;% 
-  knitr::kable(digits = 3)</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;region&#39;. You can override using the
-## `.groups` argument.</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">region</th>
-<th align="right">year</th>
-<th align="right">avg_by_year_region</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Africa</td>
-<td align="right">2000</td>
-<td align="right">52.999</td>
-</tr>
-<tr class="even">
-<td align="left">Africa</td>
-<td align="right">2001</td>
-<td align="right">53.505</td>
-</tr>
-<tr class="odd">
-<td align="left">Africa</td>
-<td align="right">2002</td>
-<td align="right">53.741</td>
-</tr>
-<tr class="even">
-<td align="left">Africa</td>
-<td align="right">2003</td>
-<td align="right">54.034</td>
-</tr>
-<tr class="odd">
-<td align="left">Africa</td>
-<td align="right">2004</td>
-<td align="right">54.573</td>
-</tr>
-<tr class="even">
-<td align="left">Africa</td>
-<td align="right">2005</td>
-<td align="right">55.265</td>
-</tr>
-<tr class="odd">
-<td align="left">Africa</td>
-<td align="right">2006</td>
-<td align="right">56.069</td>
-</tr>
-<tr class="even">
-<td align="left">Africa</td>
-<td align="right">2007</td>
-<td align="right">56.929</td>
-</tr>
-<tr class="odd">
-<td align="left">Africa</td>
-<td align="right">2008</td>
-<td align="right">57.765</td>
-</tr>
-<tr class="even">
-<td align="left">Africa</td>
-<td align="right">2009</td>
-<td align="right">58.569</td>
-</tr>
-<tr class="odd">
-<td align="left">Africa</td>
-<td align="right">2010</td>
-<td align="right">59.340</td>
-</tr>
-<tr class="even">
-<td align="left">Africa</td>
-<td align="right">2011</td>
-<td align="right">60.035</td>
-</tr>
-<tr class="odd">
-<td align="left">Africa</td>
-<td align="right">2012</td>
-<td align="right">60.625</td>
-</tr>
-<tr class="even">
-<td align="left">Africa</td>
-<td align="right">2013</td>
-<td align="right">61.119</td>
-</tr>
-<tr class="odd">
-<td align="left">Africa</td>
-<td align="right">2014</td>
-<td align="right">61.446</td>
-</tr>
-<tr class="even">
-<td align="left">Africa</td>
-<td align="right">2015</td>
-<td align="right">62.009</td>
-</tr>
-<tr class="odd">
-<td align="left">Africa</td>
-<td align="right">2016</td>
-<td align="right">62.526</td>
-</tr>
-<tr class="even">
-<td align="left">Americas</td>
-<td align="right">2000</td>
-<td align="right">71.443</td>
-</tr>
-<tr class="odd">
-<td align="left">Americas</td>
-<td align="right">2001</td>
-<td align="right">71.615</td>
-</tr>
-<tr class="even">
-<td align="left">Americas</td>
-<td align="right">2002</td>
-<td align="right">71.914</td>
-</tr>
-<tr class="odd">
-<td align="left">Americas</td>
-<td align="right">2003</td>
-<td align="right">72.026</td>
-</tr>
-<tr class="even">
-<td align="left">Americas</td>
-<td align="right">2004</td>
-<td align="right">72.253</td>
-</tr>
-<tr class="odd">
-<td align="left">Americas</td>
-<td align="right">2005</td>
-<td align="right">72.580</td>
-</tr>
-<tr class="even">
-<td align="left">Americas</td>
-<td align="right">2006</td>
-<td align="right">72.943</td>
-</tr>
-<tr class="odd">
-<td align="left">Americas</td>
-<td align="right">2007</td>
-<td align="right">73.228</td>
-</tr>
-<tr class="even">
-<td align="left">Americas</td>
-<td align="right">2008</td>
-<td align="right">73.444</td>
-</tr>
-<tr class="odd">
-<td align="left">Americas</td>
-<td align="right">2009</td>
-<td align="right">73.688</td>
-</tr>
-<tr class="even">
-<td align="left">Americas</td>
-<td align="right">2010</td>
-<td align="right">72.925</td>
-</tr>
-<tr class="odd">
-<td align="left">Americas</td>
-<td align="right">2011</td>
-<td align="right">74.045</td>
-</tr>
-<tr class="even">
-<td align="left">Americas</td>
-<td align="right">2012</td>
-<td align="right">74.142</td>
-</tr>
-<tr class="odd">
-<td align="left">Americas</td>
-<td align="right">2013</td>
-<td align="right">74.324</td>
-</tr>
-<tr class="even">
-<td align="left">Americas</td>
-<td align="right">2014</td>
-<td align="right">74.478</td>
-</tr>
-<tr class="odd">
-<td align="left">Americas</td>
-<td align="right">2015</td>
-<td align="right">74.640</td>
-</tr>
-<tr class="even">
-<td align="left">Americas</td>
-<td align="right">2016</td>
-<td align="right">74.801</td>
-</tr>
-<tr class="odd">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2000</td>
-<td align="right">68.021</td>
-</tr>
-<tr class="even">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2001</td>
-<td align="right">68.292</td>
-</tr>
-<tr class="odd">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2002</td>
-<td align="right">68.540</td>
-</tr>
-<tr class="even">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2003</td>
-<td align="right">68.510</td>
-</tr>
-<tr class="odd">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2004</td>
-<td align="right">68.823</td>
-</tr>
-<tr class="even">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2005</td>
-<td align="right">69.075</td>
-</tr>
-<tr class="odd">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2006</td>
-<td align="right">69.221</td>
-</tr>
-<tr class="even">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2007</td>
-<td align="right">69.579</td>
-</tr>
-<tr class="odd">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2008</td>
-<td align="right">69.974</td>
-</tr>
-<tr class="even">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2009</td>
-<td align="right">70.303</td>
-</tr>
-<tr class="odd">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2010</td>
-<td align="right">70.572</td>
-</tr>
-<tr class="even">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2011</td>
-<td align="right">70.662</td>
-</tr>
-<tr class="odd">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2012</td>
-<td align="right">70.619</td>
-</tr>
-<tr class="even">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2013</td>
-<td align="right">70.699</td>
-</tr>
-<tr class="odd">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2014</td>
-<td align="right">70.643</td>
-</tr>
-<tr class="even">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2015</td>
-<td align="right">70.927</td>
-</tr>
-<tr class="odd">
-<td align="left">Eastern Mediterranean</td>
-<td align="right">2016</td>
-<td align="right">71.150</td>
-</tr>
-<tr class="even">
-<td align="left">Europe</td>
-<td align="right">2000</td>
-<td align="right">73.740</td>
-</tr>
-<tr class="odd">
-<td align="left">Europe</td>
-<td align="right">2001</td>
-<td align="right">74.126</td>
-</tr>
-<tr class="even">
-<td align="left">Europe</td>
-<td align="right">2002</td>
-<td align="right">74.205</td>
-</tr>
-<tr class="odd">
-<td align="left">Europe</td>
-<td align="right">2003</td>
-<td align="right">74.379</td>
-</tr>
-<tr class="even">
-<td align="left">Europe</td>
-<td align="right">2004</td>
-<td align="right">74.767</td>
-</tr>
-<tr class="odd">
-<td align="left">Europe</td>
-<td align="right">2005</td>
-<td align="right">74.801</td>
-</tr>
-<tr class="even">
-<td align="left">Europe</td>
-<td align="right">2006</td>
-<td align="right">75.208</td>
-</tr>
-<tr class="odd">
-<td align="left">Europe</td>
-<td align="right">2007</td>
-<td align="right">75.442</td>
-</tr>
-<tr class="even">
-<td align="left">Europe</td>
-<td align="right">2008</td>
-<td align="right">75.796</td>
-</tr>
-<tr class="odd">
-<td align="left">Europe</td>
-<td align="right">2009</td>
-<td align="right">76.122</td>
-</tr>
-<tr class="even">
-<td align="left">Europe</td>
-<td align="right">2010</td>
-<td align="right">76.341</td>
-</tr>
-<tr class="odd">
-<td align="left">Europe</td>
-<td align="right">2011</td>
-<td align="right">76.731</td>
-</tr>
-<tr class="even">
-<td align="left">Europe</td>
-<td align="right">2012</td>
-<td align="right">76.923</td>
-</tr>
-<tr class="odd">
-<td align="left">Europe</td>
-<td align="right">2013</td>
-<td align="right">77.266</td>
-</tr>
-<tr class="even">
-<td align="left">Europe</td>
-<td align="right">2014</td>
-<td align="right">77.488</td>
-</tr>
-<tr class="odd">
-<td align="left">Europe</td>
-<td align="right">2015</td>
-<td align="right">77.536</td>
-</tr>
-<tr class="even">
-<td align="left">Europe</td>
-<td align="right">2016</td>
-<td align="right">77.819</td>
-</tr>
-<tr class="odd">
-<td align="left">South-East Asia</td>
-<td align="right">2000</td>
-<td align="right">65.012</td>
-</tr>
-<tr class="even">
-<td align="left">South-East Asia</td>
-<td align="right">2001</td>
-<td align="right">65.731</td>
-</tr>
-<tr class="odd">
-<td align="left">South-East Asia</td>
-<td align="right">2002</td>
-<td align="right">66.258</td>
-</tr>
-<tr class="even">
-<td align="left">South-East Asia</td>
-<td align="right">2003</td>
-<td align="right">66.797</td>
-</tr>
-<tr class="odd">
-<td align="left">South-East Asia</td>
-<td align="right">2004</td>
-<td align="right">66.522</td>
-</tr>
-<tr class="even">
-<td align="left">South-East Asia</td>
-<td align="right">2005</td>
-<td align="right">67.767</td>
-</tr>
-<tr class="odd">
-<td align="left">South-East Asia</td>
-<td align="right">2006</td>
-<td align="right">68.162</td>
-</tr>
-<tr class="even">
-<td align="left">South-East Asia</td>
-<td align="right">2007</td>
-<td align="right">68.535</td>
-</tr>
-<tr class="odd">
-<td align="left">South-East Asia</td>
-<td align="right">2008</td>
-<td align="right">68.246</td>
-</tr>
-<tr class="even">
-<td align="left">South-East Asia</td>
-<td align="right">2009</td>
-<td align="right">69.103</td>
-</tr>
-<tr class="odd">
-<td align="left">South-East Asia</td>
-<td align="right">2010</td>
-<td align="right">69.756</td>
-</tr>
-<tr class="even">
-<td align="left">South-East Asia</td>
-<td align="right">2011</td>
-<td align="right">70.142</td>
-</tr>
-<tr class="odd">
-<td align="left">South-East Asia</td>
-<td align="right">2012</td>
-<td align="right">70.494</td>
-</tr>
-<tr class="even">
-<td align="left">South-East Asia</td>
-<td align="right">2013</td>
-<td align="right">70.792</td>
-</tr>
-<tr class="odd">
-<td align="left">South-East Asia</td>
-<td align="right">2014</td>
-<td align="right">71.085</td>
-</tr>
-<tr class="even">
-<td align="left">South-East Asia</td>
-<td align="right">2015</td>
-<td align="right">71.301</td>
-</tr>
-<tr class="odd">
-<td align="left">South-East Asia</td>
-<td align="right">2016</td>
-<td align="right">71.644</td>
-</tr>
-<tr class="even">
-<td align="left">Western Pacific</td>
-<td align="right">2000</td>
-<td align="right">69.934</td>
-</tr>
-<tr class="odd">
-<td align="left">Western Pacific</td>
-<td align="right">2001</td>
-<td align="right">70.265</td>
-</tr>
-<tr class="even">
-<td align="left">Western Pacific</td>
-<td align="right">2002</td>
-<td align="right">70.485</td>
-</tr>
-<tr class="odd">
-<td align="left">Western Pacific</td>
-<td align="right">2003</td>
-<td align="right">70.847</td>
-</tr>
-<tr class="even">
-<td align="left">Western Pacific</td>
-<td align="right">2004</td>
-<td align="right">71.167</td>
-</tr>
-<tr class="odd">
-<td align="left">Western Pacific</td>
-<td align="right">2005</td>
-<td align="right">71.447</td>
-</tr>
-<tr class="even">
-<td align="left">Western Pacific</td>
-<td align="right">2006</td>
-<td align="right">71.802</td>
-</tr>
-<tr class="odd">
-<td align="left">Western Pacific</td>
-<td align="right">2007</td>
-<td align="right">72.105</td>
-</tr>
-<tr class="even">
-<td align="left">Western Pacific</td>
-<td align="right">2008</td>
-<td align="right">72.392</td>
-</tr>
-<tr class="odd">
-<td align="left">Western Pacific</td>
-<td align="right">2009</td>
-<td align="right">72.588</td>
-</tr>
-<tr class="even">
-<td align="left">Western Pacific</td>
-<td align="right">2010</td>
-<td align="right">72.954</td>
-</tr>
-<tr class="odd">
-<td align="left">Western Pacific</td>
-<td align="right">2011</td>
-<td align="right">73.175</td>
-</tr>
-<tr class="even">
-<td align="left">Western Pacific</td>
-<td align="right">2012</td>
-<td align="right">73.405</td>
-</tr>
-<tr class="odd">
-<td align="left">Western Pacific</td>
-<td align="right">2013</td>
-<td align="right">73.607</td>
-</tr>
-<tr class="even">
-<td align="left">Western Pacific</td>
-<td align="right">2014</td>
-<td align="right">73.747</td>
-</tr>
-<tr class="odd">
-<td align="left">Western Pacific</td>
-<td align="right">2015</td>
-<td align="right">73.911</td>
-</tr>
-<tr class="even">
-<td align="left">Western Pacific</td>
-<td align="right">2016</td>
-<td align="right">74.134</td>
-</tr>
-</tbody>
-</table>
-<pre class="r"><code># tidy data in another form that might be useful
-
-data %&gt;% 
   janitor::clean_names() %&gt;% 
   group_by(region,year) %&gt;% 
   summarise(avg_by_year_region = mean(life_expect,na.rm = T)) %&gt;% 
@@ -1077,21 +543,56 @@ data %&gt;%
 </tr>
 </tbody>
 </table>
+ 
 </div>
-<div
-id="anova-to-test-the-difference-in-mean-life-expectancy-among-regions"
+<div id="average-life-expectancy-by-income-level"
 class="section level2">
-<h2>4. ANOVA to Test the Difference in Mean Life Expectancy among
-Regions</h2>
-<pre class="r"><code>exp_year_region &lt;- data %&gt;% 
+<h2>4. Average Life Expectancy by Income Level</h2>
+<pre class="r"><code>data %&gt;% 
   janitor::clean_names() %&gt;% 
-  group_by(region,year) %&gt;% 
-  summarise(avg_by_year_region = mean(life_expect,na.rm = T)) </code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;region&#39;. You can override using the
-## `.groups` argument.</code></pre>
-<pre class="r"><code>anova_result = aov(avg_by_year_region ~ factor(region),data = exp_year_region)
-broom::tidy(anova_result) %&gt;% 
-    knitr::kable()</code></pre>
+  group_by(income_group) %&gt;% 
+  summarise(avg_by_income = mean(life_expect,na.rm = T)) %&gt;% 
+  knitr::kable(digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">income_group</th>
+<th align="right">avg_by_income</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">High income</td>
+<td align="right">77.851</td>
+</tr>
+<tr class="even">
+<td align="left">Low income</td>
+<td align="right">57.028</td>
+</tr>
+<tr class="odd">
+<td align="left">Lower middle income</td>
+<td align="right">65.102</td>
+</tr>
+<tr class="even">
+<td align="left">Upper middle income</td>
+<td align="right">70.984</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="right">73.272</td>
+</tr>
+</tbody>
+</table>
+ 
+</div>
+<div id="anova-test-difference-in-mean-life-expectancy-among-regions"
+class="section level2">
+<h2>5. ANOVA : Test Difference in Mean Life Expectancy Among
+Regions</h2>
+<pre class="r"><code>anova_result_1 &lt;- aov(life_expect ~ factor(region), data = data)
+
+broom::tidy(anova_result_1) %&gt;% 
+  knitr::kable()</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -1107,29 +608,29 @@ broom::tidy(anova_result) %&gt;%
 <tr class="odd">
 <td align="left">factor(region)</td>
 <td align="right">5</td>
-<td align="right">3424.0931</td>
-<td align="right">684.818625</td>
-<td align="right">194.3356</td>
+<td align="right">155565.8</td>
+<td align="right">31113.16329</td>
+<td align="right">931.9492</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">Residuals</td>
-<td align="right">96</td>
-<td align="right">338.2942</td>
-<td align="right">3.523897</td>
+<td align="right">3105</td>
+<td align="right">103660.6</td>
+<td align="right">33.38504</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
 </tr>
 </tbody>
 </table>
+ 
 </div>
-<div id="multiple-comparison-methods-to-find-the-difference-in-regions"
+<div id="multiple-comparison-find-the-difference-among-regions"
 class="section level2">
-<h2>5. Multiple Comparison Methods to Find the Difference in
-Regions</h2>
+<h2>6. Multiple Comparison : Find the Difference Among Regions</h2>
 <div id="bonferronis-method" class="section level3">
 <h3>Bonferroni’s Method</h3>
-<pre class="r"><code>bonferroni_result &lt;- pairwise.t.test(exp_year_region$avg_by_year_region, exp_year_region$region, p.adj = &#39;bonferroni&#39;)
+<pre class="r"><code>bonferroni_result &lt;- pairwise.t.test(data$life_expect, data$region, p.adj = &#39;bonferroni&#39;)
 
 broom::tidy(bonferroni_result) %&gt;% 
     knitr::kable()</code></pre>
@@ -1155,7 +656,7 @@ broom::tidy(bonferroni_result) %&gt;%
 <tr class="odd">
 <td align="left">Eastern Mediterranean</td>
 <td align="left">Americas</td>
-<td align="right">0.0000079</td>
+<td align="right">0.0000000</td>
 </tr>
 <tr class="even">
 <td align="left">Europe</td>
@@ -1165,7 +666,7 @@ broom::tidy(bonferroni_result) %&gt;%
 <tr class="odd">
 <td align="left">Europe</td>
 <td align="left">Americas</td>
-<td align="right">0.0016273</td>
+<td align="right">0.0000000</td>
 </tr>
 <tr class="even">
 <td align="left">Europe</td>
@@ -1185,7 +686,7 @@ broom::tidy(bonferroni_result) %&gt;%
 <tr class="odd">
 <td align="left">South-East Asia</td>
 <td align="left">Eastern Mediterranean</td>
-<td align="right">1.0000000</td>
+<td align="right">0.5925299</td>
 </tr>
 <tr class="even">
 <td align="left">South-East Asia</td>
@@ -1200,32 +701,136 @@ broom::tidy(bonferroni_result) %&gt;%
 <tr class="even">
 <td align="left">Western Pacific</td>
 <td align="left">Americas</td>
-<td align="right">1.0000000</td>
+<td align="right">0.1954017</td>
 </tr>
 <tr class="odd">
 <td align="left">Western Pacific</td>
 <td align="left">Eastern Mediterranean</td>
-<td align="right">0.0029803</td>
+<td align="right">0.0000001</td>
 </tr>
 <tr class="even">
 <td align="left">Western Pacific</td>
 <td align="left">Europe</td>
-<td align="right">0.0000038</td>
+<td align="right">0.0000000</td>
 </tr>
 <tr class="odd">
 <td align="left">Western Pacific</td>
 <td align="left">South-East Asia</td>
-<td align="right">0.0000040</td>
+<td align="right">0.0000000</td>
 </tr>
 </tbody>
 </table>
+ 
 </div>
 <div id="tukeys-method" class="section level3">
 <h3>Tukey’s Method</h3>
-<pre class="r"><code>tukey_result &lt;- TukeyHSD(anova_result)
+<pre class="r"><code>tukey_result &lt;- TukeyHSD(anova_result_1)
 
 plot(tukey_result)</code></pre>
 <p><img src="analysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+ 
+</div>
+</div>
+<div
+id="anova-test-difference-in-mean-life-expectancy-among-income-levels"
+class="section level2">
+<h2>7. ANOVA : Test Difference in Mean Life Expectancy Among Income
+Levels</h2>
+<pre class="r"><code>anova_result_2 &lt;- aov(life_expect ~ factor(income_group),data = data)
+
+broom::tidy(anova_result_2) %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">df</th>
+<th align="right">sumsq</th>
+<th align="right">meansq</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">factor(income_group)</td>
+<td align="right">3</td>
+<td align="right">155669.0</td>
+<td align="right">51889.67071</td>
+<td align="right">1552.778</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Residuals</td>
+<td align="right">3090</td>
+<td align="right">103259.5</td>
+<td align="right">33.41731</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+ 
+</div>
+<div id="multiple-comparison-find-the-difference-among-income-levels"
+class="section level2">
+<h2>8. Multiple Comparison : Find the Difference Among Income
+Levels</h2>
+<div id="bonferronis-method-1" class="section level3">
+<h3>Bonferroni’s Method</h3>
+<pre class="r"><code>bonferroni_result &lt;- pairwise.t.test(data$life_expect, data$income_group, p.adj = &#39;bonferroni&#39;)
+
+broom::tidy(bonferroni_result) %&gt;% 
+    knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">group1</th>
+<th align="left">group2</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Low income</td>
+<td align="left">High income</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Lower middle income</td>
+<td align="left">High income</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Lower middle income</td>
+<td align="left">Low income</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Upper middle income</td>
+<td align="left">High income</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Upper middle income</td>
+<td align="left">Low income</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Upper middle income</td>
+<td align="left">Lower middle income</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+ 
+</div>
+<div id="tukeys-method-1" class="section level3">
+<h3>Tukey’s Method</h3>
+<pre class="r"><code>tukey_result &lt;- TukeyHSD(anova_result_2)
+
+plot(tukey_result)</code></pre>
+<p><img src="analysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 </div>
 </div>
 

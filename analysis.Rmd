@@ -10,12 +10,15 @@ library(tidyverse)
 ```
 
 
-```{r}
+\ \par
+```{r,message=FALSE}
 data = read_csv("./data/Merged_expectation.csv")
 
 ```
 
 
+
+\ \par
 ## 1. Average Life Expectancy by Year (2000 - 2016)
 ```{r}
 data %>% 
@@ -24,10 +27,13 @@ data %>%
   summarise(avg_by_year = mean(life_expect,na.rm = T)) %>% 
   ggplot(aes(x = year,y = avg_by_year)) +
   geom_point() +
-  geom_line()
+  geom_line() +
+  labs(title = "Average Life Expectancy from 2000 to 2016") + xlab("Year") + ylab("Average  Life  Expectancy (years)")
 
 ```
 
+
+\ \par
 ## 2. Average Life Expectation by Regions
 ```{r}
 data %>% 
@@ -39,19 +45,10 @@ data %>%
 ```
 
 
+\ \par
 ## 3. Average Life Expectancy by (region, year) Combination
-```{r}
-data %>% 
-  janitor::clean_names() %>% 
-  group_by(region,year) %>% 
-  summarise(avg_by_year_region = mean(life_expect,na.rm = T)) %>% 
-  knitr::kable(digits = 3)
-
-```
 
 ```{r}
-# tidy data in another form that might be useful
-
 data %>% 
   janitor::clean_names() %>% 
   group_by(region,year) %>% 
@@ -64,45 +61,89 @@ data %>%
 
 ```
 
-## 4. ANOVA to Test the Difference in Mean Life Expectancy among Regions
-```{r}
-exp_year_region <- data %>% 
-  janitor::clean_names() %>% 
-  group_by(region,year) %>% 
-  summarise(avg_by_year_region = mean(life_expect,na.rm = T)) 
 
-anova_result = aov(avg_by_year_region ~ factor(region),data = exp_year_region)
-broom::tidy(anova_result) %>% 
-    knitr::kable()
+\ \par
+## 4. Average Life Expectancy by Income Level
+
+```{r}
+data %>% 
+  janitor::clean_names() %>% 
+  group_by(income_group) %>% 
+  summarise(avg_by_income = mean(life_expect,na.rm = T)) %>% 
+  knitr::kable(digits = 3)
+
+```
+
+
+\ \par
+## 5. ANOVA : Test Difference in Mean Life Expectancy Among Regions
+
+```{r}
+anova_result_1 <- aov(life_expect ~ factor(region), data = data)
+
+broom::tidy(anova_result_1) %>% 
+  knitr::kable()
 
 
 ```
 
-## 5. Multiple Comparison Methods to Find the Difference in Regions
+
+\ \par
+## 6. Multiple Comparison : Find the Difference Among Regions
 
 ### Bonferroni's Method
 ```{r}
-bonferroni_result <- pairwise.t.test(exp_year_region$avg_by_year_region, exp_year_region$region, p.adj = 'bonferroni')
+bonferroni_result <- pairwise.t.test(data$life_expect, data$region, p.adj = 'bonferroni')
 
 broom::tidy(bonferroni_result) %>% 
     knitr::kable()
 
 ```
 
+
+\ \par
 ### Tukey's Method
 ```{r}
-tukey_result <- TukeyHSD(anova_result)
+tukey_result <- TukeyHSD(anova_result_1)
 
 plot(tukey_result)
 
 ```
 
 
+\ \par
+## 7. ANOVA : Test Difference in Mean Life Expectancy Among Income Levels
+
 ```{r}
+anova_result_2 <- aov(life_expect ~ factor(income_group),data = data)
 
-
+broom::tidy(anova_result_2) %>% 
+  knitr::kable()
 
 ```
+
+\ \par
+## 8. Multiple Comparison : Find the Difference Among Income Levels
+
+### Bonferroni's Method
+```{r}
+bonferroni_result <- pairwise.t.test(data$life_expect, data$income_group, p.adj = 'bonferroni')
+
+broom::tidy(bonferroni_result) %>% 
+    knitr::kable()
+
+```
+
+\ \par
+### Tukey's Method
+```{r}
+tukey_result <- TukeyHSD(anova_result_2)
+
+plot(tukey_result)
+
+```
+
+
 
 
 

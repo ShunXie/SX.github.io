@@ -205,17 +205,17 @@ write.csv(merged_data , file = "data/Merged_expectation.csv")
 
 # Impute
 
-```{r,message=FALSE, warning=FALSE, eval=FALSE}
+```{r,message=FALSE, warning=FALSE}
 raw_mat = 
   merged_data %>% 
   select(-country, -country_code, -region,-income_group, -`Developed / Developing Countries`) %>% 
   as.matrix()
 
-imputed_mat = filling::fill.KNNimpute(raw_mat, k = 2)
+imputed_mat = filling::fill.KNNimpute(raw_mat, k = 5)
 
 ```
 
-```{r,eval=FALSE}
+```{r,essage=FALSE, warning=FALSE}
 #colnames_exp = colnames(LifeExpectancy)
 Imputed_expectancy = merged_data
 for (i in 1:(length(merged_data)-5)) {

@@ -108,16 +108,20 @@ merged_data_h =
 
 merge the data with dataset contain women in parliaments information
 ```{r}
-women_in_parliaments = read_csv("data/around_2019_women_percent_in_national_parliaments.csv", skip = 5) %>% 
+women_in_parliament <-
+  read_csv("data/around_2019_women_percent_in_national_parliaments.csv", skip = 5) %>% 
   janitor::clean_names() %>% 
-  mutate("country"=x2,
-         "women_percent" = percent_w_6) %>% 
-  select(country, women_percent)
+  select(x2, elections_3, percent_w_6) %>% 
+  separate(elections_3, into = c("month", "year")) %>% 
+  mutate("country" = x2,
+         "percent_w_in_lower_house" = percent_w_6,
+         "year" = as.double(year)) %>% 
+  select(country, year, percent_w_in_lower_house)
 
 merged_data = 
   merged_data_h %>% 
-  left_join(women_in_parliaments, by = c("country")) %>% 
-  select(country_code:une_school,PM_value,income_group,health_exp, women_percent,`Developed / Developing Countries`)
+  left_join(women_in_parliament, by = c("country","year")) %>% 
+  select(country_code:une_school,PM_value,income_group,health_exp,`Developed / Developing Countries`, percent_w_in_lower_house)
 
 ```
 

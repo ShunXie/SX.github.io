@@ -76,7 +76,21 @@ data %>%
 
 
 \ \par
-## 5. ANOVA : Test Difference in Mean Life Expectancy Among Regions
+## 5. Average Life Expectancy by Developing Status
+
+```{r}
+data %>% 
+  janitor::clean_names() %>% 
+  group_by(developed_developing_countries) %>% 
+  summarise(avg_by_dev = mean(life_expect,na.rm = T)) %>% 
+  knitr::kable(digits = 3)
+
+```
+
+
+
+\ \par
+## 6. ANOVA : Test Difference in Mean Life Expectancy Among Regions
 
 ```{r}
 anova_result_1 <- aov(life_expect ~ factor(region), data = data)
@@ -89,7 +103,7 @@ broom::tidy(anova_result_1) %>%
 
 
 \ \par
-## 6. Multiple Comparison : Find the Difference Among Regions
+## 7. Multiple Comparison : Find the Difference Among Regions
 
 ### Bonferroni's Method
 ```{r}
@@ -112,7 +126,7 @@ plot(tukey_result)
 
 
 \ \par
-## 7. ANOVA : Test Difference in Mean Life Expectancy Among Income Levels
+## 8. ANOVA : Test Difference in Mean Life Expectancy Among Income Levels
 
 ```{r}
 anova_result_2 <- aov(life_expect ~ factor(income_group),data = data)
@@ -123,7 +137,7 @@ broom::tidy(anova_result_2) %>%
 ```
 
 \ \par
-## 8. Multiple Comparison : Find the Difference Among Income Levels
+## 9. Multiple Comparison : Find the Difference Among Income Levels
 
 ### Bonferroni's Method
 ```{r}
@@ -144,6 +158,42 @@ plot(tukey_result)
 ```
 
 
+\ \par
+## 10. t.test : Comapre Mean Life Expectancy Between Developed and Developing Countries
+
+#### extract developed and developing life expectancy
+```{r}
+developing <- data %>% 
+  janitor::clean_names() %>% 
+  filter(developed_developing_countries == "Developing") %>% 
+  pull(life_expect)
+
+
+developed <- data %>% 
+  janitor::clean_names() %>% 
+  filter(developed_developing_countries == "Developed") %>% 
+  pull(life_expect) 
+
+```
+
+
+#### test equal variance
+```{r}
+var.test(developing,developed,alternative = "two.sided",conf.level = 0.95) %>% 
+  broom::tidy() %>% 
+  knitr::kable()
+
+```
+
+
+#### t.test with unknown unequal variances
+
+```{r}
+t.test(developing,developed,alternative = "less",conf.level = 0.95,paired = F,var.equal = FALSE )%>% 
+  broom::tidy() %>% 
+  knitr::kable()
+
+```
 
 
 

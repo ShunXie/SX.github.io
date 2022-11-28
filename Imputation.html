@@ -362,81 +362,196 @@ div.tocify {
 </div>
 
 
+<div id="background-information-of-the-datasets" class="section level1">
+<h1>Background Information of the datasets</h1>
+<p><br> <br></p>
+<div id="life-expectancy-dataset" class="section level3">
+<h3>Life Expectancy Dataset</h3>
+<p>We choose WHO Life Expectancy Dataset as our main dataset in our
+study. The code is read as following:</p>
 <pre class="r"><code>suppressMessages(library(tidyverse))
 suppressMessages(library(dbplyr))
-options(tibble.print_min = 5)</code></pre>
-<div id="background-information-of-the-data" class="section level1">
-<h1>Background Information of the data</h1>
-<p>First, we load and merge the data:</p>
+options(tibble.print_min = 5)
+
+#Get life expectancy data
+LifeExpectancy = read_csv(&quot;data/who_life_exp.csv&quot;,col_types = cols(.default = col_guess())) %&gt;% 
+  janitor::clean_names()</code></pre>
+<p>Life expectancy datasets contains a total of <code>183</code>
+countries with year ranging from <code>2000</code> to <code>2016</code>.
+There are a total of <code>32</code> variables. Out of which, we
+consider the main</p>
+<p>*<code>country</code>: country name</p>
+<p>*<code>country_code</code>: Three letter of the country id</p>
+<p>*<code>region</code>: The region of the country</p>
+<p>*<code>year</code>: year of all values stored</p>
+<p>*<code>adult_mortality</code>: Adult Mortality Rates of both sexes
+(probability of dying between 15 and 60 years per 1000 population)</p>
+<p>*<code>infant_mort</code>: Death rate up to age 1</p>
+<p>*<code>age1_4mort</code>: Death rate between ages 1 and 4</p>
+<p>*<code>alcohol</code>: Alcohol, recorded per capita (15+) consumption
+(in litres of pure alcohol)</p>
+<p>*<code>bmi</code>: Mean BMI (kg/<span
+class="math inline">\(m^2\)</span>) (18+) (age-standardized
+estimate)</p>
+<p>*<code>hepatitis</code>: Hepatitis B (HepB) immunization coverage
+among 1-year-olds (%)</p>
+<p>*<code>measles</code>: Measles-containing-vaccine first-dose (MCV1)
+immunization coverage among 1-year-olds (%)</p>
+<p>*<code>polio</code>: Polio (Pol3) immunization coverage among
+1-year-olds (%)</p>
+<p>*<code>diphtheria</code>: Diphtheria tetanus toxoid and pertussis
+(DTP3) immunization coverage among 1-year-olds (%)</p>
+<p>*<code>hospitals</code>: Total density per 100 000 population:
+Hospitals</p>
+<p>*<code>une_life</code>: (Our response variable) Life expectancy at
+birth, total (years)</p>
+<p>*<code>une_gni</code>: GNI per capita, PPP (current international
+$)</p>
+<p><br> <br></p>
+</div>
+<div id="country-code-dataset" class="section level3">
+<h3>Country Code Dataset</h3>
+<p>Country code dataset contains the status of countries, such as the
+information of the independence status and its capital city. We include
+the variable specifies whether the country is a developed or developing
+country. The data is read in the following code and is merged by the
+code.</p>
 <pre class="r"><code>country_code = 
   read_csv(&quot;data/country-codes.csv&quot;, show_col_types = FALSE) %&gt;% 
   select(`ISO3166-1-Alpha-3`, `Developed / Developing Countries`)
 
 
 
-#Guess the column type of life expectancy data
-LifeExpectancy = read_csv(&quot;data/who_life_exp.csv&quot;,col_types = cols(.default = col_guess())) %&gt;% 
-  janitor::clean_names()
+merged_data_PM = merge(LifeExpectancy, country_code, by.x = &quot;country_code&quot;, by.y = &quot;ISO3166-1-Alpha-3&quot; )</code></pre>
+<p><br> <br></p>
+</div>
+<div id="pm2.5-dataset" class="section level3">
+<h3>PM2.5 dataset</h3>
+<p>PM2.5 dataset is a dataset that specifies the percentage of total
+population exposed to levels exceeding WHO guideline value. Such value
+exists over year 1960 to 2021 but most of the value before 2010 and
+after 2017 are missing.The following code read and clean the
+dataset.</p>
+<p>merge the data with dataset contain pm 2.5 information:</p>
+<pre class="r"><code>#read pm2.5 data
+PM_dataset = 
+  read_csv(&quot;data/pm2.5.csv&quot;, show_col_types = FALSE, skip = 4) 
 
-merged_data = merge(LifeExpectancy, country_code, by.x = &quot;country_code&quot;, by.y = &quot;ISO3166-1-Alpha-3&quot; )</code></pre>
+PM_dataset_clean = 
+  PM_dataset %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(-(x1960:x1999),-(x2017:x2021)) %&gt;% 
+  pivot_longer(
+    x2000:x2016,
+    names_to = &quot;year&quot;,
+    names_prefix = &quot;x&quot;,
+    values_to = &quot;PM_value&quot;
+  ) %&gt;% 
+  select(country_code, year, PM_value) %&gt;% 
+  mutate(year = as.numeric(year))</code></pre>
+<p>The following code is used to merge with all dataset.</p>
+<pre class="r"><code>#merged data with developed/ developing countries
+merged_data_d = 
+  merged_data_PM %&gt;% 
+  left_join(PM_dataset_clean, by = c(&quot;country_code&quot;,&quot;year&quot;))</code></pre>
+<p><br> <br></p>
+</div>
+<div id="income-level-data" class="section level3">
+<h3>Income level data</h3>
+<p>Income level data is a dataset specifies the income status. It is a
+factor variable with four levels, namely high income, low income, lower
+middle income and upper middle income. The dataset is cleaned and merged
+in the following code.</p>
+<pre class="r"><code>#read income level data
+Income_dataset = read_csv(&quot;data/income_level.csv&quot;, show_col_types = FALSE) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(country_code,income_group)
+
+#merged data with income level
+merged_data_i = merged_data_d %&gt;% 
+  left_join( Income_dataset, by = c(&quot;country_code&quot;)) %&gt;% 
+  select(country_code:une_school,PM_value,income_group,`Developed / Developing Countries`)</code></pre>
+<p><br> <br></p>
+</div>
+<div id="health-expenditure" class="section level3">
+<h3>Health expenditure</h3>
+<p>Health expenditure dataset measures the health expenditure from
+government with respect to different countries. The dataset is measured
+in percentage of GDP or dollar value per capita. We choose percentage of
+GDP as our unit because the dataset measured in percentage of GDP has
+more complete values. Here is the coding for read, clean and merge the
+Health expenditure dataset to original dataset.</p>
+<pre class="r"><code>health_exp = read_csv(&quot;data/government_compulsory_health expenditure_from_1970_2020.csv&quot;) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  filter(measure==&quot;PC_GDP&quot;) %&gt;%
+  filter(subject==&quot;TOT&quot;) %&gt;% 
+  mutate(&quot;country_code&quot;=location,
+         &quot;year&quot; = time) %&gt;% 
+  select(country_code,year, value)
+
+merged_data_h = 
+  merged_data_i %&gt;% 
+  left_join(health_exp, by = c(&quot;country_code&quot;,&quot;year&quot;)) %&gt;% 
+  mutate(&quot;health_exp&quot; = value) %&gt;% 
+  select(country_code:une_school,PM_value,income_group,health_exp,`Developed / Developing Countries`)</code></pre>
+<p><br> <br></p>
+</div>
+<div id="parliament-information" class="section level3">
+<h3>Parliament Information</h3>
+<p>Parliament information data is a dataset that measured the percentage
+of women in parliament over different years for different countries. The
+following code cleans and merge the data:</p>
+<pre class="r"><code>women_in_parliament &lt;-
+  read_csv(&quot;data/around_2019_women_percent_in_national_parliaments.csv&quot;, skip = 5) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(x2, elections_3, percent_w_6) %&gt;% 
+  separate(elections_3, into = c(&quot;month&quot;, &quot;year&quot;)) %&gt;% 
+  mutate(&quot;country&quot; = x2,
+         &quot;percent_w_in_lower_house&quot; = percent_w_6,
+         &quot;year&quot; = as.double(year)) %&gt;% 
+  select(country, year, percent_w_in_lower_house)</code></pre>
+<pre><code>## New names:
+## Rows: 193 Columns: 10
+## ── Column specification
+## ──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+## (7): ...1, ...2, Elections...3, Elections...7, Seats*...8, Women...9, % ... dbl
+## (3): Seats*...4, Women...5, % W...6
+## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## • `` -&gt; `...1`
+## • `` -&gt; `...2`
+## • `Elections` -&gt; `Elections...3`
+## • `Seats*` -&gt; `Seats*...4`
+## • `Women` -&gt; `Women...5`
+## • `% W` -&gt; `% W...6`
+## • `Elections` -&gt; `Elections...7`
+## • `Seats*` -&gt; `Seats*...8`
+## • `Women` -&gt; `Women...9`
+## • `% W` -&gt; `% W...10`</code></pre>
+<pre class="r"><code>merged_data = 
+  merged_data_h %&gt;% 
+  left_join(women_in_parliament, by = c(&quot;country&quot;,&quot;year&quot;)) %&gt;% 
+  select(country_code:une_school,PM_value,income_group,health_exp,`Developed / Developing Countries`, percent_w_in_lower_house)</code></pre>
+<p>Store the data</p>
+<pre class="r"><code>write.csv(merged_data , file = &quot;data/Merged_expectation.csv&quot;)</code></pre>
+</div>
 </div>
 <div id="impute" class="section level1">
 <h1>Impute</h1>
 <pre class="r"><code>raw_mat = 
-  LifeExpectancy %&gt;% 
-  select(-country, -country_code, -region) %&gt;% 
+  merged_data %&gt;% 
+  select(-country, -country_code, -region,-income_group, -`Developed / Developing Countries`) %&gt;% 
   as.matrix()
 
 imputed_mat = filling::fill.KNNimpute(raw_mat, k = 2)</code></pre>
 <pre class="r"><code>#colnames_exp = colnames(LifeExpectancy)
 Imputed_expectancy = merged_data
-for (i in 1:(length(merged_data)-4)) {
+for (i in 1:(length(merged_data)-5)) {
   Imputed_expectancy[i+3][[1]] = imputed_mat[[1]][,i]
 }
-head(Imputed_expectancy)</code></pre>
-<pre><code>##   country_code     country                region year life_expect life_exp60
-## 1          AFG Afghanistan Eastern Mediterranean 2000    47.33730   14.73400
-## 2          AFG Afghanistan Eastern Mediterranean 2001    48.19789   14.95963
-## 3          AFG Afghanistan Eastern Mediterranean 2002    49.42569   15.20010
-## 4          AFG Afghanistan Eastern Mediterranean 2003    50.50266   15.39144
-## 5          AFG Afghanistan Eastern Mediterranean 2004    51.52863   15.56860
-## 6          AFG Afghanistan Eastern Mediterranean 2005    52.72512   15.75107
-##   adult_mortality infant_mort age1_4mort alcohol  bmi age5_19thinness
-## 1        383.5583    0.137985   0.025695 1.47439 21.7            11.0
-## 2        372.3876    0.133675   0.024500 1.94025 21.8            10.9
-## 3        354.5147    0.128320   0.023260 2.07512 21.9            10.7
-## 4        343.2169    0.122040   0.021925 2.20275 22.0            10.5
-## 5        333.8711    0.115700   0.020545 2.41274 22.2            10.3
-## 6        322.7077    0.109205   0.018945 3.48640 22.3            10.2
-##   age5_19obesity hepatitis measles polio diphtheria basic_water   doctors
-## 1            0.5  41.44918      32    21         31    41.14431 2.4348729
-## 2            0.5  41.39812      60    28         42    42.25467 2.2510864
-## 3            0.6  42.11362      59    22         47    43.37680 0.6178465
-## 4            0.7  42.45999      44    21         46    44.36387 0.3481835
-## 5            0.8  42.39453      43    18         47    45.35134 0.6210000
-## 6            0.8  60.97879      21    14         47    46.33602 0.9034819
-##   hospitals gni_capita  gghe_d che_gdp  une_pop une_infant une_life une_hiv
-## 1 0.7102302       2190 1.11099 1.90860 16395.47      122.2   46.522     1.0
-## 2 0.6922662       2290 2.04631 4.48352 16945.75      118.9   47.059     1.1
-## 3 0.6067707       2690 1.30863 3.32946 17519.42      115.1   47.702     1.2
-## 4 0.5949045       2820 1.46560 3.54797 18121.48      110.8   48.440     1.3
-## 5 0.5775181       3080 1.68663 3.96720 18758.15      106.2   49.263     1.3
-## 6 0.5410495       3570 1.27876 2.85220 19433.60      101.3   50.165     1.4
-##   une_gni une_poverty une_edu_spend une_literacy une_school
-## 1    2530    32.30000      2.607530     61.34299   4.902891
-## 2    2630    39.04717      2.389692     67.40542   4.144258
-## 3    3180    60.92537      2.791274     70.96043   4.134169
-## 4    3260    60.98489      2.791807     60.40339   4.155547
-## 5    3560    60.27729      2.874390     64.61786   3.974715
-## 6    4060    80.96484      2.120110     25.15626   3.250495
-##   Developed / Developing Countries
-## 1                       Developing
-## 2                       Developing
-## 3                       Developing
-## 4                       Developing
-## 5                       Developing
-## 6                       Developing</code></pre>
-<pre class="r"><code>write.table(Imputed_expectancy , file = &quot;data/Imputed_expectation.csv&quot;)</code></pre>
+head(Imputed_expectancy)
+
+write.csv(Imputed_expectancy , file = &quot;data/Imputed_expectation.csv&quot;)</code></pre>
 </div>
 
 

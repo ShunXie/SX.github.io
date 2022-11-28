@@ -1,0 +1,44 @@
+---
+title: "Project report"
+date: "2022-11-23"
+output: html_document
+---
+# World Life Expectancy—Live to thrive
+
+## Motivation
+
+## Related work
+
+## Initial questions
+### new questions
+
+## Data
+
+###Data sources 
+
+Our main datasets is WHO Life Exp Dataset measures the life expectancy data and some variables from WHO with Pm2.5 DataSeta, Country Code Dataset and Income Level Dataset for merging and imputation.
+
+While looking at the mortality rate columns in our life expectancy dataset, we found out that the mortality rate has been divided into several age groups--adults, infants, and children with age 1-4. In the meantime, life expectancy has also been divided into two directions--one is the overall countrywide life expectancy, and another one is the life expectancy for people who are older than 60 years old.
+
+Based on this information, we started to wonder whether the causes of death vary at different ages. Under the idea of stratify analysis, we looked into the causes of death in three different age groups. 
+
+The death of infants and young children is largely related to the level of medical care, sanitary conditions, the mother's level of education, the physical and psychological conditions of the mother during childbirth, the support from the country, and so on.
+
+The causes of death of young and middle-aged people are related to social development, employment pressure, work fatigue, environmental pollution, over use of tobacco and alcohol, obesity and other problems. Noncommunicable disease is now the leading cause of death worldwide, and according to WHO, cardiovascular diseases, cancer, chronic respiratory diseases, and diabetes account for the most NCD deaths. These deaths can be attributed to tobacco use, physical inactivity, alcohol, and unhealthy diets. For instance, heart-related diseases, alcohol abuse in young people could be linked. We think these NCDs are very much associated with young adult deaths, since excessive smoking and alcohol addiction, bad diet, tend to occur in young and middle-aged people.
+
+In the end, the death of the elderly may be related to the level of medical care, social welfare, social culture, clean resources, and so on. In addition to the diseases caused by normal aging and cancer, which cannot be cured by the current medical level, the life expectancy of the elderly may be related to whether the hospital is close to them, whether they can afford the medical expenses, whether they have children to take care of them, whether the social welfare is complete, and whether the policies and public facilities are friendly to the elderly.
+
+Based on these ideas, we looked through several papers to generate more variables that we thought would relate to life expectancy.
+
+###Data cleaing 
+
+##Exploratory Analysis
+
+###World Life Expectancy and Interactive World Map
+
+##Additional analysis
+###Analysis Test Part
+
+###Linear Model
+
+##Discussion

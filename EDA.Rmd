@@ -1,0 +1,430 @@
+---
+title: "Exploratory Data Analysis"
+
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cosmo
+    code_folding: hide
+---
+
+
+```{r defaults, echo = FALSE, message = FALSE, warning = FALSE}
+# load necessary packages
+library(tidyverse)
+library(patchwork)
+library(reshape2)
+library(rstatix)
+library(patchwork)
+library(ggridges)
+library(spatstat)
+library(grid)
+library(gridExtra)
+#library(ggpubr)
+#library(GGally)
+suppressMessages(library(dbplyr))
+suppressMessages(library(energy))
+suppressMessages(library(bookdown))
+options(tibble.print_min = 5)
+options(digits=2)
+# set knitr defaults
+knitr::opts_chunk$set(
+    echo      = TRUE
+  , message   = FALSE
+  , fig.align = "center"
+)
+# set theme defaults
+theme_set(
+  theme_bw() +
+  theme(
+    legend.position = "bottom"
+    , plot.title    = element_text(hjust = 0.5)
+    , plot.subtitle = element_text(hjust = 0.5)    
+    , plot.caption  = element_text(hjust = 0.0)
+  )
+)
+# set color scale defaults
+options(
+    ggplot2.continuous.colour = "viridis"
+  , ggplot2.continuous.fill   = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete   = scale_fill_viridis_d
+```
+
+
+# Time series plot
+
+With our existence data, we need to evaluate the overall trend with respect to different types of countries. One way to differentiate country is to identify that whether the country is classified as developed or developing country. In the work by [SP Heyneman](https://www.journals.uchicago.edu/doi/pdf/10.1086/451180?casa_token=9gJkljIq_ukAAAAA:j3C4Kv-0Jp_gUpmVKvxFAxT1oGg8ryzRaHR_hdBX7QlqrAPGKU36A43QBGZ65AItaKU-LrLn6NE), he claimed that the change of economic status and school has a big difference between developed and developing country. We treat these variables as our predictors to the life expectancy. Therefore, it is likely that the predictors are different between developed and developing country. Therefore, we plot over different predictors and identify the trends over time. 
+
+```{r,message = FALSE, warning = FALSE}
+merged_data = 
+  read_csv("data/Merged_expectation.csv", show_col_types = FALSE)
+
+imputed_data = read_csv("data/Imputed_expectation.csv", show_col_types = FALSE)
+```
+
+
+```{r,message = FALSE, warning = FALSE}
+
+merged_data %>% 
+  group_by(year, `Developed / Developing Countries`) %>% 
+  summarize(
+    mean_val = mean(une_life)
+  ) %>% 
+  pivot_wider(
+    values_from = mean_val,
+    names_from = `Developed / Developing Countries`
+  ) %>% 
+  ggplot()+
+  geom_line(aes(x=year, y=Developed, color='a'))+
+  geom_line(aes(x=year, y=Developing, color='b'))+
+  scale_color_manual(name = ' ', 
+                     values =c("a"='black',"b"='red'), 
+                     labels = c('Developed','Developing'))+
+  geom_point(aes(x=year, y=Developed, color='a'),shape=19,size = 3)+
+  geom_point(aes(x=year, y=Developing, color='b'),color = "red", shape=19,size = 3)+
+  labs(title = sprintf("Time series plot for %s", "Life Expectancy") )+
+  xlab("Year")+
+  ylab(sprintf("%s","Life Expectancy"))
+  
+  
+```
+
+
+
+
+
+
+```{r,message = FALSE, warning = FALSE}
+Time_series_plot = function(variable,merged_data){
+  merged_data %>% 
+  group_by(year, `Developed / Developing Countries`) %>% 
+  summarize_at(variable,mean,na.rm=TRUE) %>% 
+  pivot_wider(
+    values_from = variable,
+    names_from = `Developed / Developing Countries`
+  ) %>% 
+  ggplot()+
+  geom_line(aes(x=year, y=Developed, color='a'))+
+  geom_line(aes(x=year, y=Developing, color='b'))+
+  scale_color_manual(name = ' ', 
+                     values =c("a"='black',"b"='red'), 
+                     labels = c('Developed','Developing'))+
+  geom_point(aes(x=year, y=Developed, color='a'),shape=19,size = 3)+
+  geom_point(aes(x=year, y=Developing, color='b'),color = "red", shape=19,size = 3)+
+  labs(title = sprintf("Time series plot for %s", variable) )+
+  xlab("Year")+
+  ylab(sprintf("%s",variable))
+}
+
+
+Time_series_plot("une_life",merged_data)
+```
+
+Life expectancy as our dependent variable has similar trends for both developed and developing countries. Two life expectancy indices have a persistent increase over time. However, the expectancy for developed countries is 10 years higher than the developing countries over 16 years.
+
+```{r,message = FALSE, warning = FALSE}
+Time_series_plot("bmi",merged_data)
+```
+
+BMI for developed and developing countries also increases over time. Developing countries has a higher rate of increase as indicated by a steeper line (higher tangent) according to the time series plot.
+
+```{r,message = FALSE, warning = FALSE}
+#Time_series_plot("bmi",imputed_data)
+Time_series_plot("une_gni",merged_data)
+```
+
+
+The gni is different for developed and developing country over the year. While developing countries have a relative stable curve at 10000 dollar per capita, developed countries increases from 20000 dollar to 40000 dollar per capita. 
+
+```{r,message = FALSE, warning = FALSE}
+
+Time_series_plot("measles",merged_data)
+
+```
+
+Measles vaccination coverage increases for developing countries and developed countries have a persistently high vaccination coverage. 
+
+```{r,message = FALSE, warning = FALSE}
+Time_series_plot("hospitals",merged_data)
+```
+
+
+
+```{r,message = FALSE, warning = FALSE}
+Time_series_plot("health_exp",merged_data)
+```
+
+Health expenditure in developed countries soar over the years from 2000 to 2016, from 4% to 5% of total GDP. Developing countries also have an increase in the health expenditure, but with a lower rate. 
+
+<br>
+<br>
+
+# Scatter Plot:
+
+Sc
+
+<br>
+<br>
+
+
+# Correlation:
+
+Although scatter plot gives us some visualization of correlation between variables, we can not know to what extend the two variables are correlated. Therefore, correlation, as a numeric value, is of a great help to resolve the problem. The correlation value gives us a value that indicates how correlated two variables are using Pearson method or distance methods. 
+
+<br>
+
+## Pearson Correlation
+
+### Theory
+
+Pearson correlation is a common EDA method that measures the strength of the linear relation between
+two variables [paper](https://link.springer.com/chapter/10.1007/978-3-642-00296-0_5). It has the formula defined in following definition:
+
+<br>
+<br>
+
+#### Definition Pearson
+
+Let x and y be two random variables with zero mean and $x,y\in \mathbb R$, the pearson correlation coefficient is defined as:
+
+\[
+\rho (x,y) = \frac{cov(x,y)}{\sigma_x\sigma_y}
+\]
+
+where $\sigma_x=\sqrt{var(x)}$ and $\sigma_y=\sqrt{var(y)}$. 
+
+<br>
+<br>
+
+The coefficient as a value between $-1\leq\rho(x,y)\leq1$. If the coefficient is zero, then x and y does not have correlation at all. If the coefficient is closer to a value of +1 or -1, then the correlation between the two variable is stronger. A +1 coefficient means the two variables have a perfect positive correlation whereas a -1 value means the two variables have a perfect negative correlation. 
+
+#### Results
+
+Over the time:
+```{r,message = FALSE, warning = FALSE}
+
+Pearson_Correlation = function(varnum, merged_data){
+  
+  correlation_result = tibble("date"=2000:2016, "Pearson_cor"=0,"Pearson_pval"=0)
+  
+  for (t in 2000:2016){
+    merged_data_temp = 
+      merged_data %>% 
+      filter(year==t)
+    
+    correlation_result$Pearson_cor[t-1999] = 
+    round(cor(merged_data_temp[,varnum], merged_data_temp$une_life, method = "pearson",use = "complete.obs")[1],2)
+    
+    correlation_result$Pearson_pval[t-1999] = 
+    round(cor.test(merged_data_temp[,varnum][[1]], merged_data_temp$une_life, method = "pearson",use = "complete.obs")$p.value,2)
+    
+  }
+  
+  return(correlation_result)
+  
+}
+
+#Pearson_Correlation(6,merged_data)
+
+Pearson_Correlation_result = tibble("date"=2000:2016)
+
+
+colname = colnames(merged_data)
+
+
+
+Pearson_Corr_res = 
+Pearson_Correlation_result %>%
+  mutate(une_exp = Pearson_Correlation(6,merged_data)$Pearson_cor,
+         alcohol = Pearson_Correlation(11,merged_data)$Pearson_cor,
+         bmi = Pearson_Correlation(12,merged_data)$Pearson_cor,
+         measles = Pearson_Correlation(16,merged_data)$Pearson_cor,
+         gni_capita = Pearson_Correlation(29,merged_data)$Pearson_cor
+         )
+
+
+Pearson_Corr_pval = 
+Pearson_Correlation_result %>%
+  mutate(
+         une_exp_pval = Pearson_Correlation(6,merged_data)$Pearson_pval,
+         alcohol_pval = Pearson_Correlation(11,merged_data)$Pearson_pval,
+         bmi_pval = Pearson_Correlation(12,merged_data)$Pearson_pval,
+         measles_pval = Pearson_Correlation(16,merged_data)$Pearson_pval,
+         gni_capita_pval = Pearson_Correlation(29,merged_data)$Pearson_pval
+         )
+
+grid.table(Pearson_Corr_res)
+#grid.table(Pearson_Corr_pval)
+
+```
+
+
+
+
+<br>
+<br>
+
+## Distance Correlation
+
+### Theory
+
+Distance correlation is a novel developed technique to discover the joint dependence of random variables developed by [Székely et al](https://projecteuclid.org/journals/annals-of-statistics/volume-35/issue-6/Measuring-and-testing-dependence-by-correlation-of-distances/10.1214/009053607000000505.full). Unlike Pearson correlation, such Pairwise distance 
+correlation is a distance method and therefore it can take into consideration of the non-linear relationship between two random variables, namely $X\in \mathbb{R}^p$ and $Y\in \mathbb{R}^q$ that can have arbitrary dimensions (p and q can be non-equal) to some extend. The correlation between two variables is said to be independent of distance correlation $\mathcal{R}(X,Y)=0$. 
+
+In my article, denote the scalar product of two vectors $a$ and $b$ as <$a,b$> and conjugate of complex function f as $f$. Also define norm $|x|_p$ as Euclidean norm for $x\in\mathbb{R}^p$
+
+<br>
+<br>
+
+#### Definition 1
+In weighted $l_2$ space, the $||\cdot||_w$-norm for any complex function $\zeta \in \mathbb{R}^p\times\mathbb{R}^q$ is defined by:
+\[
+\begin{equation}
+    ||\zeta( a, b )||^2
+_w =\int_{\mathbb{R}^{p+q}}|\zeta( a, b)|^2 w( a, b)\,d a\, d b
+\end{equation}
+\]
+where $w(a,b)$ can be any arbitrary positive weighting function as long as the integral is well-defined. 
+
+<br>
+<br>
+
+
+#### Definition 2
+Define the measure of dependence as:
+\[
+\begin{equation}
+V^2(X,Y;w) = ||f_{X,Y}(a,b)-f_X(a)f_Y(b)||^2_w= \int_{\mathbb{R}^{p+q}}|f_{X,Y}(a,b)-f_X(a)f_Y(b)|^2 w( a, b)\,d a\, d b
+\end{equation}
+\]
+
+##### Proof
+*The criterion of independent means that for vectors $a$, $b$, the probability density function $f_X(a)$, $f_Y(b)$ and their joint probability density function $f_{X,Y}(a,b)$ satisfies $f_{X,Y}(a,b)=f_X(a)f_Y(b)$. Therefore, I have $V^2(X,Y;w)=||0||^2_w=0$ if they are independent hence the equation satisfy the condition that $V^2=0$ only if variables are independent. (see [paper](https://d1wqtxts1xzle7.cloudfront.net/61217354/solucionario_estadistica_papoulis20191114-47174-4f1occ-with-cover-page-v2.pdf?Expires=1669433644&Signature=PaZvHQ0E9kQ6FyxALEPJ5A1LFgJ3-4zYvgbzSUP7obp~cfIuvZe~8QTXle4i6usOg6MOXKs-KkOUzwVgAz60n4dm5r595qPuZPhzyfu9pE~2hydHWubyH8dfZa-59DF07O3hPFdPgPDrvSGiOWFtfuD2HXBXN2IQ4nm~UJ94pPMG7K8q0jh4WYqDp7WbQ-9WQ5hFULnUKGIH2ok7rwAFEbHqMBR6FAIHJO8gtUjaTtMhc6K4OIAmzBnoqgSOInEE6kXy4agsg1sboDLyxxJMOfJa33GPNRlwrU1Yv69wcb3rsjtjL2s9JGM4mJATS6xpRspz0RBDDZqXSIngfjmE0w__&Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA))*
+
+
+
+<br>
+<br>
+
+The choice of weighting function must satisfy invariance under transformations of random variables up to multiplication of a positive constant $\epsilon$: $(X,Y)\rightarrow (\epsilon X, \epsilon Y)$ and positiveness for any dependent variables. By the work of Szekely et. al., only non-integrable functions satisfy the condition for weight function. In order to specify the formula, I need the following lemma
+
+<br>
+<br>
+
+
+#### Lemma 1
+For all x in $\mathbb{R}^d$:
+\[
+\begin{equation}
+\int_{\mathbb{R}^d}\frac{1-cos<y,x> }{|y|^{d+1}_{d}}dy=c_d|x|=\frac{\pi ^{(1+d/2)}}{2 \Gamma ((d+1)/2)}|x|
+\end{equation}
+\]
+where $\Gamma(\cdot)$ is the gamma function. This is proved by [Szekely et. al.](https://home.ipipan.waw.pl/j.mielniczuk/Szekely-Rizzo_2005.pdf)
+
+
+<br>
+<br>
+
+Now I can choose weight function as following:
+\[
+\begin{equation}
+w(a,b) = (c_p c_q |a|
+^{1+p}_p |b|
+^{1+q}_q )^{-1}
+\end{equation}
+\]
+
+By using such weight function and lemma 3.1, the definition of distance covariance will be well-defined. Note by the weight, I have $dw = (c_p c_q |a|
+^{1+p}_p |b|
+^{1+q}_q )^{-1}dadb$. This is proven in the following definition. \\
+
+<br>
+<br>
+
+#### Deinition 4
+Define the distance covariance (dCov) for random vectors $X$ and $Y$ with finite expectation as the following non-negative figure:
+\[
+\begin{equation}
+    V^2(X,Y) = ||f_{X,Y} (a,b)- f_X(a)f_Y (b)||^2
+= \frac{1}{c_pc_q}\int_{\mathbb{R}^{p+q}}\frac{|f_{X,Y} (a,b) - f_X(a)f_Y (b)|^2}{|a|^{1+p}_p|b|^{1+q}_q}da db
+\end{equation}
+\]
+where $a\in \mathbb{R}^p$, $b\in \mathbb{R}^q$ are two vectors that $a\in X$ and $b\in Y$\cite{szekely2007measuring}
+
+<br>
+<br>
+
+Different to the Pearson method, the distance correlation have a non-negative value as it is a distance method. Therefore, although we have a better ability to measure nonlinear correlation, we cannot identify the direction of the correlation. In other word, we cannot tell whether the correlation is positively correlated or negatively correlated. 
+
+<br>
+
+
+
+
+### Result
+
+```{r,message = FALSE, warning = FALSE}
+Distance_Correlation = function(varnum, merged_data){
+  
+  correlation_result = tibble("date"=2000:2016, "Distance_cor"=0,"Distance_pval"=0)
+  
+  for (t in 2000:2016){
+    merged_data_temp = 
+      merged_data %>% 
+      filter(year==t) %>% 
+      select(27,varnum) %>% 
+      na.omit()
+    
+    correlation_result$Distance_cor[t-1999] = 
+    round(dcor(merged_data_temp[,2], merged_data_temp$une_life,)[1],2)
+    
+    correlation_result$Distance_pval[t-1999] = 
+    round(dcor.test(merged_data_temp[,2][[1]], merged_data_temp$une_life,R=1000)$p.value,2)
+    
+  }
+  
+  return(correlation_result)
+  
+}
+
+
+
+Distance_Correlation_result = tibble("date"=2000:2016)
+
+colname = colnames(merged_data)
+
+result_corr = 
+Distance_Correlation_result %>%
+  mutate(une_exp = Distance_Correlation(6,merged_data)$Distance_cor,
+         alcohol = Distance_Correlation(11,merged_data)$Distance_cor,
+         bmi = Distance_Correlation(12,merged_data)$Distance_cor,
+         measles = Distance_Correlation(16,merged_data)$Distance_cor,
+         gni_capita = Distance_Correlation(29,merged_data)$Distance_cor
+         )
+
+result_pval = 
+  Distance_Correlation_result %>%
+  mutate(
+         une_exp_pval = Distance_Correlation(6,merged_data)$Distance_pval,
+         alcohol_pval = Distance_Correlation(11,merged_data)$Distance_pval,
+         bmi = Distance_Correlation(12,merged_data)$Distance_pval,
+         measles = Distance_Correlation(16,merged_data)$Distance_pval,
+         gni_capita = Distance_Correlation(29,merged_data)$Distance_pval
+         )
+
+
+grid.table(result_corr)
+#grid.table(result_pval)
+
+```
+
+
+
+
+
+
+
+

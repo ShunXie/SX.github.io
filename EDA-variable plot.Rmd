@@ -1,0 +1,167 @@
+---
+title: "Correlation plot"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cosmo
+    code_folding: hide
+---
+
+```{r}
+library(tidyverse)
+library(ggridges)
+```
+
+
+Load data
+```{r,message = FALSE, warning = FALSE}
+merged_data = 
+  read_csv("data/Merged_expectation.csv", show_col_types = FALSE)
+
+merged_data
+```
+```{r}
+merged_data_bmi =
+merged_data %>% 
+  select(year, life_expect, bmi) %>% 
+  filter(year > 2012)
+
+par(mfrow = c(2, 2)) # Create a 2 x 2 plotting matrix
+# The next 4 plots created will be plotted next to each other
+# 2013
+merged_data_bmi %>% 
+  filter(year == 2013) %>% 
+  ggplot(aes(x = bmi, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+
+# 2014
+merged_data_bmi %>% 
+  filter(year == 2014) %>% 
+  ggplot(aes(x = bmi, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+
+# 2015
+merged_data_bmi %>% 
+  filter(year == 2015) %>% 
+  ggplot(aes(x = bmi, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+
+# 2016
+merged_data_bmi %>% 
+  filter(year == 2016) %>% 
+  ggplot(aes(x = bmi, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+```
+
+```{r}
+merged_data_alcohol =
+merged_data %>% 
+  select(year, life_expect, alcohol) %>% 
+  filter(year > 2012)
+
+par(mfrow = c(2, 2)) # Create a 2 x 2 plotting matrix
+# The next 4 plots created will be plotted next to each other
+# 2013
+merged_data_alcohol %>% 
+  filter(year == 2013) %>% 
+  ggplot(aes(x = alcohol, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+
+# 2014
+merged_data_alcohol %>% 
+  filter(year == 2014) %>% 
+  ggplot(aes(x = alcohol, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+
+# 2015
+merged_data_alcohol %>% 
+  filter(year == 2015) %>% 
+  ggplot(aes(x = alcohol, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+
+# 2016
+merged_data_alcohol %>% 
+  filter(year == 2016) %>% 
+  ggplot(aes(x = alcohol, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+```
+
+```{r}
+merged_data_adult_mortality =
+merged_data %>% 
+  select(year, life_expect, adult_mortality) %>% 
+  filter(year > 2012)
+
+par(mfrow = c(2, 2)) # Create a 2 x 2 plotting matrix
+# The next 4 plots created will be plotted next to each other
+# 2013
+merged_data_adult_mortality %>% 
+  filter(year == 2013) %>% 
+  ggplot(aes(x = adult_mortality, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+
+# 2014
+merged_data_adult_mortality %>% 
+  filter(year == 2014) %>% 
+  ggplot(aes(x = adult_mortality, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+
+# 2015
+merged_data_adult_mortality %>% 
+  filter(year == 2015) %>% 
+  ggplot(aes(x = adult_mortality, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+
+# 2016
+merged_data_adult_mortality %>% 
+  filter(year == 2016) %>% 
+  ggplot(aes(x = adult_mortality, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+```
+
+```{r}
+merged_data_infant_mort =
+merged_data %>% 
+  select(year, life_expect, infant_mort) %>% 
+  filter(year > 2012)
+
+par(mfrow = c(2, 2)) # Create a 2 x 2 plotting matrix
+# The next 4 plots created will be plotted next to each other
+# 2013
+merged_data_infant_mort %>% 
+  filter(year == 2013) %>% 
+  ggplot(aes(x = infant_mort, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+
+# 2014
+merged_data_infant_mort %>% 
+  filter(year == 2014) %>% 
+  ggplot(aes(x = infant_mort, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+
+# 2015
+merged_data_infant_mort %>% 
+  filter(year == 2015) %>% 
+  ggplot(aes(x = infant_mort, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+
+# 2016
+merged_data_infant_mort %>% 
+  filter(year == 2016) %>% 
+  ggplot(aes(x = infant_mort, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+```
+
+```{r}
+merged_data_gni_capita =
+merged_data %>% 
+  select(year, life_expect, gni_capita) %>% 
+  filter(year > 2012)
+
+par(mfrow = c(2, 2)) # Create a 2 x 2 plotting matrix
+# The next 4 plots created will be plotted next to each other
+# 2013
+merged_data_gni_capita %>% 
+  filter(year == 2013) %>% 
+  ggplot(aes(x = gni_capita, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+
+# 2014
+merged_data_gni_capita %>% 
+  filter(year == 2014) %>% 
+  ggplot(aes(x = gni_capita, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+
+# 2015
+merged_data_gni_capita %>% 
+  filter(year == 2015) %>% 
+  ggplot(aes(x = gni_capita, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+
+# 2016
+merged_data_gni_capita %>% 
+  filter(year == 2016) %>% 
+  ggplot(aes(x = gni_capita, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+```

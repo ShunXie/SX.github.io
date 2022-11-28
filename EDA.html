@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Exploratory Data Analysis</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="dashboard.html">Dashboard</a>
+</li>
+<li>
+  <a href="mailto:&lt;you@youremail.com&gt;">
+    <span class="fa fa-envelope fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="http://github.com/&lt;YOUR_GH_NAME&gt;/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Exploratory Data Analysis</h1>
+
+</div>
+
+
+<div id="time-series-plot" class="section level1">
+<h1>Time series plot</h1>
+<p>With our existence data, we need to evaluate the overall trend with
+respect to different types of countries. One way to differentiate
+country is to identify that whether the country is classified as
+developed or developing country. In the work by <a
+href="https://www.journals.uchicago.edu/doi/pdf/10.1086/451180?casa_token=9gJkljIq_ukAAAAA:j3C4Kv-0Jp_gUpmVKvxFAxT1oGg8ryzRaHR_hdBX7QlqrAPGKU36A43QBGZ65AItaKU-LrLn6NE">SP
+Heyneman</a>, he claimed that the change of economic status and school
+has a big difference between developed and developing country. We treat
+these variables as our predictors to the life expectancy. Therefore, it
+is likely that the predictors are different between developed and
+developing country. Therefore, we plot over different predictors and
+identify the trends over time.</p>
+<pre class="r"><code>merged_data = 
+  read_csv(&quot;data/Merged_expectation.csv&quot;, show_col_types = FALSE)
+
+imputed_data = read_csv(&quot;data/Imputed_expectation.csv&quot;, show_col_types = FALSE)</code></pre>
+<pre class="r"><code>merged_data %&gt;% 
+  group_by(year, `Developed / Developing Countries`) %&gt;% 
+  summarize(
+    mean_val = mean(une_life)
+  ) %&gt;% 
+  pivot_wider(
+    values_from = mean_val,
+    names_from = `Developed / Developing Countries`
+  ) %&gt;% 
+  ggplot()+
+  geom_line(aes(x=year, y=Developed, color=&#39;a&#39;))+
+  geom_line(aes(x=year, y=Developing, color=&#39;b&#39;))+
+  scale_color_manual(name = &#39; &#39;, 
+                     values =c(&quot;a&quot;=&#39;black&#39;,&quot;b&quot;=&#39;red&#39;), 
+                     labels = c(&#39;Developed&#39;,&#39;Developing&#39;))+
+  geom_point(aes(x=year, y=Developed, color=&#39;a&#39;),shape=19,size = 3)+
+  geom_point(aes(x=year, y=Developing, color=&#39;b&#39;),color = &quot;red&quot;, shape=19,size = 3)+
+  labs(title = sprintf(&quot;Time series plot for %s&quot;, &quot;Life Expectancy&quot;) )+
+  xlab(&quot;Year&quot;)+
+  ylab(sprintf(&quot;%s&quot;,&quot;Life Expectancy&quot;))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>Time_series_plot = function(variable,merged_data){
+  merged_data %&gt;% 
+  group_by(year, `Developed / Developing Countries`) %&gt;% 
+  summarize_at(variable,mean,na.rm=TRUE) %&gt;% 
+  pivot_wider(
+    values_from = variable,
+    names_from = `Developed / Developing Countries`
+  ) %&gt;% 
+  ggplot()+
+  geom_line(aes(x=year, y=Developed, color=&#39;a&#39;))+
+  geom_line(aes(x=year, y=Developing, color=&#39;b&#39;))+
+  scale_color_manual(name = &#39; &#39;, 
+                     values =c(&quot;a&quot;=&#39;black&#39;,&quot;b&quot;=&#39;red&#39;), 
+                     labels = c(&#39;Developed&#39;,&#39;Developing&#39;))+
+  geom_point(aes(x=year, y=Developed, color=&#39;a&#39;),shape=19,size = 3)+
+  geom_point(aes(x=year, y=Developing, color=&#39;b&#39;),color = &quot;red&quot;, shape=19,size = 3)+
+  labs(title = sprintf(&quot;Time series plot for %s&quot;, variable) )+
+  xlab(&quot;Year&quot;)+
+  ylab(sprintf(&quot;%s&quot;,variable))
+}
+
+
+Time_series_plot(&quot;une_life&quot;,merged_data)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Life expectancy as our dependent variable has similar trends for both
+developed and developing countries. Two life expectancy indices have a
+persistent increase over time. However, the expectancy for developed
+countries is 10 years higher than the developing countries over 16
+years.</p>
+<pre class="r"><code>Time_series_plot(&quot;bmi&quot;,merged_data)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>BMI for developed and developing countries also increases over time.
+Developing countries has a higher rate of increase as indicated by a
+steeper line (higher tangent) according to the time series plot.</p>
+<pre class="r"><code>#Time_series_plot(&quot;bmi&quot;,imputed_data)
+Time_series_plot(&quot;une_gni&quot;,merged_data)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The gni is different for developed and developing country over the
+year. While developing countries have a relative stable curve at 10000
+dollar per capita, developed countries increases from 20000 dollar to
+40000 dollar per capita.</p>
+<pre class="r"><code>Time_series_plot(&quot;measles&quot;,merged_data)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Measles vaccination coverage increases for developing countries and
+developed countries have a persistently high vaccination coverage.</p>
+<pre class="r"><code>Time_series_plot(&quot;hospitals&quot;,merged_data)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>Time_series_plot(&quot;health_exp&quot;,merged_data)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Health expenditure in developed countries soar over the years from
+2000 to 2016, from 4% to 5% of total GDP. Developing countries also have
+an increase in the health expenditure, but with a lower rate.</p>
+<p><br> <br></p>
+</div>
+<div id="scatter-plot" class="section level1">
+<h1>Scatter Plot:</h1>
+<p>Sc</p>
+<p><br> <br></p>
+</div>
+<div id="correlation" class="section level1">
+<h1>Correlation:</h1>
+<p>Although scatter plot gives us some visualization of correlation
+between variables, we can not know to what extend the two variables are
+correlated. Therefore, correlation, as a numeric value, is of a great
+help to resolve the problem. The correlation value gives us a value that
+indicates how correlated two variables are using Pearson method or
+distance methods.</p>
+<p><br></p>
+<div id="pearson-correlation" class="section level2">
+<h2>Pearson Correlation</h2>
+<div id="theory" class="section level3">
+<h3>Theory</h3>
+<p>Pearson correlation is a common EDA method that measures the strength
+of the linear relation between two variables <a
+href="https://link.springer.com/chapter/10.1007/978-3-642-00296-0_5">paper</a>.
+It has the formula defined in following definition:</p>
+<p><br> <br></p>
+<div id="definition-pearson" class="section level4">
+<h4>Definition Pearson</h4>
+<p>Let x and y be two random variables with zero mean and <span
+class="math inline">\(x,y\in \mathbb R\)</span>, the pearson correlation
+coefficient is defined as:</p>
+<p><span class="math display">\[
+\rho (x,y) = \frac{cov(x,y)}{\sigma_x\sigma_y}
+\]</span></p>
+<p>where <span class="math inline">\(\sigma_x=\sqrt{var(x)}\)</span> and
+<span class="math inline">\(\sigma_y=\sqrt{var(y)}\)</span>.</p>
+<p><br> <br></p>
+<p>The coefficient as a value between <span
+class="math inline">\(-1\leq\rho(x,y)\leq1\)</span>. If the coefficient
+is zero, then x and y does not have correlation at all. If the
+coefficient is closer to a value of +1 or -1, then the correlation
+between the two variable is stronger. A +1 coefficient means the two
+variables have a perfect positive correlation whereas a -1 value means
+the two variables have a perfect negative correlation.</p>
+</div>
+<div id="results" class="section level4">
+<h4>Results</h4>
+<p>Over the time:</p>
+<pre class="r"><code>Pearson_Correlation = function(varnum, merged_data){
+  
+  correlation_result = tibble(&quot;date&quot;=2000:2016, &quot;Pearson_cor&quot;=0,&quot;Pearson_pval&quot;=0)
+  
+  for (t in 2000:2016){
+    merged_data_temp = 
+      merged_data %&gt;% 
+      filter(year==t)
+    
+    correlation_result$Pearson_cor[t-1999] = 
+    round(cor(merged_data_temp[,varnum], merged_data_temp$une_life, method = &quot;pearson&quot;,use = &quot;complete.obs&quot;)[1],2)
+    
+    correlation_result$Pearson_pval[t-1999] = 
+    round(cor.test(merged_data_temp[,varnum][[1]], merged_data_temp$une_life, method = &quot;pearson&quot;,use = &quot;complete.obs&quot;)$p.value,2)
+    
+  }
+  
+  return(correlation_result)
+  
+}
+
+#Pearson_Correlation(6,merged_data)
+
+Pearson_Correlation_result = tibble(&quot;date&quot;=2000:2016)
+
+
+colname = colnames(merged_data)
+
+
+
+Pearson_Corr_res = 
+Pearson_Correlation_result %&gt;%
+  mutate(une_exp = Pearson_Correlation(6,merged_data)$Pearson_cor,
+         alcohol = Pearson_Correlation(11,merged_data)$Pearson_cor,
+         bmi = Pearson_Correlation(12,merged_data)$Pearson_cor,
+         measles = Pearson_Correlation(16,merged_data)$Pearson_cor,
+         gni_capita = Pearson_Correlation(29,merged_data)$Pearson_cor
+         )
+
+
+Pearson_Corr_pval = 
+Pearson_Correlation_result %&gt;%
+  mutate(
+         une_exp_pval = Pearson_Correlation(6,merged_data)$Pearson_pval,
+         alcohol_pval = Pearson_Correlation(11,merged_data)$Pearson_pval,
+         bmi_pval = Pearson_Correlation(12,merged_data)$Pearson_pval,
+         measles_pval = Pearson_Correlation(16,merged_data)$Pearson_pval,
+         gni_capita_pval = Pearson_Correlation(29,merged_data)$Pearson_pval
+         )
+
+grid.table(Pearson_Corr_res)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#grid.table(Pearson_Corr_pval)</code></pre>
+<p><br> <br></p>
+</div>
+</div>
+</div>
+<div id="distance-correlation" class="section level2">
+<h2>Distance Correlation</h2>
+<div id="theory-1" class="section level3">
+<h3>Theory</h3>
+<p>Distance correlation is a novel developed technique to discover the
+joint dependence of random variables developed by <a
+href="https://projecteuclid.org/journals/annals-of-statistics/volume-35/issue-6/Measuring-and-testing-dependence-by-correlation-of-distances/10.1214/009053607000000505.full">Székely
+et al</a>. Unlike Pearson correlation, such Pairwise distance
+correlation is a distance method and therefore it can take into
+consideration of the non-linear relationship between two random
+variables, namely <span class="math inline">\(X\in \mathbb{R}^p\)</span>
+and <span class="math inline">\(Y\in \mathbb{R}^q\)</span> that can have
+arbitrary dimensions (p and q can be non-equal) to some extend. The
+correlation between two variables is said to be independent of distance
+correlation <span class="math inline">\(\mathcal{R}(X,Y)=0\)</span>.</p>
+<p>In my article, denote the scalar product of two vectors <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span> as &lt;<span
+class="math inline">\(a,b\)</span>&gt; and conjugate of complex function
+f as <span class="math inline">\(f\)</span>. Also define norm <span
+class="math inline">\(|x|_p\)</span> as Euclidean norm for <span
+class="math inline">\(x\in\mathbb{R}^p\)</span></p>
+<p><br> <br></p>
+<div id="definition-1" class="section level4">
+<h4>Definition 1</h4>
+<p>In weighted <span class="math inline">\(l_2\)</span> space, the <span
+class="math inline">\(||\cdot||_w\)</span>-norm for any complex function
+<span class="math inline">\(\zeta \in
+\mathbb{R}^p\times\mathbb{R}^q\)</span> is defined by: <span
+class="math display">\[
+\begin{equation}
+    ||\zeta( a, b )||^2
+_w =\int_{\mathbb{R}^{p+q}}|\zeta( a, b)|^2 w( a, b)\,d a\, d b
+\end{equation}
+\]</span> where <span class="math inline">\(w(a,b)\)</span> can be any
+arbitrary positive weighting function as long as the integral is
+well-defined.</p>
+<p><br> <br></p>
+</div>
+<div id="definition-2" class="section level4">
+<h4>Definition 2</h4>
+<p>Define the measure of dependence as: <span class="math display">\[
+\begin{equation}
+V^2(X,Y;w) = ||f_{X,Y}(a,b)-f_X(a)f_Y(b)||^2_w=
+\int_{\mathbb{R}^{p+q}}|f_{X,Y}(a,b)-f_X(a)f_Y(b)|^2 w( a, b)\,d a\, d b
+\end{equation}
+\]</span></p>
+<div id="proof" class="section level5">
+<h5>Proof</h5>
+<p><em>The criterion of independent means that for vectors <span
+class="math inline">\(a\)</span>, <span
+class="math inline">\(b\)</span>, the probability density function <span
+class="math inline">\(f_X(a)\)</span>, <span
+class="math inline">\(f_Y(b)\)</span> and their joint probability
+density function <span class="math inline">\(f_{X,Y}(a,b)\)</span>
+satisfies <span
+class="math inline">\(f_{X,Y}(a,b)=f_X(a)f_Y(b)\)</span>. Therefore, I
+have <span class="math inline">\(V^2(X,Y;w)=||0||^2_w=0\)</span> if they
+are independent hence the equation satisfy the condition that <span
+class="math inline">\(V^2=0\)</span> only if variables are independent.
+(see <a
+href="https://d1wqtxts1xzle7.cloudfront.net/61217354/solucionario_estadistica_papoulis20191114-47174-4f1occ-with-cover-page-v2.pdf?Expires=1669433644&amp;Signature=PaZvHQ0E9kQ6FyxALEPJ5A1LFgJ3-4zYvgbzSUP7obp~cfIuvZe~8QTXle4i6usOg6MOXKs-KkOUzwVgAz60n4dm5r595qPuZPhzyfu9pE~2hydHWubyH8dfZa-59DF07O3hPFdPgPDrvSGiOWFtfuD2HXBXN2IQ4nm~UJ94pPMG7K8q0jh4WYqDp7WbQ-9WQ5hFULnUKGIH2ok7rwAFEbHqMBR6FAIHJO8gtUjaTtMhc6K4OIAmzBnoqgSOInEE6kXy4agsg1sboDLyxxJMOfJa33GPNRlwrU1Yv69wcb3rsjtjL2s9JGM4mJATS6xpRspz0RBDDZqXSIngfjmE0w__&amp;Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA">paper</a>)</em></p>
+<p><br> <br></p>
+<p>The choice of weighting function must satisfy invariance under
+transformations of random variables up to multiplication of a positive
+constant <span class="math inline">\(\epsilon\)</span>: <span
+class="math inline">\((X,Y)\rightarrow (\epsilon X, \epsilon Y)\)</span>
+and positiveness for any dependent variables. By the work of Szekely et.
+al., only non-integrable functions satisfy the condition for weight
+function. In order to specify the formula, I need the following
+lemma</p>
+<p><br> <br></p>
+</div>
+</div>
+<div id="lemma-1" class="section level4">
+<h4>Lemma 1</h4>
+<p>For all x in <span class="math inline">\(\mathbb{R}^d\)</span>: <span
+class="math display">\[
+\begin{equation}
+\int_{\mathbb{R}^d}\frac{1-cos&lt;y,x&gt;
+}{|y|^{d+1}_{d}}dy=c_d|x|=\frac{\pi ^{(1+d/2)}}{2 \Gamma ((d+1)/2)}|x|
+\end{equation}
+\]</span> where <span class="math inline">\(\Gamma(\cdot)\)</span> is
+the gamma function. This is proved by <a
+href="https://home.ipipan.waw.pl/j.mielniczuk/Szekely-Rizzo_2005.pdf">Szekely
+et. al.</a></p>
+<p><br> <br></p>
+<p>Now I can choose weight function as following: <span
+class="math display">\[
+\begin{equation}
+w(a,b) = (c_p c_q |a|
+^{1+p}_p |b|
+^{1+q}_q )^{-1}
+\end{equation}
+\]</span></p>
+<p>By using such weight function and lemma 3.1, the definition of
+distance covariance will be well-defined. Note by the weight, I have
+<span class="math inline">\(dw = (c_p c_q |a| ^{1+p}_p |b| ^{1+q}_q
+)^{-1}dadb\)</span>. This is proven in the following definition. \</p>
+<p><br> <br></p>
+</div>
+<div id="deinition-4" class="section level4">
+<h4>Deinition 4</h4>
+<p>Define the distance covariance (dCov) for random vectors <span
+class="math inline">\(X\)</span> and <span
+class="math inline">\(Y\)</span> with finite expectation as the
+following non-negative figure: <span class="math display">\[
+\begin{equation}
+    V^2(X,Y) = ||f_{X,Y} (a,b)- f_X(a)f_Y (b)||^2
+= \frac{1}{c_pc_q}\int_{\mathbb{R}^{p+q}}\frac{|f_{X,Y} (a,b) -
+f_X(a)f_Y (b)|^2}{|a|^{1+p}_p|b|^{1+q}_q}da db
+\end{equation}
+\]</span> where <span class="math inline">\(a\in \mathbb{R}^p\)</span>,
+<span class="math inline">\(b\in \mathbb{R}^q\)</span> are two vectors
+that <span class="math inline">\(a\in X\)</span> and <span
+class="math inline">\(b\in Y\)</span></p>
+<p><br> <br></p>
+<p>Different to the Pearson method, the distance correlation have a
+non-negative value as it is a distance method. Therefore, although we
+have a better ability to measure nonlinear correlation, we cannot
+identify the direction of the correlation. In other word, we cannot tell
+whether the correlation is positively correlated or negatively
+correlated.</p>
+<p><br></p>
+</div>
+</div>
+<div id="result" class="section level3">
+<h3>Result</h3>
+<pre class="r"><code>Distance_Correlation = function(varnum, merged_data){
+  
+  correlation_result = tibble(&quot;date&quot;=2000:2016, &quot;Distance_cor&quot;=0,&quot;Distance_pval&quot;=0)
+  
+  for (t in 2000:2016){
+    merged_data_temp = 
+      merged_data %&gt;% 
+      filter(year==t) %&gt;% 
+      select(27,varnum) %&gt;% 
+      na.omit()
+    
+    correlation_result$Distance_cor[t-1999] = 
+    round(dcor(merged_data_temp[,2], merged_data_temp$une_life,)[1],2)
+    
+    correlation_result$Distance_pval[t-1999] = 
+    round(dcor.test(merged_data_temp[,2][[1]], merged_data_temp$une_life,R=1000)$p.value,2)
+    
+  }
+  
+  return(correlation_result)
+  
+}
+
+
+
+Distance_Correlation_result = tibble(&quot;date&quot;=2000:2016)
+
+colname = colnames(merged_data)
+
+result_corr = 
+Distance_Correlation_result %&gt;%
+  mutate(une_exp = Distance_Correlation(6,merged_data)$Distance_cor,
+         alcohol = Distance_Correlation(11,merged_data)$Distance_cor,
+         bmi = Distance_Correlation(12,merged_data)$Distance_cor,
+         measles = Distance_Correlation(16,merged_data)$Distance_cor,
+         gni_capita = Distance_Correlation(29,merged_data)$Distance_cor
+         )
+
+result_pval = 
+  Distance_Correlation_result %&gt;%
+  mutate(
+         une_exp_pval = Distance_Correlation(6,merged_data)$Distance_pval,
+         alcohol_pval = Distance_Correlation(11,merged_data)$Distance_pval,
+         bmi = Distance_Correlation(12,merged_data)$Distance_pval,
+         measles = Distance_Correlation(16,merged_data)$Distance_pval,
+         gni_capita = Distance_Correlation(29,merged_data)$Distance_pval
+         )
+
+
+grid.table(result_corr)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#grid.table(result_pval)</code></pre>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

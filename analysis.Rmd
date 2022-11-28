@@ -7,6 +7,13 @@ output: github_document
 
 ```{r,message=FALSE,warning=FALSE}
 library(tidyverse)
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
 ```
 
 
@@ -19,22 +26,30 @@ data = read_csv("./data/Merged_expectation.csv")
 
 
 \ \par
-## 1. Average Life Expectancy by Year (2000 - 2016)
+## 1. Life Expectancy by Year (2000 - 2016)
 ```{r}
 data %>% 
   janitor::clean_names() %>% 
   group_by(year) %>% 
   summarise(avg_by_year = mean(life_expect,na.rm = T)) %>% 
-  ggplot(aes(x = year,y = avg_by_year)) +
-  geom_point() +
-  geom_line() +
-  labs(title = "Average Life Expectancy from 2000 to 2016") + xlab("Year") + ylab("Average  Life  Expectancy (years)")
+  arrange(avg_by_year) %>% 
+  knitr::kable(digits = 3)
+
+
+data %>% 
+  janitor::clean_names() %>% 
+  group_by(year)  %>% 
+  ggplot(aes(x = factor(year),y = life_expect,fill = year)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Life Expectancy by Year") +
+  xlab("Year") +
+  ylab("Life Expectancy")
 
 ```
 
 
 \ \par
-## 2. Average Life Expectation by Regions
+## 2.  Life Expectation by Regions
 ```{r}
 data %>% 
   janitor::clean_names() %>% 
@@ -42,6 +57,18 @@ data %>%
   summarise(avg_by_region = mean(life_expect,na.rm = T)) %>% 
   arrange(avg_by_region) %>% 
   knitr::kable(digits = 3)
+
+data %>% 
+  janitor::clean_names() %>% 
+  group_by(region) %>% 
+  ggplot(aes(x = region, y = life_expect, fill = region)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Life Expectancy by Regions") +
+  xlab("Region") +
+  ylab("Life Expectancy")
+  
+          
+           
 ```
 
 
@@ -59,6 +86,7 @@ data %>%
   ) %>% 
   knitr::kable(digits = 3)
 
+
 ```
 
 
@@ -72,11 +100,21 @@ data %>%
   summarise(avg_by_income = mean(life_expect,na.rm = T)) %>% 
   knitr::kable(digits = 3)
 
+data %>% 
+  janitor::clean_names() %>% 
+  group_by(income_group) %>% 
+  ggplot(aes(x = income_group, y = life_expect,fill = income_group)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Life Expectancy by Income Groups") +
+  xlab("Income Groups") +
+  ylab("Life Expectancy")
+  
+
 ```
 
 
 \ \par
-## 5. Average Life Expectancy by Developing Status
+## 5. Life Expectancy by Development Status
 
 ```{r}
 data %>% 
@@ -84,6 +122,16 @@ data %>%
   group_by(developed_developing_countries) %>% 
   summarise(avg_by_dev = mean(life_expect,na.rm = T)) %>% 
   knitr::kable(digits = 3)
+
+
+data %>% 
+  janitor::clean_names() %>% 
+  group_by(developed_developing_countries) %>% 
+  ggplot(aes(x = developed_developing_countries, y = life_expect,fill = developed_developing_countries)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Life Expectancy by Development Status") +
+  xlab("Development Status") +
+  ylab("Life Expectancy")
 
 ```
 
@@ -189,7 +237,7 @@ var.test(developing,developed,alternative = "two.sided",conf.level = 0.95) %>%
 #### t.test with unknown unequal variances
 
 ```{r}
-t.test(developing,developed,alternative = "less",conf.level = 0.95,paired = F,var.equal = FALSE )%>% 
+t.test(developing,developed,alternative = "less",conf.level = 0.95,paired = F,var.equal = FALSE ) %>% 
   broom::tidy() %>% 
   knitr::kable()
 

@@ -5,4 +5,62 @@ date: "`r Sys.Date()`"
 output: github_document
 ---
 
+Need to revise according to correlation
 
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(dplyr)
+```
+
+First, we look at how many missing data we have on each column, at year 2015.
+
+```{r, message=FALSE, warning=FALSE}
+data <-
+  read_csv("data/Merged_expectation.csv")
+data %>% 
+  filter(year == 2015) %>% 
+  select(alcohol:percent_w_in_lower_house) %>% 
+  is.na() %>% 
+  colSums() %>% 
+  knitr::kable(col.names = c("Counts of NA"))
+```
+
+Limited to the variable that we have less than 5% NA's (which is less than 10 NAs), also exclude variables that have high correlation value, we could generate our first basic linear model, with selected variables of alcohol, bmi, measles, basic_water, che_gdp, une_gni, PM_value, income_group, percent_w_in_lower_house, and our response variable of une_life.
+
+* Model 1:
+une_life ~ alcohol + bmi + measles + basic_water + che_gdp + une_gni + PM_value, income_group + percent_w_in_lower_house + income_group * percent_w_in_lower_house
+
+(Also consider intersection here)
+
+
+```{r}
+
+```
+
+
+Second, we only look at the countries with existing une_literacy data and found out NA in other variables of these countries, at year 2015.
+
+```{r}
+data %>% 
+  filter(year == 2015) %>% 
+  filter(is.na(une_literacy) == FALSE) %>% 
+  select(alcohol:percent_w_in_lower_house) %>% 
+  is.na() %>% 
+  colSums() %>% 
+  knitr::kable(col.names = c("Counts of NA"))
+```
+
+Here, limited to the variable that we have less than 5% NA's (which is less than 3 NAs), also exclude variables that have high correlation value, we could generate our second basic linear model, with selected variables of alcohol, bmi, measles, basic_water, che_gdp, une_gni, une_literacy, PM_value, income_group, percent_w_in_lower_house, and our response variable of une_life.
+
+* Model 2:
+une_life ~ alcohol + bmi + measles + basic_water + che_gdp + une_gni + une_literacy + PM_value, income_group + percent_w_in_lower_house + income_group * percent_w_in_lower_house
+
+(Also consider intersection here)
+
+```{r}
+
+```
+
+
+* Model 3:
+We could try all the variables, with imputed data. use step method to find the best method.

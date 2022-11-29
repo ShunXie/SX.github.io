@@ -11,7 +11,7 @@
 
 
 
-<title>Imputation</title>
+<title>Data</title>
 
 <script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -357,7 +357,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Imputation</h1>
+<h1 class="title toc-ignore">Data</h1>
 
 </div>
 
@@ -384,6 +384,10 @@ consider the main</p>
 <p>*<code>country_code</code>: Three letter of the country id</p>
 <p>*<code>region</code>: The region of the country</p>
 <p>*<code>year</code>: year of all values stored</p>
+<p>*<code>life_expect</code>: Life expectancy at birth measured in year.
+It is continuous variable.</p>
+<p>*<code>life_exp60</code>: Life expectancy at age 60 measured in year.
+It is continuous variable.</p>
 <p>*<code>adult_mortality</code>: Adult Mortality Rates of both sexes
 (probability of dying between 15 and 60 years per 1000 population)</p>
 <p>*<code>infant_mort</code>: Death rate up to age 1</p>
@@ -393,6 +397,12 @@ consider the main</p>
 <p>*<code>bmi</code>: Mean BMI (kg/<span
 class="math inline">\(m^2\)</span>) (18+) (age-standardized
 estimate)</p>
+<p>*<code>age5_19thinness</code>: Prevalence of thinness among children
+and adolescents. This is measured in a crude estimate percentage for
+children with BMI &lt; (median - 2 s.d.)</p>
+<p>*<code>age5_19obesity</code>: Prevalence of obesity among children
+and adolescents. This is measured in a crude estimate percentage for
+children with BMI &lt; (median - 2 s.d.)</p>
 <p>*<code>hepatitis</code>: Hepatitis B (HepB) immunization coverage
 among 1-year-olds (%)</p>
 <p>*<code>measles</code>: Measles-containing-vaccine first-dose (MCV1)
@@ -401,12 +411,35 @@ immunization coverage among 1-year-olds (%)</p>
 1-year-olds (%)</p>
 <p>*<code>diphtheria</code>: Diphtheria tetanus toxoid and pertussis
 (DTP3) immunization coverage among 1-year-olds (%)</p>
-<p>*<code>hospitals</code>: Total density per 100 000 population:
-Hospitals</p>
+<p>*<code>basic_water</code>: Population using at least basic
+drinking-water services</p>
+<p>*<code>doctors</code>: Number of medical doctors (per 10,000)</p>
+<p>*<code>hospitals</code>: Total density of hospitals per 100 000
+population</p>
+<p>*<code>gni_capita</code>: Gross national income per capita in
+dollars. This is measured from GHO server</p>
+<p>*<code>gghe_d</code>: Domestic general government health expenditure
+(GGHE-D) as percentage of gross domestic product (GDP). This is measured
+from GHO server</p>
+<p>*<code>che_gdp</code>: Current health expenditure (CHE) as percentage
+of gross domestic product (GDP) (%)</p>
+<p>*<code>une_pop</code>: Population (thousands)</p>
+<p>*<code>une_infant</code>: Mortality rate, infant (per 1,000 live
+births). This is measured from GHO server</p>
 <p>*<code>une_life</code>: (Our response variable) Life expectancy at
-birth, total (years)</p>
-<p>*<code>une_gni</code>: GNI per capita, PPP (current international
-$)</p>
+birth, total (years). This is measured from GHO server. It is contains
+less missing value than life expectancy.</p>
+<p>*<code>une_hiv</code>: Prevalence of HIV, total (% of population ages
+15-49). This is measured from GHO server</p>
+<p>*<code>une_gni</code>: GNI per capita, PPP (current international $).
+This is measured from UNESCO server</p>
+<p>*<code>une_poverty</code>: Government expenditure on education as a
+percentage of GDP (%). This is measured from UNESCO server</p>
+<p>*<code>une_edu_spend</code>: Adult literacy rate, population 15+
+years, both sexes (%). This is measured from UNESCO server</p>
+<p>*<code>une_literacy</code>: Mean years of schooling (ISCED 1 or
+higher), population 25+ years, both sexes. This is measured from UNESCO
+server</p>
 <p><br> <br></p>
 </div>
 <div id="country-code-dataset" class="section level3">
@@ -499,8 +532,12 @@ merged_data_h =
 <div id="parliament-information" class="section level3">
 <h3>Parliament Information</h3>
 <p>Parliament information data is a dataset that measured the percentage
-of women in parliament over different years for different countries. The
-following code cleans and merge the data:</p>
+of women in national parliament around 2015~2018 for different
+countries. Since different countries have different election dates, and
+there is rare data before 2015, we choose the dataset that is around
+2015~2018. Then, we adjust the date to year 2015, and add the percentage
+of women in lower house of national parliament to the last column of the
+original dataset. The following code cleans and merge the data:</p>
 <pre class="r"><code>women_in_parliament &lt;-
   read_csv(&quot;data/around_2019_women_percent_in_national_parliaments.csv&quot;, skip = 5) %&gt;% 
   janitor::clean_names() %&gt;% 
@@ -508,26 +545,9 @@ following code cleans and merge the data:</p>
   mutate(&quot;country&quot; = x2,
          &quot;percent_w_in_lower_house&quot; = percent_w_6,
          &quot;year&quot; = as.double(2015)) %&gt;% 
-  select(country, year, percent_w_in_lower_house)</code></pre>
-<pre><code>## New names:
-## Rows: 193 Columns: 10
-## ── Column specification
-## ──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
-## (7): ...1, ...2, Elections...3, Elections...7, Seats*...8, Women...9, % ... dbl
-## (3): Seats*...4, Women...5, % W...6
-## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-## Specify the column types or set `show_col_types = FALSE` to quiet this message.
-## • `` -&gt; `...1`
-## • `` -&gt; `...2`
-## • `Elections` -&gt; `Elections...3`
-## • `Seats*` -&gt; `Seats*...4`
-## • `Women` -&gt; `Women...5`
-## • `% W` -&gt; `% W...6`
-## • `Elections` -&gt; `Elections...7`
-## • `Seats*` -&gt; `Seats*...8`
-## • `Women` -&gt; `Women...9`
-## • `% W` -&gt; `% W...10`</code></pre>
-<pre class="r"><code>merged_data = 
+  select(country, year, percent_w_in_lower_house)
+
+merged_data = 
   merged_data_h %&gt;% 
   left_join(women_in_parliament, by = c(&quot;country&quot;,&quot;year&quot;)) %&gt;% 
   select(country_code:une_school,PM_value,health_exp,income_group,`Developed / Developing Countries`, percent_w_in_lower_house)</code></pre>
@@ -564,33 +584,33 @@ head(Imputed_expectancy)</code></pre>
 ## 5        281.8943    0.087595   0.009210 1.195219 22.1            19.8
 ## 6        277.1813    0.084630   0.008785 0.016230 22.2            19.6
 ##   age5_19obesity hepatitis measles polio diphtheria basic_water   doctors
-## 1            0.6  70.23043      27    24         24    27.77190 1.4563221
-## 2            0.7  65.63848      37    35         33    27.79726 1.8990000
-## 3            0.8  63.00225      35    36         36    29.90076 0.9113381
-## 4            0.9  59.46949      39    41         41    32.00507 0.9645514
-## 5            1.0  60.91312      48    50         50    34.12623 1.1784814
-## 6            1.1  75.43442      50    58         58    36.26526 1.3027394
-##   hospitals gni_capita    gghe_d  che_gdp  une_pop une_infant une_life une_hiv
-## 1  7.039521  1563.3121 0.9743583 5.024003 20779.95       90.6   55.841     0.1
-## 2  3.643610   837.2164 1.6438850 6.778395 21606.99       88.0   56.308     0.1
-## 3 10.130177   870.0000 0.0841800 9.443390 22600.77       85.4   56.784     0.1
-## 4  8.446619   920.0000 0.6509600 8.941260 23680.87       82.8   57.271     0.1
-## 5  1.224748   920.0000 0.5429300 9.808470 24726.68       80.1   57.772     0.1
-## 6  7.193556  1020.0000 0.5291800 9.948290 25654.28       77.4   58.290     0.1
+## 1            0.6  63.13159      27    24         24    27.77190 1.0362225
+## 2            0.7  67.09376      37    35         33    27.79726 1.8990000
+## 3            0.8  68.33159      35    36         36    29.90076 0.8334763
+## 4            0.9  56.33555      39    41         41    32.00507 0.7021706
+## 5            1.0  63.05660      48    50         50    34.12623 0.8709674
+## 6            1.1  66.40745      50    58         58    36.26526 1.6843101
+##   hospitals gni_capita   gghe_d  che_gdp  une_pop une_infant une_life une_hiv
+## 1  6.544210  1511.8310 1.220464 4.151749 20779.95       90.6   55.841     0.1
+## 2  9.555871   837.2164 1.643885 6.778395 21606.99       88.0   56.308     0.1
+## 3 10.637172   870.0000 0.084180 9.443390 22600.77       85.4   56.784     0.1
+## 4  8.438940   920.0000 0.650960 8.941260 23680.87       82.8   57.271     0.1
+## 5  4.483273   920.0000 0.542930 9.808470 24726.68       80.1   57.772     0.1
+## 6  1.512364  1020.0000 0.529180 9.948290 25654.28       77.4   58.290     0.1
 ##    une_gni une_poverty une_edu_spend une_literacy une_school PM_value
-## 1 2746.966    57.91620      3.447189     31.40760   1.824565      100
-## 2 1037.780    52.66989      3.595020     34.08595   1.554033      100
-## 3 1734.210    48.24949      3.159068     33.73404   1.659586      100
-## 4 1341.355    55.94504      3.242766     35.68166   2.140095      100
-## 5 1407.914    59.05085      3.033755     34.70571   2.146410      100
-## 6 1431.164    53.78105      2.315727     55.04429   2.681557      100
+## 1 1608.080    54.47086      3.117114     32.43924   1.881955      100
+## 2 1037.780    52.27004      3.081875     41.06535   1.608696      100
+## 3 1734.210    49.59728      3.019396     38.73354   1.989663      100
+## 4 1035.660    56.61874      3.242766     33.52655   2.270300      100
+## 5 1407.914    59.02120      3.033755     36.25152   2.256908      100
+## 6 1431.164    58.30771      2.490159     49.63869   2.741359      100
 ##   health_exp income_group Developed / Developing Countries
-## 1   6.048328   Low income                       Developing
-## 2   5.706551   Low income                       Developing
-## 3   5.585644   Low income                       Developing
-## 4   5.099147   Low income                       Developing
-## 5   4.911871   Low income                       Developing
-## 6   4.896389   Low income                       Developing
+## 1   4.988715   Low income                       Developing
+## 2   4.730187   Low income                       Developing
+## 3   4.952205   Low income                       Developing
+## 4   5.046077   Low income                       Developing
+## 5   4.906787   Low income                       Developing
+## 6   4.536520   Low income                       Developing
 ##   percent_w_in_lower_house
 ## 1                       NA
 ## 2                       NA

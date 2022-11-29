@@ -1,5 +1,5 @@
 ---
-title: "Imputation"
+title: "Data"
 
 output: 
   html_document:
@@ -22,7 +22,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 We choose WHO Life Expectancy Dataset as our main dataset in our study. The code is read as following:
 
-```{r}
+```{r,message=FALSE, warning=FALSE}
 suppressMessages(library(tidyverse))
 suppressMessages(library(dbplyr))
 options(tibble.print_min = 5)
@@ -43,6 +43,10 @@ Life expectancy datasets contains a total of ```r length(unique(LifeExpectancy$c
 
 *```r colnames(LifeExpectancy)[4]```: year of all values stored
 
+*```r colnames(LifeExpectancy)[5]```: Life expectancy at birth measured in year. It is continuous variable.
+
+*```r colnames(LifeExpectancy)[6]```: Life expectancy at age 60 measured in year. It is continuous variable.
+
 *```r colnames(LifeExpectancy)[7]```: Adult Mortality Rates of both sexes (probability of dying between 15 and 60 years per 1000 population)
 
 *```r colnames(LifeExpectancy)[8]```: Death rate up to age 1
@@ -53,6 +57,10 @@ Life expectancy datasets contains a total of ```r length(unique(LifeExpectancy$c
 
 *```r colnames(LifeExpectancy)[11]```: Mean BMI (kg/$m^2$) (18+) (age-standardized estimate)
 
+*```r colnames(LifeExpectancy)[12]```: Prevalence of thinness among children and adolescents. This is measured in a crude estimate percentage for children with BMI < (median - 2 s.d.)
+
+*```r colnames(LifeExpectancy)[13]```: Prevalence of obesity  among children and adolescents. This is measured in a crude estimate percentage for children with BMI < (median - 2 s.d.)
+
 *```r colnames(LifeExpectancy)[14]```: Hepatitis B (HepB) immunization coverage among 1-year-olds (%)
 
 *```r colnames(LifeExpectancy)[15]```: Measles-containing-vaccine first-dose (MCV1) immunization coverage among 1-year-olds (%)
@@ -61,11 +69,34 @@ Life expectancy datasets contains a total of ```r length(unique(LifeExpectancy$c
 
 *```r colnames(LifeExpectancy)[17]```: Diphtheria tetanus toxoid and pertussis (DTP3) immunization coverage among 1-year-olds (%)
 
-*```r colnames(LifeExpectancy)[20]```: Total density per 100 000 population: Hospitals
+*```r colnames(LifeExpectancy)[18]```: Population using at least basic drinking-water services
 
-*```r colnames(LifeExpectancy)[26]```: (Our response variable) Life expectancy at birth, total (years)
+*```r colnames(LifeExpectancy)[19]```: Number of medical doctors (per 10,000)
 
-*```r colnames(LifeExpectancy)[28]```: GNI per capita, PPP (current international $)
+*```r colnames(LifeExpectancy)[20]```: Total density of hospitals per 100 000 population
+
+*```r colnames(LifeExpectancy)[21]```: Gross national income per capita in dollars. This is measured from GHO server
+
+*```r colnames(LifeExpectancy)[22]```: Domestic general government health expenditure (GGHE-D) as percentage of gross domestic product (GDP). This is measured from GHO server
+
+*```r colnames(LifeExpectancy)[23]```: Current health expenditure (CHE) as percentage of gross domestic product (GDP) (%) 
+
+*```r colnames(LifeExpectancy)[24]```: Population (thousands) 
+
+*```r colnames(LifeExpectancy)[25]```: Mortality rate, infant (per 1,000 live births). This is measured from GHO server
+
+*```r colnames(LifeExpectancy)[26]```: (Our response variable) Life expectancy at birth, total (years). This is measured from GHO server. It is contains less missing value than life expectancy. 
+
+*```r colnames(LifeExpectancy)[27]```: Prevalence of HIV, total (% of population ages 15-49). This is measured from GHO server
+
+*```r colnames(LifeExpectancy)[28]```: GNI per capita, PPP (current international $). This is measured from UNESCO  server
+
+*```r colnames(LifeExpectancy)[29]```: Government expenditure on education as a percentage of GDP (%). This is measured from UNESCO  server
+
+*```r colnames(LifeExpectancy)[30]```: Adult literacy rate, population 15+ years, both sexes (%). This is measured from UNESCO  server
+
+*```r colnames(LifeExpectancy)[31]```: Mean years of schooling (ISCED 1 or higher), population 25+ years, both sexes. This is measured from UNESCO  server
+
 
 
 
@@ -178,7 +209,7 @@ merged_data_h =
 
 Parliament information data is a dataset that measured the percentage of women in national parliament around 2015~2018 for different countries. Since different countries have different election dates, and there is rare data before 2015, we choose the dataset that is around 2015~2018. Then, we adjust the date to year 2015, and add the percentage of women in lower house of national parliament to the last column of the original dataset. The following code cleans and merge the data:
 
-```{r}
+```{r,message=FALSE, warning=FALSE}
 women_in_parliament <-
   read_csv("data/around_2019_women_percent_in_national_parliaments.csv", skip = 5) %>% 
   janitor::clean_names() %>% 

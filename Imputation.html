@@ -369,8 +369,9 @@ div.tocify {
 <h3>Life Expectancy Dataset</h3>
 <p>We choose WHO Life Expectancy Dataset as our main dataset in our
 study. The code is read as following:</p>
-<pre class="r"><code>suppressMessages(library(tidyverse))
-suppressMessages(library(dbplyr))
+<pre class="r"><code>suppressMessages(library(tidyverse))</code></pre>
+<pre><code>## Warning: 程辑包&#39;ggplot2&#39;是用R版本4.2.2 来建造的</code></pre>
+<pre class="r"><code>suppressMessages(library(dbplyr))
 options(tibble.print_min = 5)
 
 #Get life expectancy data
@@ -531,7 +532,7 @@ following code cleans and merge the data:</p>
 <pre class="r"><code>merged_data = 
   merged_data_h %&gt;% 
   left_join(women_in_parliament, by = c(&quot;country&quot;,&quot;year&quot;)) %&gt;% 
-  select(country_code:une_school,PM_value,income_group,health_exp,`Developed / Developing Countries`, percent_w_in_lower_house)</code></pre>
+  select(country_code:une_school,PM_value,health_exp,income_group,`Developed / Developing Countries`, percent_w_in_lower_house)</code></pre>
 <p>Store the data</p>
 <pre class="r"><code>write.csv(merged_data , file = &quot;data/Merged_expectation.csv&quot;)</code></pre>
 </div>
@@ -540,13 +541,13 @@ following code cleans and merge the data:</p>
 <h1>Impute</h1>
 <pre class="r"><code>raw_mat = 
   merged_data %&gt;% 
-  select(-country, -country_code, -region,-income_group, -`Developed / Developing Countries`) %&gt;% 
+  select(-country, -country_code, -region,-income_group, -`Developed / Developing Countries`,percent_w_in_lower_house) %&gt;% 
   as.matrix()
 
 imputed_mat = filling::fill.KNNimpute(raw_mat, k = 5)</code></pre>
 <pre class="r"><code>#colnames_exp = colnames(LifeExpectancy)
 Imputed_expectancy = merged_data
-for (i in 1:(length(merged_data)-5)) {
+for (i in 1:(length(merged_data)-6)) {
   Imputed_expectancy[i+3][[1]] = imputed_mat[[1]][,i]
 }
 head(Imputed_expectancy)</code></pre>
@@ -561,37 +562,37 @@ head(Imputed_expectancy)</code></pre>
 ## 1        316.0496    0.098245   0.011050 1.097579 21.7            20.6
 ## 2        307.2416    0.095925   0.010625 2.602703 21.8            20.4
 ## 3        292.3430    0.093330   0.010130 2.482694 21.9            20.2
-## 4        286.4569    0.090470   0.009655 1.828856 22.0            20.0
+## 4        286.4569    0.090470   0.009655 1.134228 22.0            20.0
 ## 5        281.8943    0.087595   0.009210 1.195219 22.1            19.8
 ## 6        277.1813    0.084630   0.008785 0.016230 22.2            19.6
 ##   age5_19obesity hepatitis measles polio diphtheria basic_water   doctors
-## 1            0.6  72.07348      27    24         24    27.77190 1.0869062
-## 2            0.7  69.74068      37    35         33    27.79726 1.8990000
-## 3            0.8  68.33159      35    36         36    29.90076 0.8184601
-## 4            0.9  67.12956      39    41         41    32.00507 0.7291122
-## 5            1.0  60.76356      48    50         50    34.12623 0.8786297
-## 6            1.1  72.22008      50    58         58    36.26526 1.1446742
-##   hospitals gni_capita   gghe_d  che_gdp  une_pop une_infant une_life une_hiv
-## 1  3.818620  1511.8310 1.220464 4.857017 20779.95       90.6   55.841     0.1
-## 2  4.119031   837.2164 1.643885 6.778395 21606.99       88.0   56.308     0.1
-## 3  5.730001   870.0000 0.084180 9.443390 22600.77       85.4   56.784     0.1
-## 4  6.169815   920.0000 0.650960 8.941260 23680.87       82.8   57.271     0.1
-## 5  6.961186   920.0000 0.542930 9.808470 24726.68       80.1   57.772     0.1
-## 6  9.123275  1020.0000 0.529180 9.948290 25654.28       77.4   58.290     0.1
-##    une_gni une_poverty une_edu_spend une_literacy une_school PM_value
-## 1 1684.715    57.96779      3.545008     31.62632   1.584920      100
-## 2 1037.780    50.93308      4.014273     37.07993   1.437904      100
-## 3 1734.210    45.45746      3.143236     37.23949   1.602321      100
-## 4 1341.355    56.74053      3.231213     37.95340   1.880437      100
-## 5 1407.914    55.07774      3.033755     36.68218   2.081837      100
-## 6 1431.164    50.37312      2.382994     58.28174   2.675194      100
-##   income_group health_exp Developed / Developing Countries
-## 1     7.078288   18.83858                       Developing
-## 2     6.610803   19.34282                       Developing
-## 3     6.238277   17.01150                       Developing
-## 4     5.783722   16.42218                       Developing
-## 5     5.748878   15.95343                       Developing
-## 6     5.578531   15.97178                       Developing
+## 1            0.6  67.92940      27    24         24    27.77190 1.0578468
+## 2            0.7  67.34301      37    35         33    27.79726 1.8990000
+## 3            0.8  43.81626      35    36         36    29.90076 0.7964362
+## 4            0.9  54.83897      39    41         41    32.00507 0.6874721
+## 5            1.0  60.76356      48    50         50    34.12623 1.3307467
+## 6            1.1  73.77457      50    58         58    36.26526 1.1568766
+##   hospitals gni_capita    gghe_d  che_gdp  une_pop une_infant une_life une_hiv
+## 1  6.501224  1511.8310 0.9743583 4.151749 20779.95       90.6   55.841     0.1
+## 2  6.430330   837.2164 0.9157564 6.778395 21606.99       88.0   56.308     0.1
+## 3  7.845995   870.0000 0.0841800 9.443390 22600.77       85.4   56.784     0.1
+## 4  8.439805   920.0000 0.6509600 8.941260 23680.87       82.8   57.271     0.1
+## 5  6.385935   920.0000 0.5429300 9.808470 24726.68       80.1   57.772     0.1
+## 6  6.399202  1020.0000 0.5291800 9.948290 25654.28       77.4   58.290     0.1
+##    une_gni une_poverty une_edu_spend une_literacy une_school  PM_value
+## 1 1762.988    60.05272      3.318005     32.80994   2.127627 100.00000
+## 2 1037.780    52.71974      3.588316     39.40903   1.565275 100.00000
+## 3 1862.518    46.31441      3.210979     28.34837   1.513869 100.00000
+## 4 1341.355    31.37589      3.246474     36.52478   2.308321  99.64759
+## 5 2214.533    59.92910      3.033755     38.57999   2.315442 100.00000
+## 6 1486.113    58.50990      2.315727     52.84351   3.013763 100.00000
+##   health_exp income_group Developed / Developing Countries
+## 1   4.111119   Low income                       Developing
+## 2   4.136561   Low income                       Developing
+## 3   4.253977   Low income                       Developing
+## 4   4.267040   Low income                       Developing
+## 5   4.277610   Low income                       Developing
+## 6   4.281935   Low income                       Developing
 ##   percent_w_in_lower_house
 ## 1                       NA
 ## 2                       NA

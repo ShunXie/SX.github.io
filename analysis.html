@@ -299,28 +299,7 @@ options(
 scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d</code></pre>
  
-<pre class="r"><code>data = read_csv(&quot;./data/Merged_expectation.csv&quot;)
-data</code></pre>
-<pre><code>## # A tibble: 3,111 × 38
-##     ...1 country_…¹ country region  year life_…² life_…³ adult…⁴ infan…⁵ age1_…⁶
-##    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-##  1     1 AFG        Afghan… Easte…  2000    55.9    15.1    316.  0.0982 0.0111 
-##  2     2 AFG        Afghan… Easte…  2001    56.5    15.2    307.  0.0959 0.0106 
-##  3     3 AFG        Afghan… Easte…  2002    57.4    15.2    292.  0.0933 0.0101 
-##  4     4 AFG        Afghan… Easte…  2003    58.0    15.4    286.  0.0905 0.00966
-##  5     5 AFG        Afghan… Easte…  2004    58.4    15.4    282.  0.0876 0.00921
-##  6     6 AFG        Afghan… Easte…  2005    58.9    15.5    277.  0.0846 0.00878
-##  7     7 AFG        Afghan… Easte…  2006    59.2    15.6    276.  0.0816 0.00832
-##  8     8 AFG        Afghan… Easte…  2007    59.6    15.7    273.  0.0786 0.00789
-##  9     9 AFG        Afghan… Easte…  2008    60.2    15.8    265.  0.0756 0.0075 
-## 10    10 AFG        Afghan… Easte…  2009    60.7    15.9    260.  0.0727 0.00708
-## # … with 3,101 more rows, 28 more variables: alcohol &lt;dbl&gt;, bmi &lt;dbl&gt;,
-## #   age5_19thinness &lt;dbl&gt;, age5_19obesity &lt;dbl&gt;, hepatitis &lt;dbl&gt;,
-## #   measles &lt;dbl&gt;, polio &lt;dbl&gt;, diphtheria &lt;dbl&gt;, basic_water &lt;dbl&gt;,
-## #   doctors &lt;dbl&gt;, hospitals &lt;dbl&gt;, gni_capita &lt;dbl&gt;, gghe_d &lt;dbl&gt;,
-## #   che_gdp &lt;dbl&gt;, une_pop &lt;dbl&gt;, une_infant &lt;dbl&gt;, une_life &lt;dbl&gt;,
-## #   une_hiv &lt;dbl&gt;, une_gni &lt;dbl&gt;, une_poverty &lt;dbl&gt;, une_edu_spend &lt;dbl&gt;,
-## #   une_literacy &lt;dbl&gt;, une_school &lt;dbl&gt;, PM_value &lt;dbl&gt;, health_exp &lt;dbl&gt;, …</code></pre>
+<pre class="r"><code>data = read_csv(&quot;./data/Imputed_expectation.csv&quot;)</code></pre>
  
 <div id="life-expectancy-by-year-2000---2016" class="section level2">
 <h2>1. Life Expectancy by Year (2000 - 2016)</h2>
@@ -472,6 +451,8 @@ data</code></pre>
   theme(axis.text.x = element_text(hjust = 1, angle = 10,size = 8))</code></pre>
 <p><img src="analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
  
+<div id="test-of-equal-variance" class="section level4">
+<h4>test of equal variance</h4>
 <pre class="r"><code>bartlett.test(life_expect ~ factor(region),data = data) %&gt;% 
   broom::tidy() %&gt;% 
   knitr::kable()</code></pre>
@@ -500,6 +481,7 @@ data</code></pre>
 </tbody>
 </table>
  
+</div>
 </div>
 <div
 id="t.test-compare-mean-life-expectancy-between-americas-and-europe"
@@ -617,91 +599,67 @@ Europe &lt;- data %&gt;%
 </div>
 </div>
 <div
-id="t.test-compare-mean-life-expectancy-between-western-pacific-and-eastern-mediterranean"
+id="prop.test-compare-the-proportion-of-life-expectancy-over-70-between-western-pacific-and-eastern-mediterranean"
 class="section level2">
-<h2>4. t.test : Compare Mean Life Expectancy Between Western Pacific and
-Eastern Mediterranean</h2>
-<div id="extract-life-expectancy-in-americas-and-europe-1"
-class="section level4">
-<h4>extract life expectancy in Americas and Europe</h4>
-<pre class="r"><code>Western_Pacific &lt;- data %&gt;% 
+<h2>4. prop.test : Compare the Proportion of Life Expectancy Over 70
+Between Western Pacific and Eastern Mediterranean</h2>
+<pre class="r"><code>data %&gt;% 
   janitor::clean_names() %&gt;% 
   filter(region == &quot;Western Pacific&quot;) %&gt;% 
-  pull(life_expect)
-
-Eastern_Mediterranean &lt;- data %&gt;% 
-  janitor::clean_names() %&gt;% 
-  filter(region == &quot;Eastern Mediterranean&quot;) %&gt;% 
-  pull(life_expect) </code></pre>
-</div>
-<div id="test-equal-variance-1" class="section level4">
-<h4>test equal variance</h4>
-<pre class="r"><code>var.test(Western_Pacific,Eastern_Mediterranean,alternative = &quot;two.sided&quot;,conf.level = 0.95) %&gt;% 
-  broom::tidy() %&gt;% 
+  summarise(above_70 = sum(life_expect &gt; 70),
+            total = n()) %&gt;% 
   knitr::kable()</code></pre>
-<pre><code>## Multiple parameters; naming those columns num.df, den.df</code></pre>
-<table style="width:100%;">
-<colgroup>
-<col width="9%" />
-<col width="6%" />
-<col width="6%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="29%" />
-<col width="11%" />
-</colgroup>
+<table>
 <thead>
 <tr class="header">
-<th align="right">estimate</th>
-<th align="right">num.df</th>
-<th align="right">den.df</th>
-<th align="right">statistic</th>
-<th align="right">p.value</th>
-<th align="right">conf.low</th>
-<th align="right">conf.high</th>
-<th align="left">method</th>
-<th align="left">alternative</th>
+<th align="right">above_70</th>
+<th align="right">total</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">0.9077007</td>
-<td align="right">356</td>
-<td align="right">356</td>
-<td align="right">0.9077007</td>
-<td align="right">0.3613621</td>
-<td align="right">0.7371754</td>
-<td align="right">1.117672</td>
-<td align="left">F test to compare two variances</td>
-<td align="left">two.sided</td>
+<td align="right">203</td>
+<td align="right">357</td>
 </tr>
 </tbody>
 </table>
-</div>
-<div id="t.test-with-unknown-unequal-variances-1"
-class="section level4">
-<h4>t.test with unknown unequal variances</h4>
-<pre class="r"><code>t.test(Americas,Europe,alternative = &quot;less&quot;,conf.level = 0.95,paired = F,var.equal = FALSE ) %&gt;% 
+<pre class="r"><code>data %&gt;% 
+  janitor::clean_names() %&gt;% 
+  filter(region == &quot;Eastern Mediterranean&quot;)  %&gt;% 
+  summarise(above_70 = sum(life_expect &gt; 70),
+            total = n()) %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">above_70</th>
+<th align="right">total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">225</td>
+<td align="right">357</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>prop.test(c(203,225),n = c(357,357),correct = F) %&gt;% 
   broom::tidy() %&gt;% 
   knitr::kable()</code></pre>
 <table>
 <colgroup>
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="5%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="47%" />
 <col width="7%" />
-<col width="8%" />
-<col width="7%" />
-<col width="8%" />
-<col width="21%" />
-<col width="10%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th align="right">estimate</th>
 <th align="right">estimate1</th>
 <th align="right">estimate2</th>
 <th align="right">statistic</th>
@@ -715,25 +673,24 @@ class="section level4">
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">-2.599997</td>
-<td align="right">73.20526</td>
-<td align="right">75.80526</td>
-<td align="right">-10.61033</td>
-<td align="right">0</td>
-<td align="right">1292.953</td>
-<td align="right">-Inf</td>
-<td align="right">-2.196646</td>
-<td align="left">Welch Two Sample t-test</td>
-<td align="left">less</td>
+<td align="right">0.5686275</td>
+<td align="right">0.6302521</td>
+<td align="right">2.823149</td>
+<td align="right">0.092914</td>
+<td align="right">1</td>
+<td align="right">-0.133367</td>
+<td align="right">0.0101177</td>
+<td align="left">2-sample test for equality of proportions without
+continuity correction</td>
+<td align="left">two.sided</td>
 </tr>
 </tbody>
 </table>
  
 </div>
-</div>
 <div id="average-life-expectancy-by-region-year-combination"
 class="section level2">
-<h2>3. Average Life Expectancy by (region, year) Combination</h2>
+<h2>5. Average Life Expectancy by (region, year) Combination</h2>
 <pre class="r"><code>data %&gt;% 
   janitor::clean_names() %&gt;% 
   group_by(region,year) %&gt;% 
@@ -925,11 +882,13 @@ class="section level2">
  
 </div>
 <div id="life-expectancy-by-income-level" class="section level2">
-<h2>4. Life Expectancy by Income Level</h2>
+<h2>6. Life Expectancy by Income Level</h2>
 <pre class="r"><code>data %&gt;% 
-  janitor::clean_names() %&gt;% 
+  janitor::clean_names()  %&gt;% 
+  filter(!is.na(income_group)) %&gt;%  
   group_by(income_group) %&gt;% 
   summarise(avg_by_income = mean(life_expect,na.rm = T)) %&gt;% 
+  arrange(avg_by_income) %&gt;% 
   knitr::kable(digits = 3)</code></pre>
 <table>
 <thead>
@@ -940,24 +899,20 @@ class="section level2">
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">High income</td>
-<td align="right">77.851</td>
-</tr>
-<tr class="even">
 <td align="left">Low income</td>
 <td align="right">57.028</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Lower middle income</td>
 <td align="right">65.102</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Upper middle income</td>
 <td align="right">70.984</td>
 </tr>
-<tr class="odd">
-<td align="left">NA</td>
-<td align="right">73.272</td>
+<tr class="even">
+<td align="left">High income</td>
+<td align="right">77.851</td>
 </tr>
 </tbody>
 </table>
@@ -970,11 +925,11 @@ class="section level2">
   labs(title = &quot;Boxplot of Life Expectancy by Income Groups&quot;) +
   xlab(&quot;Income Groups&quot;) +
   ylab(&quot;Life Expectancy&quot;)</code></pre>
-<p><img src="analysis_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="analysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
  
 </div>
 <div id="life-expectancy-by-development-status" class="section level2">
-<h2>5. Life Expectancy by Development Status</h2>
+<h2>7. Life Expectancy by Development Status</h2>
 <pre class="r"><code>data %&gt;% 
   janitor::clean_names() %&gt;% 
   group_by(developed_developing_countries) %&gt;% 
@@ -1006,13 +961,13 @@ class="section level2">
   labs(title = &quot;Boxplot of Life Expectancy by Development Status&quot;) +
   xlab(&quot;Development Status&quot;) +
   ylab(&quot;Life Expectancy&quot;)</code></pre>
-<p><img src="analysis_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p><img src="analysis_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
  
 </div>
 <div
 id="t.test-comapre-mean-life-expectancy-between-developed-and-developing-countries"
 class="section level2">
-<h2>10. t.test : Comapre Mean Life Expectancy Between Developed and
+<h2>8. t.test : Comapre Mean Life Expectancy Between Developed and
 Developing Countries</h2>
 <div id="extract-developed-and-developing-life-expectancy"
 class="section level4">
@@ -1028,7 +983,7 @@ developed &lt;- data %&gt;%
   filter(developed_developing_countries == &quot;Developed&quot;) %&gt;% 
   pull(life_expect) </code></pre>
 </div>
-<div id="test-equal-variance-2" class="section level4">
+<div id="test-equal-variance-1" class="section level4">
 <h4>test equal variance</h4>
 <pre class="r"><code>var.test(developing,developed,alternative = &quot;two.sided&quot;,conf.level = 0.95) %&gt;% 
   broom::tidy() %&gt;% 
@@ -1074,7 +1029,7 @@ developed &lt;- data %&gt;%
 </tbody>
 </table>
 </div>
-<div id="t.test-with-unknown-unequal-variances-2"
+<div id="t.test-with-unknown-unequal-variances-1"
 class="section level4">
 <h4>t.test with unknown unequal variances</h4>
 <pre class="r"><code>t.test(developing,developed,alternative = &quot;less&quot;,conf.level = 0.95,paired = F,var.equal = FALSE ) %&gt;% 

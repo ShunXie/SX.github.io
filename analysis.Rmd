@@ -19,8 +19,7 @@ scale_fill_discrete = scale_fill_viridis_d
 
 \ \par
 ```{r,message=FALSE}
-data = read_csv("./data/Merged_expectation.csv")
-data
+data = read_csv("./data/Imputed_expectation.csv")
 
 ```
 
@@ -47,6 +46,7 @@ data %>%
   ylab("Life Expectancy")
 
 ```
+
 
 
 \ \par
@@ -77,6 +77,7 @@ data %>%
 ```
 
 \ \par
+#### test of equal variance
 ```{r}
 bartlett.test(life_expect ~ factor(region),data = data) %>% 
   broom::tidy() %>% 
@@ -125,40 +126,32 @@ t.test(Americas,Europe,alternative = "less",conf.level = 0.95,paired = F,var.equ
 
 
 \ \par
-## 4. t.test : Compare Mean Life Expectancy Between Western Pacific and Eastern Mediterranean
+## 4. prop.test : Compare the Proportion of Life Expectancy Over 70 Between Western Pacific and Eastern Mediterranean
 
-#### extract life expectancy in Western Pacific and Eastern Mediterranean
+
 ```{r}
-Western_Pacific <- data %>% 
+data %>% 
   janitor::clean_names() %>% 
   filter(region == "Western Pacific") %>% 
-  pull(life_expect)
+  summarise(above_70 = sum(life_expect > 70),
+            total = n()) %>% 
+  knitr::kable()
 
-Eastern_Mediterranean <- data %>% 
+
+data %>% 
   janitor::clean_names() %>% 
-  filter(region == "Eastern Mediterranean") %>% 
-  pull(life_expect) 
+  filter(region == "Eastern Mediterranean")  %>% 
+  summarise(above_70 = sum(life_expect > 70),
+            total = n()) %>% 
+  knitr::kable()
 
-```
-
-
-#### test equal variance
-```{r}
-var.test(Western_Pacific,Eastern_Mediterranean,alternative = "two.sided",conf.level = 0.95) %>% 
+prop.test(c(203,225),n = c(357,357),correct = F) %>% 
   broom::tidy() %>% 
   knitr::kable()
 
 ```
 
 
-#### t.test with unknown unequal variances
-
-```{r}
-t.test(Western_Pacific,Eastern_Mediterranean,alternative = "two.sided",conf.level = 0.95,paired = F,var.equal = TRUE ) %>% 
-  broom::tidy() %>% 
-  knitr::kable()
-
-```
 
 
 \ \par
@@ -184,9 +177,11 @@ data %>%
 
 ```{r}
 data %>% 
-  janitor::clean_names() %>% 
+  janitor::clean_names()  %>% 
+  filter(!is.na(income_group)) %>%  
   group_by(income_group) %>% 
   summarise(avg_by_income = mean(life_expect,na.rm = T)) %>% 
+  arrange(avg_by_income) %>% 
   knitr::kable(digits = 3)
 
 data %>% 
@@ -201,6 +196,9 @@ data %>%
   
 
 ```
+
+
+
 
 
 \ \par
@@ -226,10 +224,8 @@ data %>%
 ```
 
 
-
-
 \ \par
-## 10. t.test : Comapre Mean Life Expectancy Between Developed and Developing Countries
+## 8. t.test : Comapre Mean Life Expectancy Between Developed and Developing Countries
 
 #### extract developed and developing life expectancy
 ```{r}
@@ -264,6 +260,7 @@ t.test(developing,developed,alternative = "less",conf.level = 0.95,paired = F,va
   knitr::kable()
 
 ```
+
 
 
 

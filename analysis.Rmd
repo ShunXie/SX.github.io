@@ -31,7 +31,7 @@ data = read_csv("./data/Imputed_expectation.csv")
 data %>% 
   janitor::clean_names() %>% 
   group_by(year) %>% 
-  summarise(avg_by_year = mean(life_expect,na.rm = T)) %>% 
+  summarise(avg_by_year = mean(une_life,na.rm = T)) %>% 
   arrange(avg_by_year) %>% 
   knitr::kable(digits = 3)
 
@@ -39,7 +39,7 @@ data %>%
 data %>% 
   janitor::clean_names() %>% 
   group_by(year)  %>% 
-  ggplot(aes(x = factor(year),y = life_expect,fill = year)) +
+  ggplot(aes(x = factor(year),y = une_life,fill = year)) +
   geom_boxplot() +
   labs(title = "Boxplot of Life Expectancy by Year") +
   xlab("Year") +
@@ -56,7 +56,7 @@ data %>%
 data %>% 
   janitor::clean_names() %>% 
   group_by(region) %>% 
-  summarise(avg_by_region = mean(life_expect,na.rm = T)) %>% 
+  summarise(avg_by_region = mean(une_life,na.rm = T)) %>% 
   arrange(avg_by_region) %>% 
   knitr::kable(digits = 3)
 ```
@@ -66,7 +66,7 @@ data %>%
 data %>% 
   janitor::clean_names() %>% 
   group_by(region) %>% 
-  ggplot(aes(x = fct_reorder(region,life_expect), y = life_expect, fill = region)) +
+  ggplot(aes(x = fct_reorder(region,une_life), y = une_life, fill = region)) +
   geom_boxplot() +
   labs(title = "Boxplot of Life Expectancy by Regions") +
   xlab("Region") +
@@ -79,7 +79,7 @@ data %>%
 \ \par
 #### test of equal variance
 ```{r}
-bartlett.test(life_expect ~ factor(region),data = data) %>% 
+bartlett.test(une_life ~ factor(region),data = data) %>% 
   broom::tidy() %>% 
   knitr::kable()
 
@@ -94,13 +94,13 @@ bartlett.test(life_expect ~ factor(region),data = data) %>%
 Americas <- data %>% 
   janitor::clean_names() %>% 
   filter(region == "Americas") %>% 
-  pull(life_expect)
+  pull(une_life)
 
 
 Europe <- data %>% 
   janitor::clean_names() %>% 
   filter(region == "Europe") %>% 
-  pull(life_expect) 
+  pull(une_life) 
 
 ```
 
@@ -126,26 +126,26 @@ t.test(Americas,Europe,alternative = "less",conf.level = 0.95,paired = F,var.equ
 
 
 \ \par
-## 4. prop.test : Compare the Proportion of Life Expectancy Over 70 Between Western Pacific and Eastern Mediterranean
+## 4. prop.test : Compare the Proportion of Life Expectancy Over 70 Between Western Pacific and South-East Asia
 
 
 ```{r}
 data %>% 
   janitor::clean_names() %>% 
   filter(region == "Western Pacific") %>% 
-  summarise(above_70 = sum(life_expect > 70),
+  summarise(above_65 = sum(une_life > 65),
             total = n()) %>% 
   knitr::kable()
 
 
 data %>% 
   janitor::clean_names() %>% 
-  filter(region == "Eastern Mediterranean")  %>% 
-  summarise(above_70 = sum(life_expect > 70),
+  filter(region == "South-East Asia")  %>% 
+  summarise(above_65 = sum(une_life > 65),
             total = n()) %>% 
   knitr::kable()
 
-prop.test(c(203,225),n = c(357,357),correct = F) %>% 
+prop.test(c(304,149),n = c(357,187),correct = F) %>% 
   broom::tidy() %>% 
   knitr::kable()
 
@@ -161,7 +161,7 @@ prop.test(c(203,225),n = c(357,357),correct = F) %>%
 data %>% 
   janitor::clean_names() %>% 
   group_by(region,year) %>% 
-  summarise(avg_by_year_region = mean(life_expect,na.rm = T)) %>% 
+  summarise(avg_by_year_region = mean(une_life,na.rm = T)) %>% 
   pivot_wider(
     names_from = region,
     values_from = avg_by_year_region
@@ -180,7 +180,7 @@ data %>%
   janitor::clean_names()  %>% 
   filter(!is.na(income_group)) %>%  
   group_by(income_group) %>% 
-  summarise(avg_by_income = mean(life_expect,na.rm = T)) %>% 
+  summarise(avg_by_income = mean(une_life,na.rm = T)) %>% 
   arrange(avg_by_income) %>% 
   knitr::kable(digits = 3)
 
@@ -188,7 +188,7 @@ data %>%
   janitor::clean_names() %>% 
   filter(!is.na(income_group)) %>% 
   group_by(income_group) %>% 
-  ggplot(aes(x = fct_reorder(income_group,life_expect), y = life_expect,fill = income_group)) +
+  ggplot(aes(x = fct_reorder(income_group,une_life), y = une_life,fill = income_group)) +
   geom_boxplot() +
   labs(title = "Boxplot of Life Expectancy by Income Groups") +
   xlab("Income Groups") +
@@ -208,14 +208,14 @@ data %>%
 data %>% 
   janitor::clean_names() %>% 
   group_by(developed_developing_countries) %>% 
-  summarise(avg_by_dev = mean(life_expect,na.rm = T)) %>% 
+  summarise(avg_by_dev = mean(une_life,na.rm = T)) %>% 
   knitr::kable(digits = 3)
 
 
 data %>% 
   janitor::clean_names() %>% 
   group_by(developed_developing_countries) %>% 
-  ggplot(aes(x = developed_developing_countries, y = life_expect,fill = developed_developing_countries)) +
+  ggplot(aes(x = developed_developing_countries, y = une_life,fill = developed_developing_countries)) +
   geom_boxplot() +
   labs(title = "Boxplot of Life Expectancy by Development Status") +
   xlab("Development Status") +
@@ -232,13 +232,13 @@ data %>%
 developing <- data %>% 
   janitor::clean_names() %>% 
   filter(developed_developing_countries == "Developing") %>% 
-  pull(life_expect)
+  pull(une_life)
 
 
 developed <- data %>% 
   janitor::clean_names() %>% 
   filter(developed_developing_countries == "Developed") %>% 
-  pull(life_expect) 
+  pull(une_life) 
 
 ```
 

@@ -174,7 +174,7 @@ Since we choose Life expectancy as our response variable, we can plot the scatte
 #bmi
 merged_data_temp =
 merged_data %>% 
-  select(year, life_expect, bmi) %>% 
+  select(year, une_life, bmi) %>% 
   filter(year > 2012)
 
 
@@ -184,7 +184,7 @@ for (i in 2013:2016){
     myplots[[i-2012]] =
       merged_data_temp %>% 
       filter(year == i) %>% 
-      ggplot(aes(x = bmi, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+      ggplot(aes(x = bmi, y = une_life))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
   
   }
   
@@ -217,7 +217,7 @@ plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1,
 #measles
 merged_data_temp =
 merged_data %>% 
-  select(year, life_expect, measles) %>% 
+  select(year, une_life, measles) %>% 
   filter(year > 2012)
 
 
@@ -227,7 +227,7 @@ for (i in 2013:2016){
     myplots[[i-2012]] =
       merged_data_temp %>% 
       filter(year == i) %>% 
-      ggplot(aes(x = measles, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+      ggplot(aes(x = measles, y = une_life))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
   
   }
   
@@ -261,7 +261,7 @@ plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1,
 #health_exp
 merged_data_temp =
 merged_data %>% 
-  select(year, life_expect, health_exp) %>% 
+  select(year, une_life, health_exp) %>% 
   filter(year > 2012)
 
 
@@ -271,7 +271,7 @@ for (i in 2013:2016){
     myplots[[i-2012]] =
       merged_data_temp %>% 
       filter(year == i) %>% 
-      ggplot(aes(x = health_exp, y = life_expect))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
+      ggplot(aes(x = health_exp, y = une_life))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')
   
   }
   

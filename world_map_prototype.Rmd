@@ -1,0 +1,54 @@
+---
+title: "world_map"
+author: "Jingyi Yao"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(plotly)
+library(rjson)
+library(tidyverse)
+```
+
+
+
+```{r}
+
+df <- read_csv("./data/Merged_expectation.csv")
+df <- df %>% 
+  filter(year == 2015) %>% 
+  select(country_code,country,une_life) 
+  
+
+df
+
+```
+
+
+
+```{r}
+# light grey boundaries
+l <- list(color = toRGB("grey"), width = 0.5)
+
+# specify map projection/options
+g <- list(
+  showframe = FALSE,
+  showcoastlines = FALSE,
+  projection = list(type = 'Mercator')
+)
+
+fig <- plot_geo(df)
+fig <- fig %>% add_trace(
+  z = ~une_life, color = ~une_life, colors = 'Blues',
+  text = ~country, locations = ~country_code, marker = list(line = l)
+)
+fig <- fig %>% colorbar(title = 'life expectancy')
+fig <- fig %>% layout(
+  title = "life expectancy in 2015",
+  geo = g
+)
+
+fig
+```
+

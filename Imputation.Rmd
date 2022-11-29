@@ -176,17 +176,16 @@ merged_data_h =
 
 ### Parliament Information
 
-Parliament information data is a dataset that measured the percentage of women in parliament over different years for different countries. The following code cleans and merge the data:
+Parliament information data is a dataset that measured the percentage of women in national parliament around 2015~2018 for different countries. Since different countries have different election dates, and there is rare data before 2015, we choose the dataset that is around 2015~2018. Then, we adjust the date to year 2015, and add the percentage of women in lower house of national parliament to the last column of the original dataset. The following code cleans and merge the data:
 
 ```{r}
 women_in_parliament <-
   read_csv("data/around_2019_women_percent_in_national_parliaments.csv", skip = 5) %>% 
   janitor::clean_names() %>% 
   select(x2, elections_3, percent_w_6) %>% 
-  separate(elections_3, into = c("month", "year")) %>% 
   mutate("country" = x2,
          "percent_w_in_lower_house" = percent_w_6,
-         "year" = as.double(year)) %>% 
+         "year" = as.double(2015)) %>% 
   select(country, year, percent_w_in_lower_house)
 
 merged_data = 

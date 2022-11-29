@@ -1,0 +1,8 @@
+---
+title: "Linear Regression Model"
+author: "Youlan Shen"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+

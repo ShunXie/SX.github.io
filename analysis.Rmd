@@ -127,7 +127,7 @@ t.test(Americas,Europe,alternative = "less",conf.level = 0.95,paired = F,var.equ
 \ \par
 ## 4. t.test : Compare Mean Life Expectancy Between Western Pacific and Eastern Mediterranean
 
-#### extract life expectancy in Americas and Europe
+#### extract life expectancy in Western Pacific and Eastern Mediterranean
 ```{r}
 Western_Pacific <- data %>% 
   janitor::clean_names() %>% 
@@ -154,7 +154,7 @@ var.test(Western_Pacific,Eastern_Mediterranean,alternative = "two.sided",conf.le
 #### t.test with unknown unequal variances
 
 ```{r}
-t.test(Americas,Europe,alternative = "less",conf.level = 0.95,paired = F,var.equal = FALSE ) %>% 
+t.test(Western_Pacific,Eastern_Mediterranean,alternative = "two.sided",conf.level = 0.95,paired = F,var.equal = TRUE ) %>% 
   broom::tidy() %>% 
   knitr::kable()
 
@@ -162,7 +162,7 @@ t.test(Americas,Europe,alternative = "less",conf.level = 0.95,paired = F,var.equ
 
 
 \ \par
-## 3. Average Life Expectancy by (region, year) Combination
+## 5. Average Life Expectancy by (region, year) Combination
 
 ```{r}
 data %>% 
@@ -180,7 +180,7 @@ data %>%
 
 
 \ \par
-## 4. Life Expectancy by Income Level
+## 6. Life Expectancy by Income Level
 
 ```{r}
 data %>% 
@@ -204,7 +204,7 @@ data %>%
 
 
 \ \par
-## 5. Life Expectancy by Development Status
+## 7. Life Expectancy by Development Status
 
 ```{r}
 data %>% 

@@ -19,7 +19,7 @@ scale_fill_discrete = scale_fill_viridis_d
 
 \ \par
 ```{r,message=FALSE}
-data = read_csv("./data/Imputed_expectation.csv")
+data = read_csv("./data/Merged_expectation.csv")
 
 ```
 

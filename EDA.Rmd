@@ -67,36 +67,6 @@ imputed_data = read_csv("data/Imputed_expectation.csv", show_col_types = FALSE)
 ```
 
 
-```{r,message = FALSE, warning = FALSE}
-
-merged_data %>% 
-  group_by(year, `Developed / Developing Countries`) %>% 
-  summarize(
-    mean_val = mean(une_life)
-  ) %>% 
-  pivot_wider(
-    values_from = mean_val,
-    names_from = `Developed / Developing Countries`
-  ) %>% 
-  ggplot()+
-  geom_line(aes(x=year, y=Developed, color='a'))+
-  geom_line(aes(x=year, y=Developing, color='b'))+
-  scale_color_manual(name = ' ', 
-                     values =c("a"='black',"b"='red'), 
-                     labels = c('Developed','Developing'))+
-  geom_point(aes(x=year, y=Developed, color='a'),shape=19,size = 3)+
-  geom_point(aes(x=year, y=Developing, color='b'),color = "red", shape=19,size = 3)+
-  labs(title = sprintf("Time series plot for %s", "Life Expectancy") )+
-  xlab("Year")+
-  ylab(sprintf("%s","Life Expectancy"))
-  
-  
-```
-
-
-
-
-
 
 ```{r,message = FALSE, warning = FALSE}
 Time_series_plot = function(variable,merged_data){
@@ -121,7 +91,35 @@ Time_series_plot = function(variable,merged_data){
 }
 
 
+Time_series_income =  function(variable,merged_data){
+  merged_data %>% 
+  group_by(year, income_group) %>% 
+  summarize_at(variable,mean,na.rm=TRUE) %>% 
+  pivot_wider(
+    values_from = variable,
+    names_from = income_group
+  ) %>% 
+  janitor::clean_names() %>% 
+  ggplot()+
+  geom_line(aes(x=year, y=high_income, color='a'))+
+  geom_line(aes(x=year, y=upper_middle_income, color='b'))+
+  geom_line(aes(x=year, y=lower_middle_income, color='c'))+
+  geom_line(aes(x=year, y=low_income, color='d'))+
+  scale_color_manual(name = ' ', 
+                     values =c("a"='black',"b"='red',"c"='blue',"d"='purple'), 
+                     labels = c('High','Upper middle','Lower middle','Low'))+
+  geom_point(aes(x=year, y=high_income, color='a'),shape=19,size = 3)+
+  geom_point(aes(x=year, y=upper_middle_income, color='b'),color = "red", shape=19,size = 3)+
+  geom_point(aes(x=year, y=lower_middle_income, color='c'),color = "blue", shape=19,size = 3)+
+  geom_point(aes(x=year, y=low_income, color='d'),color = "purple", shape=19,size = 3)+
+  labs(title = sprintf("Time series plot for %s", variable) )+
+  xlab("Year")+
+  ylab(sprintf("%s",variable))
+}
+
+par(mfrow=c(1,2))
 Time_series_plot("une_life",merged_data)
+Time_series_income("une_life",merged_data)
 ```
 
 Life expectancy as our dependent variable has similar trends for both developed and developing countries. Two life expectancy indices have a persistent increase over time. However, the expectancy for developed countries is 10 years higher than the developing countries over 16 years.

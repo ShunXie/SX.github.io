@@ -1,0 +1,90 @@
+---
+title: "Shiny Dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+
+library(plotly)
+library(shiny)
+```
+
+
+```{r, include=FALSE}
+
+df <- read_csv("./data/Merged_expectation.csv")
+df <- df %>%
+  select(country_code,country,une_life,year) 
+  
+```
+
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+
+```{r}
+year = df %>% distinct(year) %>% pull()
+
+# selectInput widget
+selectInput(
+  inputId = "year", 
+  label = h3("Select Year"),
+  choices = year,
+  selected = "2015")
+
+
+```
+
+
+
+
+
+
+Column {data-width=1000}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+renderPlotly({
+  # light grey boundaries
+l <- list(color = toRGB("grey"), width = 0.5)
+
+# specify map projection/options
+g <- list(
+  showframe = FALSE,
+  showcoastlines = FALSE,
+  projection = list(type = 'Mercator')
+)
+
+df %>% filter(year == input$year) %>% 
+  plot_geo() %>% 
+  add_trace(
+  z = ~une_life, color = ~une_life, colors = 'Blues',
+  text = ~country, locations = ~country_code, marker = list(line = l)
+  ) %>% 
+  colorbar(title = 'life expectancy') %>% 
+  layout(
+    title = str_c("life expectancy in ",input$year),
+    geo = g
+  )
+})
+
+
+```
+
+
+
+
+
+
+
+
+

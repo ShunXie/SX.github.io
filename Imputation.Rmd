@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Life Expectancy Dataset
 
-We choose WHO Life Expectancy Dataset as our main dataset in our study. The code is read as following:
+We choose WHO Life Expectancy Dataset as our main dataset in our study. The data can be accessed [here](https://www.kaggle.com/datasets/mmattson/who-national-life-expectancy?resource=download). The code is read as following:
 
 ```{r,message=FALSE, warning=FALSE}
 suppressMessages(library(tidyverse))
@@ -33,7 +33,7 @@ LifeExpectancy = read_csv("data/who_life_exp.csv",col_types = cols(.default = co
 
 
 ```
-Life expectancy datasets contains a total of ```r length(unique(LifeExpectancy$country))``` countries with year ranging from ```r min(unique(LifeExpectancy$year))``` to ```r max(unique(LifeExpectancy$year))```. There are a total of ```r length(LifeExpectancy)``` variables. Out of which, we consider the main 
+Life expectancy datasets contains a total of ```r length(unique(LifeExpectancy$country))``` countries with year ranging from ```r min(unique(LifeExpectancy$year))``` to ```r max(unique(LifeExpectancy$year))```. There are a total of ```r length(LifeExpectancy)``` variables. Out of which, we consider the variables and description is listed below:
 
 *```r colnames(LifeExpectancy)[1]```: country name
 
@@ -106,7 +106,7 @@ Life expectancy datasets contains a total of ```r length(unique(LifeExpectancy$c
 ### Country Code Dataset
 
 
-Country code dataset contains the status of countries, such as the information of the independence status and its capital city. We include the variable specifies whether the country is a developed or developing country. The data is read in the following code and is merged by the code.  
+Country code dataset contains the status of countries, such as the information of the independence status and its capital city. The data is extracted from [here](https://github.com/datasets/country-codes/blob/master/data/country-codes.csv). We include the variable specifies whether the country is a developed or developing country. The data is read in the following code and is merged by the code.  
 
 
 ```{r,message=FALSE, warning=FALSE}
@@ -125,7 +125,7 @@ merged_data_PM = merge(LifeExpectancy, country_code, by.x = "country_code", by.y
 
 
 ### PM2.5 dataset
-PM2.5 dataset is a dataset that specifies the percentage of total population exposed to levels exceeding WHO guideline value. Such value exists over year 1960 to 2021 but most of the value before 2010 and after 2017 are missing.The following code read and clean the dataset.
+PM2.5 dataset is a dataset that specifies the percentage of total population exposed to levels exceeding WHO guideline value. Such value exists over year 1960 to 2021 but most of the value before 2010 and after 2017 are missing. The dataset can be accessed [here](https://data.worldbank.org/indicator/EN.ATM.PM25.MC.M3). The following code read and clean the dataset.
 
 merge the data with dataset contain pm 2.5 information:
 ```{r,message=FALSE, warning=FALSE}
@@ -163,7 +163,7 @@ merged_data_d =
 
 ### Income level data
 
-Income level data is a dataset specifies the income status. It is a factor variable with four levels, namely high income, low income, lower middle income and upper middle income. The dataset is cleaned and merged in the following code. 
+Income level data is a dataset specifies the income status accessed [here](https://databank.worldbank.org/source/world-development-indicators). It is a factor variable with four levels, namely high income, low income, lower middle income and upper middle income. The dataset is cleaned and merged in the following code. 
 
 ```{r,message=FALSE, warning=FALSE}
 #read income level data
@@ -183,7 +183,7 @@ merged_data_i = merged_data_d %>%
 
 ### Health expenditure
 
-Health expenditure dataset measures the health expenditure from government with respect to different countries. The dataset is measured in percentage of GDP or dollar value per capita. We choose percentage of GDP as our unit because the dataset measured in percentage of GDP has more complete values. Here is the coding for read, clean and merge the Health expenditure dataset to original dataset. 
+Health expenditure dataset measures the health expenditure from government with respect to different countries. The dataset is retrieved from [here](https://ourworldindata.org/grapher/public-health-expenditure-share-gdp-owid?country=SWE~FRA~DEU~JPN~GBR~BEL~ESP~AUS~NZL~CAN~USA). The dataset is measured in percentage of GDP or dollar value per capita. We choose percentage of GDP as our unit because the dataset measured in percentage of GDP has more complete values. Here is the coding for read, clean and merge the Health expenditure dataset to original dataset. 
 
 ```{r,message=FALSE, warning=FALSE}
 health_exp = read_csv("data/government_compulsory_health expenditure_from_1970_2020.csv") %>% 
@@ -207,7 +207,7 @@ merged_data_h =
 
 ### Parliament Information
 
-Parliament information data is a dataset that measured the percentage of women in national parliament around 2015~2018 for different countries. Since different countries have different election dates, and there is rare data before 2015, we choose the dataset that is around 2015~2018. Then, we adjust the date to year 2015, and add the percentage of women in lower house of national parliament to the last column of the original dataset. The following code cleans and merge the data:
+Parliament information data is a dataset that measured the percentage of women in national parliament around 2015~2018 for different countries. Since different countries have different election dates, and there is rare data before 2015, we choose the dataset that is around 2015~2018. Then, we adjust the date to year 2015, and add the percentage of women in lower house of national parliament to the last column of the original dataset. The data origins from [here](https://data.ipu.org/women-ranking?month=1&year=2019) and the following code cleans and merge the data:
 
 ```{r,message=FALSE, warning=FALSE}
 women_in_parliament <-
@@ -232,8 +232,34 @@ Store the data
 write.csv(merged_data , file = "data/Merged_expectation.csv")
 ```
 
+<br>
+<br>
 
 # Impute
+
+For the simplicity and accuracy purpose, imputation using weighted k nearest neighbour algorithm (w-kNN) is considered in my study. It is built on simple k nearest neighbour(kNN) but unlike kNN, it considers the weight of each dimension so that it circumvents the problem of neglecting the correlation between missing variables and other variables according to [Ling et. al.](https://ieeexplore.ieee.org/abstract/document/5199781). Additionally, such a non-parametric method does not make any assumption on the distribution of the input vector hence it is suitable for correlation analysis by [mukid's paper](https://iopscience.iop.org/article/10.1088/1742-6596/1025/1/012114/meta). In my method, we choose Euclidean distance as my measurement for the similarity between authorities as it performs better than the other metrics, namely [Manhattan distance](https://ieeexplore.ieee.org/abstract/document/6873626). Thus, any missing value $x_{i,j}$ at time t can be imputed using an inverse of Euclidean distance as a weighting factor, where the subscript i corresponds to the $i_{th}$ country and subscript j represents the $j_{th}$ sub-indicator (or the $j_{th}$ variable in the dataset).  \\
+
+To obtain the imputation for missing value $x_{i,j}$, euclidean distances between all underlying pairs of country $(a_i,a_k)$ at year t without missing value need to be calculated. The pair with the largest euclidean distance $d_t(a_i,a_k) $, however, will not be considered, and instead it is treated as the denominator for standardization of other available euclidean distance values. For a pair of country $(a_i,a_k)$ at year t, the euclidean distance $d_t(a_i,a_k) $ can be obtained by the following formula:
+\[
+\begin{equation}
+\mathbf{d}_t(a_i,a_k)=||a_i,a_k||=\sqrt{\sum_{j=1}^J w(a_{ij}-a_{kj})^2}
+\end{equation}
+\]
+where J is the total number of variables or non missing data and w is the weighting function by [Ling et. al.](https://ieeexplore.ieee.org/abstract/document/5199781). As my available data may have different length due to different number of missing values, I choose $w=\frac{1}{J}$ as my weight in the Euclidean distance. Then, I can normalize the Euclidean distance by dividing the largest euclidean distance in the available data set for country i. Without loss of generality, let $\mathbf{d}_t(a_i,a_l)$ be the maximum euclidean distance for country i. Then for  $k\neq l$:
+\[
+\begin{equation}
+\mathbf{D}_t(a_i,a_k)=\frac{\mathbf{d}_t(a_i,a_k)}{\mathbf{d}_t(a_i,a_{l})}
+\end{equation}
+\]
+
+To balance the size of the imputed value for missing value $x_{i,j}$, I consider the weight as the inverse of Euclidean distance. Such an approach is validated in [Laumann et. al's work](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3777229) where they believe the imputed value will be similar to countries with sub-indicator that has small Euclidean distance. With all other things being equal, countries are replaced by authorities and sub-indicators are variables in my data. Hence, having computed euclidean distances between all possible pairs and years, the missing value is measured as:
+
+\begin{equation}
+x^t_{i,j}=\frac{1}{K}\sum_k \frac{1}{|\mathbf{D}_t(a_i,a_k)|}x^t_{k,j}
+\end{equation}
+where K is the total number of countries that have values at year t for variable j.
+
+This is nicely packed in filling package in R.
 
 ```{r,message=FALSE, warning=FALSE}
 raw_mat = 
@@ -251,7 +277,7 @@ Imputed_expectancy = merged_data
 for (i in 1:(length(merged_data)-6)) {
   Imputed_expectancy[i+3][[1]] = imputed_mat[[1]][,i]
 }
-head(Imputed_expectancy)
+head(Imputed_expectancy %>% select(-percent_w_in_lower_house))
 
 write.csv(Imputed_expectancy , file = "data/Imputed_expectation.csv")
 ```

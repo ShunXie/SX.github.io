@@ -368,7 +368,9 @@ div.tocify {
 <div id="life-expectancy-dataset" class="section level3">
 <h3>Life Expectancy Dataset</h3>
 <p>We choose WHO Life Expectancy Dataset as our main dataset in our
-study. The code is read as following:</p>
+study. The data can be accessed <a
+href="https://www.kaggle.com/datasets/mmattson/who-national-life-expectancy?resource=download">here</a>.
+The code is read as following:</p>
 <pre class="r"><code>suppressMessages(library(tidyverse))
 suppressMessages(library(dbplyr))
 options(tibble.print_min = 5)
@@ -379,7 +381,7 @@ LifeExpectancy = read_csv(&quot;data/who_life_exp.csv&quot;,col_types = cols(.de
 <p>Life expectancy datasets contains a total of <code>183</code>
 countries with year ranging from <code>2000</code> to <code>2016</code>.
 There are a total of <code>32</code> variables. Out of which, we
-consider the main</p>
+consider the variables and description is listed below:</p>
 <p>*<code>country</code>: country name</p>
 <p>*<code>country_code</code>: Three letter of the country id</p>
 <p>*<code>region</code>: The region of the country</p>
@@ -445,10 +447,12 @@ server</p>
 <div id="country-code-dataset" class="section level3">
 <h3>Country Code Dataset</h3>
 <p>Country code dataset contains the status of countries, such as the
-information of the independence status and its capital city. We include
-the variable specifies whether the country is a developed or developing
-country. The data is read in the following code and is merged by the
-code.</p>
+information of the independence status and its capital city. The data is
+extracted from <a
+href="https://github.com/datasets/country-codes/blob/master/data/country-codes.csv">here</a>.
+We include the variable specifies whether the country is a developed or
+developing country. The data is read in the following code and is merged
+by the code.</p>
 <pre class="r"><code>country_code = 
   read_csv(&quot;data/country-codes.csv&quot;, show_col_types = FALSE) %&gt;% 
   select(`ISO3166-1-Alpha-3`, `Developed / Developing Countries`)
@@ -463,8 +467,9 @@ merged_data_PM = merge(LifeExpectancy, country_code, by.x = &quot;country_code&q
 <p>PM2.5 dataset is a dataset that specifies the percentage of total
 population exposed to levels exceeding WHO guideline value. Such value
 exists over year 1960 to 2021 but most of the value before 2010 and
-after 2017 are missing.The following code read and clean the
-dataset.</p>
+after 2017 are missing. The dataset can be accessed <a
+href="https://data.worldbank.org/indicator/EN.ATM.PM25.MC.M3">here</a>.
+The following code read and clean the dataset.</p>
 <p>merge the data with dataset contain pm 2.5 information:</p>
 <pre class="r"><code>#read pm2.5 data
 PM_dataset = 
@@ -491,10 +496,12 @@ merged_data_d =
 </div>
 <div id="income-level-data" class="section level3">
 <h3>Income level data</h3>
-<p>Income level data is a dataset specifies the income status. It is a
-factor variable with four levels, namely high income, low income, lower
-middle income and upper middle income. The dataset is cleaned and merged
-in the following code.</p>
+<p>Income level data is a dataset specifies the income status accessed
+<a
+href="https://databank.worldbank.org/source/world-development-indicators">here</a>.
+It is a factor variable with four levels, namely high income, low
+income, lower middle income and upper middle income. The dataset is
+cleaned and merged in the following code.</p>
 <pre class="r"><code>#read income level data
 Income_dataset = read_csv(&quot;data/income_level.csv&quot;, show_col_types = FALSE) %&gt;% 
   janitor::clean_names() %&gt;% 
@@ -509,11 +516,13 @@ merged_data_i = merged_data_d %&gt;%
 <div id="health-expenditure" class="section level3">
 <h3>Health expenditure</h3>
 <p>Health expenditure dataset measures the health expenditure from
-government with respect to different countries. The dataset is measured
-in percentage of GDP or dollar value per capita. We choose percentage of
-GDP as our unit because the dataset measured in percentage of GDP has
-more complete values. Here is the coding for read, clean and merge the
-Health expenditure dataset to original dataset.</p>
+government with respect to different countries. The dataset is retrieved
+from <a
+href="https://ourworldindata.org/grapher/public-health-expenditure-share-gdp-owid?country=SWE~FRA~DEU~JPN~GBR~BEL~ESP~AUS~NZL~CAN~USA">here</a>.
+The dataset is measured in percentage of GDP or dollar value per capita.
+We choose percentage of GDP as our unit because the dataset measured in
+percentage of GDP has more complete values. Here is the coding for read,
+clean and merge the Health expenditure dataset to original dataset.</p>
 <pre class="r"><code>health_exp = read_csv(&quot;data/government_compulsory_health expenditure_from_1970_2020.csv&quot;) %&gt;% 
   janitor::clean_names() %&gt;% 
   filter(measure==&quot;PC_GDP&quot;) %&gt;%
@@ -537,7 +546,9 @@ countries. Since different countries have different election dates, and
 there is rare data before 2015, we choose the dataset that is around
 2015~2018. Then, we adjust the date to year 2015, and add the percentage
 of women in lower house of national parliament to the last column of the
-original dataset. The following code cleans and merge the data:</p>
+original dataset. The data origins from <a
+href="https://data.ipu.org/women-ranking?month=1&amp;year=2019">here</a>
+and the following code cleans and merge the data:</p>
 <pre class="r"><code>women_in_parliament &lt;-
   read_csv(&quot;data/around_2019_women_percent_in_national_parliaments.csv&quot;, skip = 5) %&gt;% 
   janitor::clean_names() %&gt;% 
@@ -553,10 +564,78 @@ merged_data =
   select(country_code:une_school,PM_value,health_exp,income_group,`Developed / Developing Countries`, percent_w_in_lower_house)</code></pre>
 <p>Store the data</p>
 <pre class="r"><code>write.csv(merged_data , file = &quot;data/Merged_expectation.csv&quot;)</code></pre>
+<p><br> <br></p>
 </div>
 </div>
 <div id="impute" class="section level1">
 <h1>Impute</h1>
+<p>For the simplicity and accuracy purpose, imputation using weighted k
+nearest neighbour algorithm (w-kNN) is considered in my study. It is
+built on simple k nearest neighbour(kNN) but unlike kNN, it considers
+the weight of each dimension so that it circumvents the problem of
+neglecting the correlation between missing variables and other variables
+according to <a
+href="https://ieeexplore.ieee.org/abstract/document/5199781">Ling et.
+al.</a>. Additionally, such a non-parametric method does not make any
+assumption on the distribution of the input vector hence it is suitable
+for correlation analysis by <a
+href="https://iopscience.iop.org/article/10.1088/1742-6596/1025/1/012114/meta">mukid’s
+paper</a>. In my method, we choose Euclidean distance as my measurement
+for the similarity between authorities as it performs better than the
+other metrics, namely <a
+href="https://ieeexplore.ieee.org/abstract/document/6873626">Manhattan
+distance</a>. Thus, any missing value <span
+class="math inline">\(x_{i,j}\)</span> at time t can be imputed using an
+inverse of Euclidean distance as a weighting factor, where the subscript
+i corresponds to the <span class="math inline">\(i_{th}\)</span> country
+and subscript j represents the <span
+class="math inline">\(j_{th}\)</span> sub-indicator (or the <span
+class="math inline">\(j_{th}\)</span> variable in the dataset). \</p>
+<p>To obtain the imputation for missing value <span
+class="math inline">\(x_{i,j}\)</span>, euclidean distances between all
+underlying pairs of country <span
+class="math inline">\((a_i,a_k)\)</span> at year t without missing value
+need to be calculated. The pair with the largest euclidean distance
+$d_t(a_i,a_k) $, however, will not be considered, and instead it is
+treated as the denominator for standardization of other available
+euclidean distance values. For a pair of country <span
+class="math inline">\((a_i,a_k)\)</span> at year t, the euclidean
+distance $d_t(a_i,a_k) $ can be obtained by the following formula: <span
+class="math display">\[
+\begin{equation}
+\mathbf{d}_t(a_i,a_k)=||a_i,a_k||=\sqrt{\sum_{j=1}^J w(a_{ij}-a_{kj})^2}
+\end{equation}
+\]</span> where J is the total number of variables or non missing data
+and w is the weighting function by <a
+href="https://ieeexplore.ieee.org/abstract/document/5199781">Ling et.
+al.</a>. As my available data may have different length due to different
+number of missing values, I choose <span
+class="math inline">\(w=\frac{1}{J}\)</span> as my weight in the
+Euclidean distance. Then, I can normalize the Euclidean distance by
+dividing the largest euclidean distance in the available data set for
+country i. Without loss of generality, let <span
+class="math inline">\(\mathbf{d}_t(a_i,a_l)\)</span> be the maximum
+euclidean distance for country i. Then for <span
+class="math inline">\(k\neq l\)</span>: <span class="math display">\[
+\begin{equation}
+\mathbf{D}_t(a_i,a_k)=\frac{\mathbf{d}_t(a_i,a_k)}{\mathbf{d}_t(a_i,a_{l})}
+\end{equation}
+\]</span></p>
+<p>To balance the size of the imputed value for missing value <span
+class="math inline">\(x_{i,j}\)</span>, I consider the weight as the
+inverse of Euclidean distance. Such an approach is validated in <a
+href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3777229">Laumann
+et. al’s work</a> where they believe the imputed value will be similar
+to countries with sub-indicator that has small Euclidean distance. With
+all other things being equal, countries are replaced by authorities and
+sub-indicators are variables in my data. Hence, having computed
+euclidean distances between all possible pairs and years, the missing
+value is measured as:</p>
+<p><span class="math display">\[\begin{equation}
+x^t_{i,j}=\frac{1}{K}\sum_k \frac{1}{|\mathbf{D}_t(a_i,a_k)|}x^t_{k,j}
+\end{equation}\]</span> where K is the total number of countries that
+have values at year t for variable j.</p>
+<p>This is nicely packed in filling package in R.</p>
 <pre class="r"><code>raw_mat = 
   merged_data %&gt;% 
   select(-country, -country_code, -region,-income_group, -`Developed / Developing Countries`,percent_w_in_lower_house) %&gt;% 
@@ -568,7 +647,7 @@ Imputed_expectancy = merged_data
 for (i in 1:(length(merged_data)-6)) {
   Imputed_expectancy[i+3][[1]] = imputed_mat[[1]][,i]
 }
-head(Imputed_expectancy)</code></pre>
+head(Imputed_expectancy %&gt;% select(-percent_w_in_lower_house))</code></pre>
 <pre><code>##   country_code     country                region year life_expect life_exp60
 ## 1          AFG Afghanistan Eastern Mediterranean 2000    55.89618   15.14620
 ## 2          AFG Afghanistan Eastern Mediterranean 2001    56.52523   15.20886
@@ -577,47 +656,40 @@ head(Imputed_expectancy)</code></pre>
 ## 5          AFG Afghanistan Eastern Mediterranean 2004    58.42978   15.44257
 ## 6          AFG Afghanistan Eastern Mediterranean 2005    58.90924   15.52284
 ##   adult_mortality infant_mort age1_4mort  alcohol  bmi age5_19thinness
-## 1        316.0496    0.098245   0.011050 1.097579 21.7            20.6
+## 1        316.0496    0.098245   0.011050 1.398968 21.7            20.6
 ## 2        307.2416    0.095925   0.010625 2.602703 21.8            20.4
-## 3        292.3430    0.093330   0.010130 2.591893 21.9            20.2
-## 4        286.4569    0.090470   0.009655 1.828856 22.0            20.0
+## 3        292.3430    0.093330   0.010130 2.482694 21.9            20.2
+## 4        286.4569    0.090470   0.009655 1.125425 22.0            20.0
 ## 5        281.8943    0.087595   0.009210 1.195219 22.1            19.8
 ## 6        277.1813    0.084630   0.008785 0.016230 22.2            19.6
 ##   age5_19obesity hepatitis measles polio diphtheria basic_water   doctors
-## 1            0.6  63.13159      27    24         24    27.77190 1.0362225
-## 2            0.7  67.09376      37    35         33    27.79726 1.8990000
-## 3            0.8  68.33159      35    36         36    29.90076 0.8334763
-## 4            0.9  56.33555      39    41         41    32.00507 0.7021706
-## 5            1.0  63.05660      48    50         50    34.12623 0.8709674
-## 6            1.1  66.40745      50    58         58    36.26526 1.6843101
-##   hospitals gni_capita   gghe_d  che_gdp  une_pop une_infant une_life une_hiv
-## 1  6.544210  1511.8310 1.220464 4.151749 20779.95       90.6   55.841     0.1
-## 2  9.555871   837.2164 1.643885 6.778395 21606.99       88.0   56.308     0.1
-## 3 10.637172   870.0000 0.084180 9.443390 22600.77       85.4   56.784     0.1
-## 4  8.438940   920.0000 0.650960 8.941260 23680.87       82.8   57.271     0.1
-## 5  4.483273   920.0000 0.542930 9.808470 24726.68       80.1   57.772     0.1
-## 6  1.512364  1020.0000 0.529180 9.948290 25654.28       77.4   58.290     0.1
+## 1            0.6  66.24991      27    24         24    27.77190 0.9363814
+## 2            0.7  65.64343      37    35         33    27.79726 1.8990000
+## 3            0.8  64.04224      35    36         36    29.90076 0.7841283
+## 4            0.9  58.99369      39    41         41    32.00507 0.6751078
+## 5            1.0  63.05660      48    50         50    34.12623 0.8233564
+## 6            1.1  63.58047      50    58         58    36.26526 1.1568766
+##   hospitals gni_capita    gghe_d  che_gdp  une_pop une_infant une_life une_hiv
+## 1  2.537557  1511.8310 0.9743583 5.024003 20779.95       90.6   55.841     0.1
+## 2  4.337737   837.2164 1.6438850 4.753436 21606.99       88.0   56.308     0.1
+## 3  7.655975   870.0000 0.0841800 9.443390 22600.77       85.4   56.784     0.1
+## 4  9.225002   920.0000 0.6509600 8.941260 23680.87       82.8   57.271     0.1
+## 5  9.218848   920.0000 0.5429300 9.808470 24726.68       80.1   57.772     0.1
+## 6  8.473076  1020.0000 0.5291800 9.948290 25654.28       77.4   58.290     0.1
 ##    une_gni une_poverty une_edu_spend une_literacy une_school PM_value
-## 1 1608.080    54.47086      3.117114     32.43924   1.881955      100
-## 2 1037.780    52.27004      3.081875     41.06535   1.608696      100
-## 3 1734.210    49.59728      3.019396     38.73354   1.989663      100
-## 4 1035.660    56.61874      3.242766     33.52655   2.270300      100
-## 5 1407.914    59.02120      3.033755     36.25152   2.256908      100
-## 6 1431.164    58.30771      2.490159     49.63869   2.741359      100
+## 1 1762.988    59.45462      3.319488     30.57469   1.527226      100
+## 2 1037.780    52.04459      3.519695     36.23104   1.487489      100
+## 3 1862.518    49.59728      2.928732     28.06739   3.480543      100
+## 4 1341.355    55.99555      3.040688     34.50999   2.207583      100
+## 5 1407.914    57.23386      2.296474     37.72725   2.229729      100
+## 6 1431.164    54.42576      2.315727     50.69343   2.942488      100
 ##   health_exp income_group Developed / Developing Countries
-## 1   4.988715   Low income                       Developing
-## 2   4.730187   Low income                       Developing
-## 3   4.952205   Low income                       Developing
-## 4   5.046077   Low income                       Developing
-## 5   4.906787   Low income                       Developing
-## 6   4.536520   Low income                       Developing
-##   percent_w_in_lower_house
-## 1                       NA
-## 2                       NA
-## 3                       NA
-## 4                       NA
-## 5                       NA
-## 6                       NA</code></pre>
+## 1   6.390136   Low income                       Developing
+## 2   6.403802   Low income                       Developing
+## 3   5.981793   Low income                       Developing
+## 4   5.839438   Low income                       Developing
+## 5   5.744935   Low income                       Developing
+## 6   5.517950   Low income                       Developing</code></pre>
 <pre class="r"><code>write.csv(Imputed_expectancy , file = &quot;data/Imputed_expectation.csv&quot;)</code></pre>
 </div>
 

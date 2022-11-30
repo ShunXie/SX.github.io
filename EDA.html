@@ -582,10 +582,96 @@ countries.</p>
 <div id="scatter-plot" class="section level1">
 <h1>Scatter Plot:</h1>
 <p>Visualization via scatter plot is a way to further discover the
-pairwise relation between two chosen variable.<br />
-Since we choose Life expectancy as our response variable, we can plot
-the scatter plot between life expectancy and other chosen predictors to
-see the correlation between variables.</p>
+pairwise relation between two chosen variable. By plotting the scatter
+plot and fitted using best linear line, we can potential obtain the
+relationship between variables and how well linear trend can explain the
+data. Since we choose Life expectancy as our response variable, we can
+plot the scatter plot between life expectancy and other chosen
+predictors to see the correlation between variables.</p>
+<pre class="r"><code>#adult_mortality
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, adult_mortality) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = adult_mortality, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and adult mortality&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-16-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Adult Mortality has a almost perfect relation with life expectation.
+This may because life expectancy is calculated based on mortality rate.
+Although linear relation can perfectly explain the two relation, it is
+not a good idea to include such variable as it is directly a variable
+for calculating life expectancy. More detail will be explained in
+colinearity part.</p>
+<pre class="r"><code># alcohol
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, alcohol) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = alcohol, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and alcohol&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-17-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Among four years, the trend of relation between life expectancy and
+alcohol are similar. Although the line of best fit split points into an
+evenly two parts, there are more points with low alcohol values. And
+linear trend may not fully explain such relation.</p>
 <pre class="r"><code>#bmi
 merged_data_temp =
 merged_data %&gt;% 
@@ -599,12 +685,13 @@ for (i in 2013:2016){
     myplots[[i-2012]] =
       merged_data_temp %&gt;% 
       filter(year == i) %&gt;% 
-      ggplot(aes(x = bmi, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)
+      ggplot(aes(x = bmi, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
   
   }
   
-plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]],labels = c(2013,2014))
-plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]],labels = c(2015,2016))
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
 # title
 title &lt;- ggdraw() + 
   draw_label(
@@ -621,7 +708,12 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-18-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Bmi has a positive correlation with life expectancy as shown in the
+plots, and the points for the four years are almost exactly the same.
+Linear trend seems to explain the relation well as suggested in the
+scatter plots. When bmi increases, the life expectancy is likely to have
+a higher value, although we cannot check the causation in behind.</p>
 <pre class="r"><code>#measles
 merged_data_temp =
 merged_data %&gt;% 
@@ -635,12 +727,13 @@ for (i in 2013:2016){
     myplots[[i-2012]] =
       merged_data_temp %&gt;% 
       filter(year == i) %&gt;% 
-      ggplot(aes(x = measles, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)
+      ggplot(aes(x = measles, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
   
   }
   
-plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]],labels = c(2013,2014))
-plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]],labels = c(2015,2016))
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
 # title
 title &lt;- ggdraw() + 
   draw_label(
@@ -657,11 +750,14 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>#health_exp
+<p><img src="EDA_files/figure-html/unnamed-chunk-19-1.png" width="864" style="display: block; margin: auto;" />
+Measle vaccination coverage seems to indicate a high life expectancy
+when vaccination coverage is high. But such relation may be non linear
+as there are lots of values clustered in the upper right corner.</p>
+<pre class="r"><code>#obesity
 merged_data_temp =
 merged_data %&gt;% 
-  select(year, une_life, health_exp) %&gt;% 
+  select(year, une_life, age5_19obesity) %&gt;% 
   filter(year &gt; 2012)
 
 
@@ -671,16 +767,17 @@ for (i in 2013:2016){
     myplots[[i-2012]] =
       merged_data_temp %&gt;% 
       filter(year == i) %&gt;% 
-      ggplot(aes(x = health_exp, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)
+      ggplot(aes(x = age5_19obesity, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
   
   }
   
-plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]],labels = c(2013,2014))
-plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]],labels = c(2015,2016))
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
 # title
 title &lt;- ggdraw() + 
   draw_label(
-    &quot;Scatter Plot for Life Expectancy and health_exp&quot;,
+    &quot;Scatter Plot for Life Expectancy and obesity among age 5-19&quot;,
     fontface = &#39;bold&#39;,
     x = 0,
     hjust = 0
@@ -693,7 +790,338 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-20-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Although linear trend works well in the scatter plot between obesity
+and life expectancy, the points suggests a non-linear, perhaps a
+quadratic trends, in the graph. There is clearly a “r” shape pattern in
+the graph. Similar to other plots, the four years have almost the same
+scatter plot.</p>
+<pre class="r"><code>#basic_water
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, basic_water) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = basic_water, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and percentag of people access to basic water &quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-21-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Linear trends fit the relation between Life Expectancy and percentag
+of people access to basic water well. There is clearly an upward
+increasing trend.</p>
+<pre class="r"><code># doctors
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, doctors) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = doctors, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and doctors&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-22-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Similar to obesity, the graph has a “r” pattern and thus, there exist
+a non linear correlation. Thus, linear relation may not be accurate to
+explain the association. However, the linear trend do include most of
+the information, so it might be sufficient to just use linear relation.
+We will check it further in later analysis.</p>
+<pre class="r"><code>#une_edu_spend
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, une_edu_spend) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = une_edu_spend, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and education expenditure&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-23-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>The expenditure also suggest a linear increasing trend for all years.
+Year 2015 seems to have an outlier with a very high education
+expenditure. Otherwise, the pattern is similar for the four years. The
+scatter plot is quite spread out, so there may be some indication of non
+linear trend but we cannot conclude from the scatter plot.</p>
+<pre class="r"><code># une_gni
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, une_gni) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = une_gni, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and GNI per capita&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-24-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>The association between life expectancy and GNI per capita also shows
+a non-linear correlation with a “r” patter. Therefore, non-linear
+correlation analysis may be needed.</p>
+<pre class="r"><code>#une_pop
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, une_pop) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = une_pop, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and Population&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-25-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>As seen in the scatter plot, population is not very correlated to
+life expectancy and the data are very focused on low population. A
+linear relation is not quite appropriate here.</p>
+<pre class="r"><code>#une_literacy
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, une_literacy) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = une_literacy, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and Literacy Coverage&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-26-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Due to the missing values, literacy coverage does not have a lot of
+details. But linear trend do explain the over all association between
+life expectancy and percentage of people who are able to write and speak
+a language.</p>
+<pre class="r"><code># PM_value
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, PM_value) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = PM_value, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and percentage of people exposed to abnormal PM level&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-27-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Since most of people are exposed to abnormal PM level, most of the PM
+value is clustered at 100. Linear relation may be sufficient to explain
+lower PM values but it may be difficult to include all the information
+for high PM value.</p>
+<pre class="r"><code>#gghe_d
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, gghe_d) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = gghe_d, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and Health expenditure&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-28-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Health expenditure is positively correlated with life expectancy.
+However, there may be non linear trend as there is a curve bending at
+health expenditure = 3% of GDP.</p>
 <p><br> <br></p>
 </div>
 <div id="correlation" class="section level1">
@@ -768,27 +1196,54 @@ colname = colnames(merged_data)
 
 Pearson_Corr_res = 
 Pearson_Correlation_result %&gt;%
-  mutate(une_exp = Pearson_Correlation(6,merged_data)$Pearson_cor,
+  mutate(mortality = Pearson_Correlation(8,merged_data)$Pearson_cor,
          alcohol = Pearson_Correlation(11,merged_data)$Pearson_cor,
          bmi = Pearson_Correlation(12,merged_data)$Pearson_cor,
+         obesity = Pearson_Correlation(14,merged_data)$Pearson_cor,
          measles = Pearson_Correlation(16,merged_data)$Pearson_cor,
-         gni_capita = Pearson_Correlation(29,merged_data)$Pearson_cor
+         water = Pearson_Correlation(19,merged_data)$Pearson_cor,
+         doctors = Pearson_Correlation(20,merged_data)$Pearson_cor,
          )
 
+Pearson_Corr_res2 = 
+Pearson_Correlation_result %&gt;%
+  mutate(edu_expenditure = Pearson_Correlation(31,merged_data)$Pearson_cor,
+         gni_capita = Pearson_Correlation(29,merged_data)$Pearson_cor,
+         population = Pearson_Correlation(25,merged_data)$Pearson_cor,
+         literacy = Pearson_Correlation(32,merged_data)$Pearson_cor,
+         #PM_value = Pearson_Correlation(34,merged_data)$Pearson_cor,
+         health_expenditure = Pearson_Correlation(23,merged_data)$Pearson_cor)
 
 Pearson_Corr_pval = 
 Pearson_Correlation_result %&gt;%
-  mutate(
-         une_exp_pval = Pearson_Correlation(6,merged_data)$Pearson_pval,
-         alcohol_pval = Pearson_Correlation(11,merged_data)$Pearson_pval,
-         bmi_pval = Pearson_Correlation(12,merged_data)$Pearson_pval,
-         measles_pval = Pearson_Correlation(16,merged_data)$Pearson_pval,
-         gni_capita_pval = Pearson_Correlation(29,merged_data)$Pearson_pval
+  mutate(mortality = Pearson_Correlation(8,merged_data)$Pearson_pval,
+         alcohol = Pearson_Correlation(11,merged_data)$Pearson_pval,
+         bmi = Pearson_Correlation(12,merged_data)$Pearson_pval,
+         obesity = Pearson_Correlation(14,merged_data)$Pearson_pval,
+         measles = Pearson_Correlation(16,merged_data)$Pearson_pval,
+         water = Pearson_Correlation(19,merged_data)$Pearson_pval,
+         doctors = Pearson_Correlation(20,merged_data)$Pearson_pval,
+         edu_expenditure = Pearson_Correlation(31,merged_data)$Pearson_pval,
+         gni_capita = Pearson_Correlation(29,merged_data)$Pearson_pval,
+         population = Pearson_Correlation(25,merged_data)$Pearson_pval,
+         literacy = Pearson_Correlation(32,merged_data)$Pearson_pval,
+         #PM_value = Pearson_Correlation(34,merged_data)$Pearson_pval,
+         health_expenditure = Pearson_Correlation(23,merged_data)$Pearson_pval
          )
+         
 
 grid.table(Pearson_Corr_res)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>#grid.table(Pearson_Corr_pval)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-29-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grid.table(Pearson_Corr_res2)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-30-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>As indicated in the table, bmi, obesity, measles vaccination, gni per
+capita and health expenditure all have a high correlation with life
+expectancy, with a value close to 0.6. The correlation with water access
+and literacy is even higher, over 0.8 for all years. As discussed, life
+expectancy is calculated from mortality and therefore it has a really
+high correlation. We will not include such data. On the other hand,
+population is not likely to be correlated with life expectancy, as the
+correlations are all approximately 0.03.</p>
 <p><br> <br></p>
 </div>
 </div>
@@ -797,6 +1252,12 @@ grid.table(Pearson_Corr_res)</code></pre>
 <h2>Distance Correlation</h2>
 <div id="theory-1" class="section level3">
 <h3>Theory</h3>
+<p>Although Pearson Correlation may be sufficient to explore the
+association between variables and life expectancy, there is some
+non-linear trends exist between variables, such as obesity, GNI per
+capita, doctors, health expenditure, and life expectancy. Therefore, it
+is necessary to use a non-linear method to account for such
+scenarios.</p>
 <p>Distance correlation is a novel developed technique to discover the
 joint dependence of random variables developed by <a
 href="https://projecteuclid.org/journals/annals-of-statistics/volume-35/issue-6/Measuring-and-testing-dependence-by-correlation-of-distances/10.1214/009053607000000505.full">Székely
@@ -808,7 +1269,7 @@ and <span class="math inline">\(Y\in \mathbb{R}^q\)</span> that can have
 arbitrary dimensions (p and q can be non-equal) to some extend. The
 correlation between two variables is said to be independent of distance
 correlation <span class="math inline">\(\mathcal{R}(X,Y)=0\)</span>.</p>
-<p>In my article, denote the scalar product of two vectors <span
+<p>Denote the scalar product of two vectors <span
 class="math inline">\(a\)</span> and <span
 class="math inline">\(b\)</span> as &lt;<span
 class="math inline">\(a,b\)</span>&gt; and conjugate of complex function
@@ -912,7 +1373,7 @@ class="math inline">\(b\in Y\)</span></p>
 <p><br> <br></p>
 <p>Different to the Pearson method, the distance correlation have a
 non-negative value as it is a distance method. Therefore, although we
-have a better ability to measure nonlinear correlation, we cannot
+have a better ability to measure non-linear correlation, we cannot
 identify the direction of the correlation. In other word, we cannot tell
 whether the correlation is positively correlated or negatively
 correlated.</p>
@@ -952,27 +1413,54 @@ colname = colnames(merged_data)
 
 result_corr = 
 Distance_Correlation_result %&gt;%
-  mutate(une_exp = Distance_Correlation(6,merged_data)$Distance_cor,
+  mutate(mortality = Distance_Correlation(8,merged_data)$Distance_cor,
          alcohol = Distance_Correlation(11,merged_data)$Distance_cor,
          bmi = Distance_Correlation(12,merged_data)$Distance_cor,
+         obesity = Distance_Correlation(14,merged_data)$Distance_cor,
          measles = Distance_Correlation(16,merged_data)$Distance_cor,
-         gni_capita = Distance_Correlation(29,merged_data)$Distance_cor
+         water = Distance_Correlation(19,merged_data)$Distance_cor,
+         doctors = Distance_Correlation(20,merged_data)$Distance_cor,
          )
+   
+
+result_corr2 = 
+Distance_Correlation_result %&gt;%
+  mutate(edu_expenditure = Distance_Correlation(31,merged_data)$Distance_cor,
+         gni_capita = Distance_Correlation(29,merged_data)$Distance_cor,
+         population = Distance_Correlation(25,merged_data)$Distance_cor,
+         literacy = Distance_Correlation(32,merged_data)$Distance_cor,
+         #PM_value = Distance_Correlation(34,merged_data)$Distance_cor,
+         health_expenditure = Distance_Correlation(23,merged_data)$Distance_cor)
+
 
 result_pval = 
   Distance_Correlation_result %&gt;%
-  mutate(
-         une_exp_pval = Distance_Correlation(6,merged_data)$Distance_pval,
-         alcohol_pval = Distance_Correlation(11,merged_data)$Distance_pval,
+  mutate(mortality = Distance_Correlation(8,merged_data)$Distance_pval,
+         alcohol = Distance_Correlation(11,merged_data)$Distance_pval,
          bmi = Distance_Correlation(12,merged_data)$Distance_pval,
+         obesity = Distance_Correlation(14,merged_data)$Distance_pval,
          measles = Distance_Correlation(16,merged_data)$Distance_pval,
-         gni_capita = Distance_Correlation(29,merged_data)$Distance_pval
+         water = Distance_Correlation(19,merged_data)$Distance_pval,
+         doctors = Distance_Correlation(20,merged_data)$Distance_pval,
+         edu_expenditure = Distance_Correlation(31,merged_data)$Distance_pval,
+         gni_capita = Distance_Correlation(29,merged_data)$Distance_pval,
+         population = Distance_Correlation(25,merged_data)$Distance_pval,
+         literacy = Distance_Correlation(32,merged_data)$Distance_pval,
+         #PM_value = Distance_Correlation(34,merged_data)$Distance_pval,
+         health_expenditure = Distance_Correlation(23,merged_data)$Distance_pval
          )
 
 
 grid.table(result_corr)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>#grid.table(result_pval)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-31-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>grid.table(result_corr2)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-32-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>After take in consideration of non-linear trend, bmi, obesity,
+education expenditure, gni per capita has an average of approximately
+0.07 increase in the correlation. Population also increases from 0.03 to
+0.1. Such increase is not significant because high correlation values
+are still highly correlated. Therefore, it provides some evidence that
+linear model may be sufficient to use in our data analysis.</p>
 </div>
 </div>
 </div>

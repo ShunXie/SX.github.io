@@ -7,6 +7,7 @@ output: html_document
 
 ```{r}
 library(tidyverse)
+library(corrplot)
 ```
 
 
@@ -23,7 +24,36 @@ merged_data
 
 
 ```{r}
-res = cor(merged_data)
-round(res, 2)
+mortality_correlation = merged_data %>% 
+  select(adult_mortality, infant_mort, age1_4mort, une_life)
+res = cor(mortality_correlation)
+corrplot(res, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45)
+```
+
+```{r}
+disease_correlation = merged_data %>% 
+  select(hepatitis, measles, polio, diphtheria)
+res = cor(disease_correlation)
+res
+corrplot(res, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45)
+```
+
+```{r}
+obe_thin_correlation = merged_data %>% 
+  select(age5_19thinness, age5_19obesity)
+res = cor(obe_thin_correlation)
+res
+corrplot(res, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45)
+```
+
+```{r}
+gdp_gni_correlation = merged_data %>% 
+  select(che_gdp, une_gni)
+res = cor(gdp_gni_correlation)
+corrplot(res, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45)
 ```
 

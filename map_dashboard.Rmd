@@ -316,7 +316,7 @@ selectInput(
 Column {.tabset}
 -----------------------------------------------------------------------
 
-### Alcohol
+### BMI
 
 ```{r}
 renderPlotly({

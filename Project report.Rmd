@@ -10,13 +10,14 @@ output: html_document
 ## Related work
 
 ## Initial questions
+
 ### new questions
 
 ## Data
 
-###Data sources 
+### Explore the Original Dataset and look for other reasonable variables
 
-Our main datasets is WHO Life Exp Dataset measures the life expectancy data and some variables from WHO with Pm2.5 DataSeta, Country Code Dataset and Income Level Dataset for merging and imputation.
+Our main datasets is WHO Life Exp Dataset, which covers the years 2000-2016 for 183 countries, including 32 variables.
 
 While looking at the mortality rate columns in our life expectancy dataset, we found out that the mortality rate has been divided into several age groups--adults, infants, and children with age 1-4. In the meantime, life expectancy has also been divided into two directions--one is the overall countrywide life expectancy, and another one is the life expectancy for people who are older than 60 years old.
 
@@ -30,15 +31,30 @@ In the end, the death of the elderly may be related to the level of medical care
 
 Based on these ideas, we looked through several papers to generate more variables that we thought would relate to life expectancy.
 
-###Data cleaing 
+### Data sources 
 
-##Exploratory Analysis
+* 1. who_life_exp.csv, WHO Life Expectancy Dataset, from [kaggle](https://www.kaggle.com/datasets/mmattson/who-national-life-expectancy).
 
-###World Life Expectancy and Interactive World Map
+* 2. country-codes.csv, Country Code Dataset, from [github](https://github.com/datasets/country-codes).
 
-##Additional analysis
-###Analysis Test Part
+* 3. pm2.5.csv, WHO Pm2.5 Dataset, from [the world bank](https://data.worldbank.org/indicator/EN.ATM.PM25.MC.M3).
 
-###Linear Model
+* 4. income_level.csv, Income Level Dataset, from [website].
 
-##Discussion
+* 5. around_2019_women_percent_in_national_parliaments.csv, Percent of Women in National Parliaments before 2019 Dataset, from [global data on national parliaments](https://data.ipu.org/women-ranking?month=1&year=2019).
+
+* 6. government_compulsory_health expenditure_from_1970_2020.csv, Government Health Expenditure Dataset, from [our world in data](https://ourworldindata.org/grapher/public-health-expenditure-share-gdp-owid?country=SWE~FRA~DEU~JPN~GBR~BEL~ESP~AUS~NZL~CAN~USA).
+
+### Data cleaing 
+
+## Exploratory Analysis
+
+### World Life Expectancy and Interactive World Map
+
+## Additional analysis
+
+### Analysis Test Part
+
+### Linear Model
+
+## Discussion

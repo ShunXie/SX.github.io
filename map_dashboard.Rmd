@@ -1,9 +1,10 @@
 ---
-title: "Shiny Dashboard"
+title: "World Map Dashboard"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
+    source_code: embed
 runtime: shiny
 ---
 
@@ -20,10 +21,39 @@ library(shiny)
 
 df <- read_csv("./data/Merged_expectation.csv")
 df <- df %>%
-  select(country_code,country,une_life,year) 
+  select(country_code,country,une_life,year,region) 
   
 ```
 
+```{r, include=FALSE}
+
+mortality <- read_csv("./data/Merged_expectation.csv")
+mortality <- mortality %>%
+  select(country_code,country,adult_mortality,year) 
+  
+```
+
+```{r, include=FALSE}
+
+infant <- read_csv("./data/Merged_expectation.csv")
+infant <- infant %>%
+  select(country_code,country,infant_mort,year) 
+  
+```
+
+```{r, include=FALSE}
+
+alcohol <- read_csv("./data/Merged_expectation.csv")
+infant <- infant %>%
+  select(country_code,country,alcohol,year) 
+  
+```
+
+
+
+
+Life Expectancy
+===================================== 
 
 Column {.sidebar}
 -----------------------------------------------------------------------
@@ -43,14 +73,10 @@ selectInput(
 ```
 
 
-
-
-
-
-Column {data-width=1000}
+Column {.tabset}
 -----------------------------------------------------------------------
 
-### Chart A
+### Life Expectancy
 
 ```{r}
 renderPlotly({
@@ -84,6 +110,172 @@ df %>% filter(year == input$year) %>%
 
 
 
+Adult Mortality
+===================================== 
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+
+```{r}
+year = df %>% distinct(year) %>% pull()
+
+# selectInput widget
+selectInput(
+  inputId = "year", 
+  label = h3("Select Year"),
+  choices = year,
+  selected = "2015")
+
+
+```
+
+Column {.tabset}
+-----------------------------------------------------------------------
+
+### Adult Mortality 
+
+```{r}
+renderPlotly({
+  # light grey boundaries
+l <- list(color = toRGB("grey"), width = 0.5)
+
+# specify map projection/options
+g <- list(
+  showframe = FALSE,
+  showcoastlines = FALSE,
+  projection = list(type = 'Mercator')
+)
+
+mortality %>% filter(year == input$year) %>% 
+  plot_geo() %>% 
+  add_trace(
+  z = ~adult_mortality, color = ~adult_mortality, colors = 'Blues',
+  text = ~country, locations = ~country_code, marker = list(line = l)
+  ) %>% 
+  colorbar(title = 'Adult Mortality ') %>% 
+  layout(
+    title = str_c("Adult Mortality in ",input$year),
+    geo = g
+  )
+})
+
+
+```
+
+
+
+
+
+Infant Mortality
+===================================== 
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+
+```{r}
+year = df %>% distinct(year) %>% pull()
+
+# selectInput widget
+selectInput(
+  inputId = "year", 
+  label = h3("Select Year"),
+  choices = year,
+  selected = "2015")
+
+
+```
+
+Column {.tabset}
+-----------------------------------------------------------------------
+
+### Infant Mortality 
+
+```{r}
+renderPlotly({
+  # light grey boundaries
+l <- list(color = toRGB("grey"), width = 0.5)
+
+# specify map projection/options
+g <- list(
+  showframe = FALSE,
+  showcoastlines = FALSE,
+  projection = list(type = 'Mercator')
+)
+
+infant %>% filter(year == input$year) %>% 
+  plot_geo() %>% 
+  add_trace(
+  z = ~infant_mort, color = ~infant_mort, colors = 'Blues',
+  text = ~country, locations = ~country_code, marker = list(line = l)
+  ) %>% 
+  colorbar(title = 'Infant Mortality ') %>% 
+  layout(
+    title = str_c("Infant Mortality in ",input$year),
+    geo = g
+  )
+})
+
+
+```
+
+
+
+
+Alcohol
+===================================== 
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+
+```{r}
+year = df %>% distinct(year) %>% pull()
+
+# selectInput widget
+selectInput(
+  inputId = "year", 
+  label = h3("Select Year"),
+  choices = year,
+  selected = "2015")
+
+
+```
+
+
+Column {.tabset}
+-----------------------------------------------------------------------
+
+### Alcohol
+
+```{r}
+renderPlotly({
+  # light grey boundaries
+l <- list(color = toRGB("grey"), width = 0.5)
+
+# specify map projection/options
+g <- list(
+  showframe = FALSE,
+  showcoastlines = FALSE,
+  projection = list(type = 'Mercator')
+)
+
+alcohol %>% filter(year == input$year) %>% 
+  plot_geo() %>% 
+  add_trace(
+  z = ~alcohol, color = ~alcohol, colors = 'Blues',
+  text = ~country, locations = ~country_code, marker = list(line = l)
+  ) %>% 
+  colorbar(title = 'Alcohol') %>% 
+  layout(
+    title = str_c("Alcohol in ",input$year),
+    geo = g
+  )
+})
+
+
+```
 
 
 

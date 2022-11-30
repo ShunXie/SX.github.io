@@ -44,13 +44,25 @@ infant <- infant %>%
 ```{r, include=FALSE}
 
 alcohol <- read_csv("./data/Merged_expectation.csv")
-infant <- infant %>%
+alcohol <- alcohol %>%
   select(country_code,country,alcohol,year) 
   
 ```
 
 
+```{r, include=FALSE}
+bmi <- read_csv("./data/Merged_expectation.csv")
+bmi <- bmi %>%
+  select(country_code,country,bmi,year) 
+  
+```
 
+```{r, include=FALSE}
+che_gdp <- read_csv("./data/Merged_expectation.csv")
+che_gdp <- che_gdp %>%
+  select(country_code,country,che_gdp,year) 
+  
+```
 
 Life Expectancy
 ===================================== 
@@ -223,12 +235,12 @@ infant %>% filter(year == input$year) %>%
 
 
 
+
 Alcohol
 ===================================== 
 
 Column {.sidebar}
 -----------------------------------------------------------------------
-
 
 ```{r}
 year = df %>% distinct(year) %>% pull()
@@ -280,3 +292,114 @@ alcohol %>% filter(year == input$year) %>%
 
 
 
+
+BMI
+===================================== 
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+```{r}
+year = df %>% distinct(year) %>% pull()
+
+# selectInput widget
+selectInput(
+  inputId = "year", 
+  label = h3("Select Year"),
+  choices = year,
+  selected = "2015")
+
+
+```
+
+
+Column {.tabset}
+-----------------------------------------------------------------------
+
+### Alcohol
+
+```{r}
+renderPlotly({
+  # light grey boundaries
+l <- list(color = toRGB("grey"), width = 0.5)
+
+# specify map projection/options
+g <- list(
+  showframe = FALSE,
+  showcoastlines = FALSE,
+  projection = list(type = 'Mercator')
+)
+
+bmi %>% filter(year == input$year) %>% 
+  plot_geo() %>% 
+  add_trace(
+  z = ~bmi, color = ~bmi, colors = 'Blues',
+  text = ~country, locations = ~country_code, marker = list(line = l)
+  ) %>% 
+  colorbar(title = 'BMI') %>% 
+  layout(
+    title = str_c("BMI in ",input$year),
+    geo = g
+  )
+})
+
+
+```
+
+
+
+
+
+
+GDP
+===================================== 
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+```{r}
+year = df %>% distinct(year) %>% pull()
+
+# selectInput widget
+selectInput(
+  inputId = "year", 
+  label = h3("Select Year"),
+  choices = year,
+  selected = "2015")
+
+
+```
+
+
+Column {.tabset}
+-----------------------------------------------------------------------
+
+### GDP
+
+```{r}
+renderPlotly({
+  # light grey boundaries
+l <- list(color = toRGB("grey"), width = 0.5)
+
+# specify map projection/options
+g <- list(
+  showframe = FALSE,
+  showcoastlines = FALSE,
+  projection = list(type = 'Mercator')
+)
+
+che_gdp %>% filter(year == input$year) %>% 
+  plot_geo() %>% 
+  add_trace(
+  z = ~che_gdp, color = ~che_gdp, colors = 'Blues',
+  text = ~country, locations = ~country_code, marker = list(line = l)
+  ) %>% 
+  colorbar(title = 'GDP') %>% 
+  layout(
+    title = str_c("GDP in ",input$year),
+    geo = g
+  )
+})
+
+
+```

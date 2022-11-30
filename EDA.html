@@ -385,8 +385,14 @@ Heyneman</a>, he claimed that the change of economic status and school
 has a big difference between developed and developing country. We treat
 these variables as our predictors to the life expectancy. Therefore, it
 is likely that the predictors are different between developed and
-developing country. Therefore, we plot over different predictors and
-identify the trends over time.</p>
+developing country. On the other hand, people with different income have
+different life expectancy. According to <a
+href="https://jamanetwork.com/journals/jama/article-abstract/2513561">Chatty
+et. al.</a>, the richest 1% income group has a 14.6 years and 10.1 years
+higher life expectancy for men and women respectively against the
+poorest 1% of income group. Therefore, we plot the trends for different
+variables over time with respect to development of the country and
+income group of the country.</p>
 <pre class="r"><code>merged_data = 
   read_csv(&quot;data/Merged_expectation.csv&quot;, show_col_types = FALSE)
 
@@ -407,7 +413,7 @@ imputed_data = read_csv(&quot;data/Imputed_expectation.csv&quot;, show_col_types
                      labels = c(&#39;Developed&#39;,&#39;Developing&#39;))+
   geom_point(aes(x=year, y=Developed, color=&#39;a&#39;),shape=19,size = 3)+
   geom_point(aes(x=year, y=Developing, color=&#39;b&#39;),color = &quot;red&quot;, shape=19,size = 3)+
-  labs(title = sprintf(&quot;Time series plot for %s&quot;, variable) )+
+  labs(title = sprintf(&quot;Time series plot for %s (develop)&quot;, variable) )+
   xlab(&quot;Year&quot;)+
   ylab(sprintf(&quot;%s&quot;,variable))
 }
@@ -434,44 +440,143 @@ Time_series_income =  function(variable,merged_data){
   geom_point(aes(x=year, y=upper_middle_income, color=&#39;b&#39;),color = &quot;red&quot;, shape=19,size = 3)+
   geom_point(aes(x=year, y=lower_middle_income, color=&#39;c&#39;),color = &quot;blue&quot;, shape=19,size = 3)+
   geom_point(aes(x=year, y=low_income, color=&#39;d&#39;),color = &quot;purple&quot;, shape=19,size = 3)+
-  labs(title = sprintf(&quot;Time series plot for %s&quot;, variable) )+
+  labs(title = sprintf(&quot;Time series plot for %s (income)&quot;, variable) )+
   xlab(&quot;Year&quot;)+
   ylab(sprintf(&quot;%s&quot;,variable))
 }
 
-par(mfrow=c(2,2))
-Time_series_plot(&quot;une_life&quot;,merged_data)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>Time_series_income(&quot;une_life&quot;,merged_data)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
+ts1 = Time_series_plot(&quot;une_life&quot;,merged_data)
+ts2 = Time_series_income(&quot;une_life&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-2-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>Life expectancy as our dependent variable has similar trends for both
 developed and developing countries. Two life expectancy indices have a
 persistent increase over time. However, the expectancy for developed
 countries is 10 years higher than the developing countries over 16
+years. The similar trends also holds for different income groups but
+countries classified in low income group has a higher growth rate for
+life expectancy than other groups.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;adult_mortality&quot;,merged_data)
+ts2 = Time_series_income(&quot;adult_mortality&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-3-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Adult mortality has a similar trend with life expectancy, but in a
+reversed order. The mortality rate in developing and low income
+countries decreases with a higher rate than developed and high income
+countries.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;alcohol&quot;,merged_data)
+ts2 = Time_series_income(&quot;alcohol&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-4-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Alcohol seems to have a stable trends for all countries. However,
+alcohol consuption in developed countries have a much higher value than
+developing country, and countries classified as high and upper middle
+income have a higher alcohol consuption value than lower middle and low
+income, where countries in the latter two two categories have a value of
+2 bottles per capita.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;bmi&quot;,merged_data)
+ts2 = Time_series_income(&quot;bmi&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-5-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Over years, bmi for most of countries increases and countries in
+different categories all increases regardless of development and income
+group of the country. Interestingly, upper middle income countries
+exceed the bmi for high income countries, whereas low income countries
+has a by far lower value than other countries. Also, developing
+countries has a higher rate of increase as indicated by a steeper line
+(higher tangent) according to the time series plot.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;measles&quot;,merged_data)
+ts2 = Time_series_income(&quot;measles&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-6-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Measles vaccination coverage increases for developing countries and
+developed countries have a persistently high vaccination coverage. On
+the other hand, developing countries and low income countries has a soar
+in vaccination coverage over the time period.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;age5_19obesity&quot;,merged_data)
+ts2 = Time_series_income(&quot;age5_19obesity&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-7-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Although due to the development over time period, the problem obesity
+worsen and increases over all countries. Upper middle income and
+developing countries have a higher increase in obesity rate.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;basic_water&quot;,merged_data)
+ts2 = Time_series_income(&quot;basic_water&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-8-1.png" width="864" style="display: block; margin: auto;" />
+Time series plot for basic water indicates an increase in percentage of
+people getting basic water over time for developing and lower income
+countries. On the other hand, high income and developed countries have a
+constant high basic water coverage.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;doctors&quot;,merged_data)
+ts2 = Time_series_income(&quot;doctors&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-9-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Time series plot for doctors per 10,000 people has interesting
+trends. Despite the constant increase in high income countries and
+developed countries, other countries seems to have a fluctuation over
+the period. There is a sudden decrease in 2004 where SARS explodes. As a
+result by <a href="https://www.mdpi.com/1648-9144/57/4/325">Magdalena
+et. al.</a>, there are 48.94% of the doctors treated infected patients
+and 7.4% of the doctors were confirmed infected during the first 6 month
+period. This could potentially lead to death of doctors in lower middle
+income, low income and developing countries.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;une_edu_spend&quot;,merged_data)
+ts2 = Time_series_income(&quot;une_edu_spend&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-10-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Education expenditure for all countries varies. High and developed
+countries have the highest expenditure among all countries over all
 years.</p>
-<pre class="r"><code>Time_series_plot(&quot;bmi&quot;,merged_data)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>BMI for developed and developing countries also increases over time.
-Developing countries has a higher rate of increase as indicated by a
-steeper line (higher tangent) according to the time series plot.</p>
-<pre class="r"><code>#Time_series_plot(&quot;bmi&quot;,imputed_data)
-Time_series_plot(&quot;une_gni&quot;,merged_data)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;une_gni&quot;,merged_data)
+ts2 = Time_series_income(&quot;une_gni&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-11-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>The gni is different for developed and developing country over the
 year. While developing countries have a relative stable curve at 10000
 dollar per capita, developed countries increases from 20000 dollar to
-40000 dollar per capita.</p>
-<pre class="r"><code>Time_series_plot(&quot;measles&quot;,merged_data)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Measles vaccination coverage increases for developing countries and
-developed countries have a persistently high vaccination coverage.</p>
-<pre class="r"><code>Time_series_plot(&quot;hospitals&quot;,merged_data)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>Time_series_plot(&quot;health_exp&quot;,merged_data)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+40000 dollar per capita. On the other hand, gni per capita for high
+income countries, which exceeds 40000 dollar per capita in year 2013,
+have by far the highest value among other countries.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;une_pop&quot;,merged_data)
+ts2 = Time_series_income(&quot;une_pop&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-12-1.png" width="864" style="display: block; margin: auto;" />
+The population in developing countries is much higher than population in
+developed countries. Interestingly, when we consider the population
+among different income groups, we can see that lower middle income
+countries have the highest population, whereas low income countries and
+high income countries both have value around 20,000,000.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;une_literacy&quot;,merged_data)
+ts2 = Time_series_income(&quot;une_literacy&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-13-1.png" width="864" style="display: block; margin: auto;" />
+The literacy coverage has some missing value. In particular, all
+developed countries have a missing value in year 2006. But as indicated
+in the plots, literacy coverage is higher in developed and high income
+countries. Additionally, developing countries have an increasing trend
+in literacy whereas low income countries have a fluctuation but a non
+increasing or decreasing trend.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;PM_value&quot;,merged_data)
+ts2 = Time_series_income(&quot;PM_value&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-14-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Consider only non-missing data, PM value decreases for high and
+developed countries. The countries with low and lower middle income have
+a persistent high PM value over the periods, with approximately 100
+percentage of total population exposed to levels exceeding WHO guideline
+value.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;gghe_d&quot;,merged_data)
+ts2 = Time_series_income(&quot;gghe_d&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-15-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>Health expenditure in developed countries soar over the years from
 2000 to 2016, from 4% to 5% of total GDP. Developing countries also have
-an increase in the health expenditure, but with a lower rate.</p>
+an increase in the health expenditure, but with a lower rate. For
+different income level, high income countries have the highest
+expenditure on health and it has an increasing trend. However, health
+expenditure measured in percentage of GDP decreases among low income
+countries.</p>
 <p><br> <br></p>
 </div>
 <div id="scatter-plot" class="section level1">
@@ -516,7 +621,7 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#measles
 merged_data_temp =
 merged_data %&gt;% 
@@ -552,7 +657,7 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#health_exp
 merged_data_temp =
 merged_data %&gt;% 
@@ -588,7 +693,7 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><br> <br></p>
 </div>
 <div id="correlation" class="section level1">
@@ -682,7 +787,7 @@ Pearson_Correlation_result %&gt;%
          )
 
 grid.table(Pearson_Corr_res)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#grid.table(Pearson_Corr_pval)</code></pre>
 <p><br> <br></p>
 </div>
@@ -866,7 +971,7 @@ result_pval =
 
 
 grid.table(result_corr)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#grid.table(result_pval)</code></pre>
 </div>
 </div>

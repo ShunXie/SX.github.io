@@ -85,6 +85,8 @@ selectInput(
 ```
 
 
+
+
 Column {.tabset}
 -----------------------------------------------------------------------
 
@@ -117,6 +119,26 @@ df %>% filter(year == input$year) %>%
 
 
 ```
+
+
+
+### Description
+
+
+This is the world map showing the life expectancy (years) of each country from 2000 to 2016. 
+
+\ \par
+Take the year of 2015 as an example,
+
+\ \par
+  * North America, Western and Northern Europe, Japan, New Zealand and Australia show longer life expectancy compared with other regions.
+  
+\ \par
+  * Central and Southern Africa have relatively shorter life expectancy because the color is lighter,
+  
+  
+
+
 
 
 
@@ -174,6 +196,29 @@ mortality %>% filter(year == input$year) %>%
 
 
 ```
+
+
+### Description
+
+
+This is the world map showing the adult mortality rate (probability of dying between 15 and 60 years per 1000 population) of each country from 2000 to 2016. 
+
+\ \par
+Take the year of 2015 as an example,
+
+\ \par
+  * Central and Southern Africa have relatively higher adult mortality rate.
+  
+\ \par
+  * Lesotho, Central Africa Republic and Cote D'ivoire are the countries with the Top 3 highest adult mortality rate in the world and they are all in Africa.
+  
+\ \par
+  * Syria has the highest adult mortality rate in Asia, which is probably because of the on-going war.
+
+
+
+
+
 
 
 
@@ -234,6 +279,29 @@ infant %>% filter(year == input$year) %>%
 
 
 
+### Description
+
+
+This is the world map showing the infant mortality rate (death rate up to age 1) of each country from 2000 to 2016. 
+
+\ \par
+Take the year of 2015 as an example,
+
+\ \par
+  * Central and Southern Africa, Western and Southern Asia have relatively higher mortality rate, which is probably because of the underdeveloped medical level and poor hygiene.
+  
+\ \par
+  * Sierra Leone, Central Africa Republic and Somalia are the countries with the Top 3 highest infant mortality rate in the world and they are all in Africa.
+  
+\ \par
+  * Pakistan and Afganistan have the highest infant mortality rate in Asia.
+
+
+
+
+
+
+
 
 
 Alcohol
@@ -288,6 +356,34 @@ alcohol %>% filter(year == input$year) %>%
 
 
 ```
+
+
+### Description
+
+
+This is the world map showing the alcohol consumption level (liters of pure alcohol per capital of consumption) of each country from 2000 to 2016. 
+
+\ \par
+Take the year of 2015 as an example,
+
+\ \par
+  * Central and Northern Africa have the lowest alcohol consumption level in the world.
+  
+\ \par
+  * Europe, North America, New Zealand and Australia have the highest alcohol consumption level in the world.
+  
+\ \par
+  * Uganda has the highest alcohol consumption level in Africa.
+  
+  \ \par
+  * Estonia, a country in the Northern Europe, has the highest alcohol consumption level in the world.
+
+
+
+
+
+
+
 
 
 
@@ -348,10 +444,31 @@ bmi %>% filter(year == input$year) %>%
 
 
 
+### Description
+
+
+This is the world map showing the BMI level (age-standardized estimate) of each country from 2000 to 2016. 
+
+\ \par
+Take the year of 2015 as an example,
+
+\ \par
+  * America, Egypt, Saudi Arabia and Libya have the highest BMI level in the world.
+  
+\ \par
+  * Central and Southern Africa, Eastern and Soutern Asia have a lower BMI level.
+  
+\ \par
+  * Almost all European countries have a BMI level above 26.
+  
 
 
 
-GDP
+
+
+
+
+Current Health Expenditure
 ===================================== 
 
 Column {.sidebar}
@@ -374,7 +491,7 @@ selectInput(
 Column {.tabset}
 -----------------------------------------------------------------------
 
-### GDP
+### Current Health Expenditure
 
 ```{r}
 renderPlotly({
@@ -403,3 +520,25 @@ che_gdp %>% filter(year == input$year) %>%
 
 
 ```
+
+
+### Description
+
+
+This is the world map showing the Current health expenditure (CHE) as percentage of gross domestic product (GDP) (%) of each country from 2000 to 2016. 
+
+\ \par
+Take the year of 2015 as an example,
+
+\ \par
+  * America and Sierra Leone have the highest current health expenditure in the world.
+  
+  \ \par
+  * Generally speaking, Americas, Western and Northern Europe , Australia, New Zealand and Janpan have higher current health expenditure level.
+  
+  
+
+
+
+
+

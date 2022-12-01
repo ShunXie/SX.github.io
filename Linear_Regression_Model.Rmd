@@ -1,7 +1,5 @@
 ---
 title: "Linear Regression Model"
-author: "Youlan Shen"
-date: "`r Sys.Date()`"
 output: 
   html_document:
     toc: true
@@ -14,6 +12,8 @@ output:
 library(tidyverse)
 library(dplyr)
 ```
+
+After our EDA and statistical analysis, we consider to generate a linear regression to better express the relationship between Life Expectancy and other variables. In particular, we set une_life as our response variable and we only look at the year of 2015. 
 
 First, we look at how many missing data we have on each column, at year 2015.
 

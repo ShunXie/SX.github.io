@@ -9,9 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Youlan Shen" />
 
-<meta name="date" content="2022-12-01" />
 
 <title>Linear Regression Model</title>
 
@@ -372,14 +370,16 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Linear Regression Model</h1>
-<h4 class="author">Youlan Shen</h4>
-<h4 class="date">2022-12-01</h4>
 
 </div>
 
 
 <pre class="r"><code>library(tidyverse)
 library(dplyr)</code></pre>
+<p>After our EDA and statistical analysis, we consider to generate a
+linear regression to better express the relationship between Life
+Expectancy and other variables. In particular, we set une_life as our
+response variable and we only look at the year of 2015.</p>
 <p>First, we look at how many missing data we have on each column, at
 year 2015.</p>
 <pre class="r"><code>data &lt;-

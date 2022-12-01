@@ -2,10 +2,13 @@
 title: "Linear Regression Model"
 author: "Youlan Shen"
 date: "`r Sys.Date()`"
-output: github_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cosmo
+    code_folding: hide
 ---
-
-Need to revise according to correlation
 
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -25,12 +28,12 @@ data %>%
   knitr::kable(col.names = c("Counts of NA"))
 ```
 
-Limited to the variable that we have less than 5% NA's (which is less than 10 NAs), also exclude variables that have high correlation value, we could generate our first basic linear model, with selected variables of alcohol, bmi, measles, basic_water, che_gdp, une_gni, PM_value, income_group, percent_w_in_lower_house, and our response variable of une_life.
+Limited to the variable that we have less than 5% NA's (which is less than 10 NAs), also exclude variables that have high correlation value, we could generate our first basic linear model, with selected variables of alcohol, bmi, measles, basic_water, che_gdp (health expenditure per gdp), une_gni, PM_value, income_group, percent_w_in_lower_house, and our response variable of une_life.
 
 * Model 1:
-une_life ~ alcohol + bmi + measles + basic_water + che_gdp + une_gni + PM_value, income_group + percent_w_in_lower_house + income_group * percent_w_in_lower_house
+une_life ~ alcohol + bmi + measles + basic_water + che_gdp + une_gni + PM_value + income_group * percent_w_in_lower_house
 
-(Also consider intersection here)
+Delete all the NA rows, consider intersection here, using step function with backwards direction. Then we generate our first model.
 
 
 ```{r}

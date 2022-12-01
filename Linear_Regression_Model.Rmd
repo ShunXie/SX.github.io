@@ -36,14 +36,37 @@ une_life ~ alcohol + bmi + measles + basic_water + che_gdp + une_gni + PM_value 
 Delete all the NA rows, consider intersection here, using step function with backwards direction. Then we generate our first model.
 
 
-```{r}
+```{r,message=FALSE, warning=FALSE}
+# delete all the Na columns
+data_1 <- data %>% 
+  filter(year == 2015) %>% 
+  select(une_life, alcohol, bmi, measles, basic_water, che_gdp, une_gni, PM_value, income_group, percent_w_in_lower_house) %>% 
+  drop_na()
 
+m <- lm(une_life ~ alcohol + bmi + measles + basic_water + che_gdp + une_gni + PM_value + income_group * percent_w_in_lower_house, data = data_1)
+
+m1 <- step(m, direction = "backward", trace = FALSE)
+summary(m1)
 ```
 
+From the above, variables like bmi, che_gdp, une_gni, PM_value are deleted according to backwards step function. One way to explain this is that these variables have high correlation with income_group--in higher income countries(une_gni), people have more access to healthy foods and healthy life styles (bmi), governments also spend more money on public health(che_gdp), as well as on building a clean environment(PM_value).
+
+Another thing that needs to be aware of is that the intersection of income group and women in parliament (percent_w_in_lower_house). The variable percent_w_in_lower_house is significant itself, but it is more significant in middle income and upper income groups. In other words, after a country reaches a certain level of income, increasing women's voice in the country actually helps people live longer, which follows the intention that we chose to include this variable in the first place.
+
+The model's R-adjusted score reaches 0.78.
+
+Below are the analysis plots of the model. These plot shows that the residuals are normally distributed, independent, but may not have a constant variance--it has a linear trend in the end according to the third plot. In second plot, the points follows the line, so the regression function is linear. Therefore, maybe we don't need to add transformation to our response variable.
+
+```{r,message=FALSE, warning=FALSE}
+anova(m1)
+
+par(mfrow=c(2,2))
+plot(m1)
+```
 
 Second, we only look at the countries with existing une_literacy data and found out NA in other variables of these countries, at year 2015.
 
-```{r}
+```{r,message=FALSE, warning=FALSE}
 data %>% 
   filter(year == 2015) %>% 
   filter(is.na(une_literacy) == FALSE) %>% 
@@ -60,7 +83,7 @@ une_life ~ alcohol + bmi + measles + basic_water + che_gdp + une_gni + une_liter
 
 (Also consider intersection here)
 
-```{r}
+```{r,message=FALSE, warning=FALSE}
 
 ```
 

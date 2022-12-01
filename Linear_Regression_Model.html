@@ -11,7 +11,7 @@
 
 <meta name="author" content="Youlan Shen" />
 
-<meta name="date" content="2022-11-28" />
+<meta name="date" content="2022-12-01" />
 
 <title>Linear Regression Model</title>
 
@@ -31,7 +31,11 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -227,7 +231,73 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
 
 
 
@@ -237,6 +307,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -281,16 +361,23 @@ $(document).ready(function () {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Linear Regression Model</h1>
 <h4 class="author">Youlan Shen</h4>
-<h4 class="date">2022-11-28</h4>
+<h4 class="date">2022-12-01</h4>
 
 </div>
 
 
-<p>Need to revise according to correlation</p>
 <pre class="r"><code>library(tidyverse)
 library(dplyr)</code></pre>
 <p>First, we look at how many missing data we have on each column, at
@@ -428,15 +515,113 @@ data %&gt;%
 <p>Limited to the variable that we have less than 5% NA’s (which is less
 than 10 NAs), also exclude variables that have high correlation value,
 we could generate our first basic linear model, with selected variables
-of alcohol, bmi, measles, basic_water, che_gdp, une_gni, PM_value,
-income_group, percent_w_in_lower_house, and our response variable of
-une_life.</p>
+of alcohol, bmi, measles, basic_water, che_gdp (health expenditure per
+gdp), une_gni, PM_value, income_group, percent_w_in_lower_house, and our
+response variable of une_life.</p>
 <ul>
 <li>Model 1: une_life ~ alcohol + bmi + measles + basic_water + che_gdp
-+ une_gni + PM_value, income_group + percent_w_in_lower_house +
-income_group * percent_w_in_lower_house</li>
++ une_gni + PM_value + income_group * percent_w_in_lower_house</li>
 </ul>
-<p>(Also consider intersection here)</p>
+<p>Delete all the NA rows, consider intersection here, using step
+function with backwards direction. Then we generate our first model.</p>
+<pre class="r"><code># delete all the Na columns
+data_1 &lt;- data %&gt;% 
+  filter(year == 2015) %&gt;% 
+  select(une_life, alcohol, bmi, measles, basic_water, che_gdp, une_gni, PM_value, income_group, percent_w_in_lower_house) %&gt;% 
+  drop_na()
+
+m &lt;- lm(une_life ~ alcohol + bmi + measles + basic_water + che_gdp + une_gni + PM_value + income_group * percent_w_in_lower_house, data = data_1)
+
+m1 &lt;- step(m, direction = &quot;backward&quot;, trace = FALSE)
+summary(m1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = une_life ~ alcohol + measles + basic_water + income_group + 
+##     percent_w_in_lower_house + income_group:percent_w_in_lower_house, 
+##     data = data_1)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -14.0289  -2.0578   0.3333   2.3445   8.2274 
+## 
+## Coefficients:
+##                                                           Estimate Std. Error
+## (Intercept)                                              43.665048   3.727490
+## alcohol                                                  -0.164240   0.099915
+## measles                                                   0.065658   0.030899
+## basic_water                                               0.271190   0.036420
+## income_groupLow income                                   -6.368288   2.412949
+## income_groupLower middle income                          -2.931724   1.780812
+## income_groupUpper middle income                          -2.010134   1.853902
+## percent_w_in_lower_house                                  0.152871   0.051488
+## income_groupLow income:percent_w_in_lower_house           0.002642   0.079079
+## income_groupLower middle income:percent_w_in_lower_house -0.147987   0.066825
+## income_groupUpper middle income:percent_w_in_lower_house -0.149237   0.070140
+##                                                          t value Pr(&gt;|t|)    
+## (Intercept)                                               11.714  &lt; 2e-16 ***
+## alcohol                                                   -1.644  0.10224    
+## measles                                                    2.125  0.03518 *  
+## basic_water                                                7.446 6.25e-12 ***
+## income_groupLow income                                    -2.639  0.00916 ** 
+## income_groupLower middle income                           -1.646  0.10173    
+## income_groupUpper middle income                           -1.084  0.27993    
+## percent_w_in_lower_house                                   2.969  0.00346 ** 
+## income_groupLow income:percent_w_in_lower_house            0.033  0.97339    
+## income_groupLower middle income:percent_w_in_lower_house  -2.215  0.02825 *  
+## income_groupUpper middle income:percent_w_in_lower_house  -2.128  0.03494 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.693 on 155 degrees of freedom
+## Multiple R-squared:  0.7941, Adjusted R-squared:  0.7808 
+## F-statistic: 59.78 on 10 and 155 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>From the above, variables like bmi, che_gdp, une_gni, PM_value are
+deleted according to backwards step function. One way to explain this is
+that these variables have high correlation with income_group–in higher
+income countries(une_gni), people have more access to healthy foods and
+healthy life styles (bmi), governments also spend more money on public
+health(che_gdp), as well as on building a clean
+environment(PM_value).</p>
+<p>Another thing that needs to be aware of is that the intersection of
+income group and women in parliament (percent_w_in_lower_house). The
+variable percent_w_in_lower_house is significant itself, but it is more
+significant in middle income and upper income groups. In other words,
+after a country reaches a certain level of income, increasing women’s
+voice in the country actually helps people live longer, which follows
+the intention that we chose to include this variable in the first
+place.</p>
+<p>The model’s R-adjusted score reaches 0.78.</p>
+<p>Below are the analysis plots of the model. These plot shows that the
+residuals are normally distributed, independent, but may not have a
+constant variance–it has a linear trend in the end according to the
+third plot. In second plot, the points follows the line, so the
+regression function is linear. Therefore, maybe we don’t need to add
+transformation to our response variable.</p>
+<pre class="r"><code>anova(m1)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: une_life
+##                                        Df  Sum Sq Mean Sq  F value    Pr(&gt;F)
+## alcohol                                 1 1714.22 1714.22 125.6955 &lt; 2.2e-16
+## measles                                 1 2829.13 2829.13 207.4466 &lt; 2.2e-16
+## basic_water                             1 2759.92 2759.92 202.3714 &lt; 2.2e-16
+## income_group                            3  644.42  214.81  15.7507 5.448e-09
+## percent_w_in_lower_house                1   82.68   82.68   6.0629   0.01490
+## income_group:percent_w_in_lower_house   3  122.00   40.67   2.9819   0.03318
+## Residuals                             155 2113.87   13.64                   
+##                                          
+## alcohol                               ***
+## measles                               ***
+## basic_water                           ***
+## income_group                          ***
+## percent_w_in_lower_house              *  
+## income_group:percent_w_in_lower_house *  
+## Residuals                                
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>par(mfrow=c(2,2))
+plot(m1)</code></pre>
+<p><img src="Linear_Regression_Model_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>Second, we only look at the countries with existing une_literacy data
 and found out NA in other variables of these countries, at year
 2015.</p>
@@ -588,6 +773,8 @@ method to find the best method.</li>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -619,7 +806,41 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

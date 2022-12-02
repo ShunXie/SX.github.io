@@ -33,7 +33,9 @@ corrplot(res, type = "upper", order = "hclust",
 
 ```{r}
 disease_correlation = merged_data %>% 
-  select(hepatitis, measles, polio, diphtheria)
+  select(hepatitis, measles, polio, diphtheria) %>% 
+  na.omit()
+
 res = cor(disease_correlation)
 res
 corrplot(res, type = "upper", order = "hclust", 
@@ -42,7 +44,8 @@ corrplot(res, type = "upper", order = "hclust",
 
 ```{r}
 obe_thin_correlation = merged_data %>% 
-  select(age5_19thinness, age5_19obesity)
+  select(age5_19thinness, age5_19obesity) %>% 
+  na.omit()
 res = cor(obe_thin_correlation)
 res
 corrplot(res, type = "upper", order = "hclust", 
@@ -51,7 +54,8 @@ corrplot(res, type = "upper", order = "hclust",
 
 ```{r}
 gdp_gni_correlation = merged_data %>% 
-  select(che_gdp, une_gni)
+  select(che_gdp, une_gni) %>% 
+  na.omit()
 res = cor(gdp_gni_correlation)
 corrplot(res, type = "upper", order = "hclust", 
          tl.col = "black", tl.srt = 45)

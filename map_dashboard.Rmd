@@ -511,9 +511,9 @@ che_gdp %>% filter(year == input$year) %>%
   z = ~che_gdp, color = ~che_gdp, colors = 'Blues',
   text = ~country, locations = ~country_code, marker = list(line = l)
   ) %>% 
-  colorbar(title = 'GDP') %>% 
+  colorbar(title = 'Current Health Expenditure %') %>% 
   layout(
-    title = str_c("GDP in ",input$year),
+    title = str_c("Current Health Expenditure in ",input$year),
     geo = g
   )
 })

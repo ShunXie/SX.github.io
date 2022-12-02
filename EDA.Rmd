@@ -13,6 +13,7 @@ output:
 ```{r defaults, echo = FALSE, message = FALSE, warning = FALSE}
 # load necessary packages
 library(tidyverse)
+library(corrplot)
 library(patchwork)
 library(reshape2)
 library(rstatix)
@@ -264,54 +265,62 @@ Health expenditure in developed countries soar over the years from 2000 to 2016,
 <br>
 <br>
 
-# Scatter Plot:
+
+# Multi-colinearity Check
+
+First, we shall check the multi-colinearity between predictors. This is because multi-colinearity can cause huge swing in coefficient estimates and reduce the precision of estimated coefficients ([ref](https://statisticsbyjim.com/regression/multicollinearity-in-regression-analysis/)). The correlation heat map is able to help us identify the existence of multi-colinearity among chosen predictors. 
+
+```{r}
+mortality_correlation = merged_data %>% 
+  select(adult_mortality, infant_mort, age1_4mort, une_life)
+res = cor(mortality_correlation)
+corrplot(res, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45)
+```
+
+The heat map shows that the chosen factors, namely mortality, life_expectancy are very correlated. Mortality is negatively correlated to une life expectancy and it is directly correlated to infant mortality and mortality for children from age 1 to 4. This may because life expectancy is calculated based on mortality rate. Although linear relation can perfectly explain the two relation, it is not a good idea to include such variable as it is directly a variable for calculating life expectancy. Therefore, it is not a good idea to include mortality as our predictor. 
+
+```{r}
+disease_correlation = merged_data %>% 
+  select(hepatitis, measles, polio, diphtheria) %>% 
+  na.omit()
+
+res = cor(disease_correlation)
+res
+corrplot(res, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45)
+```
+
+
+In our dataset, we have a lot of vaccinations for different diseases. Therefore, it is natural to check whether the vaccinations data are correlated to each other. It seems like they are all very correlated to each other, with correlation value higher than 0.6. In consequence, we decide to only choose vaccinations for measles as our chosen vector as it was one of the most common disease and now almost fully controled by vaccination. There is still some cases remain for the people that did not get vaccinated according to [CDC website](https://www.cdc.gov/measles/cases-outbreaks.html).  
+
+
+```{r}
+obe_thin_correlation = merged_data %>% 
+  select(age5_19thinness, age5_19obesity) %>% 
+  na.omit()
+res = cor(obe_thin_correlation)
+res
+corrplot(res, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45)
+```
+
+Thinness and obesity are two variables measuring similar characteristics. Ideally, people that are thinner, is less likely to have obesity. Therefore, I make corelation heat map and it turns out that the two variables are quite correlated, with a value around -0.55. For the prevention of multi-colinearity, I choose obesity only in our analysis as it is more meaningful. Obesity is one of the problem that exists among people. Since cardiomyopathy of the obese is one of the leading causes in recent years by [Benoit et. al.](https://www.tandfonline.com/doi/full/10.1586/14779072.2014.952283), we want to figure out whether obesity do lead to a decrease in life expectancy. 
+
+
+
+
+<br>
+<br>
+
+
+# Correlation and Scatter Plot:
 
 Visualization via scatter plot is a way to further discover the pairwise relation between two chosen variable. By plotting the scatter plot and fitted using best linear line, we can potential obtain the relationship between variables and how well linear trend can explain the data. Since we choose Life expectancy as our response variable, we can plot the scatter plot between life expectancy and other chosen predictors to see the correlation between variables. 
 
 
-```{r,message = FALSE, warning = FALSE,fig.width=9}
-#adult_mortality
-merged_data_temp =
-merged_data %>% 
-  select(year, une_life, adult_mortality) %>% 
-  filter(year > 2012)
 
 
-
-myplots <- vector('list', 4)
-for (i in 2013:2016){
-    myplots[[i-2012]] =
-      merged_data_temp %>% 
-      filter(year == i) %>% 
-      ggplot(aes(x = adult_mortality, y = une_life))+geom_point()+geom_smooth(method = 'lm', se = TRUE, color = 'red')+
-      labs(title = sprintf("year %s", i))
-  
-  }
-  
-plot_row1 <- plot_grid(myplots[[1]], myplots[[2]])
-plot_row2 <- plot_grid(myplots[[3]], myplots[[4]])
-# title
-title <- ggdraw() + 
-  draw_label(
-    "Scatter Plot for Life Expectancy and adult mortality",
-    fontface = 'bold',
-    x = 0,
-    hjust = 0
-  ) +
-  theme(
-    # add margin on the left of the drawing canvas,
-    # so title is aligned with left edge of first plot
-    plot.margin = margin(0, 0, 0, 7)
-  )
-
-
-plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))
-
-
-
-```
-
-Adult Mortality has a almost perfect relation with life expectation. This may because life expectancy is calculated based on mortality rate. Although linear relation can perfectly explain the two relation, it is not a good idea to include such variable as it is directly a variable for calculating life expectancy. More detail will be explained in colinearity part. 
 
 
 
@@ -446,6 +455,7 @@ plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1,
 
 
 ```
+
 Measle vaccination coverage seems to indicate a high life expectancy when vaccination coverage is high. But such relation may be non linear as there are lots of values clustered in the upper right corner.
 
 

@@ -1,0 +1,13 @@
+name: map_dashboard
+title: map_dashboard
+username:
+account: 7lx8uo-txbrook
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7769429
+bundleId: 6580175
+url: https://7lx8uo-txbrook.shinyapps.io/map_dashboard/
+when: 1669952310.92691
+lastSyncTime: 1669952310.92693
+asMultiple: FALSE
+asStatic: FALSE

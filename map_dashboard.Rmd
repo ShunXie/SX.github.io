@@ -152,13 +152,13 @@ Column {.sidebar}
 
 
 ```{r}
-year = df %>% distinct(year) %>% pull()
+year2 = df %>% distinct(year) %>% pull()
 
 # selectInput widget
 selectInput(
-  inputId = "year", 
+  inputId = "year2", 
   label = h3("Select Year"),
-  choices = year,
+  choices = year2,
   selected = "2015")
 
 
@@ -181,7 +181,7 @@ g <- list(
   projection = list(type = 'Mercator')
 )
 
-mortality %>% filter(year == input$year) %>% 
+mortality %>% filter(year == input$year2) %>% 
   plot_geo() %>% 
   add_trace(
   z = ~adult_mortality, color = ~adult_mortality, colors = 'Blues',
@@ -189,7 +189,7 @@ mortality %>% filter(year == input$year) %>%
   ) %>% 
   colorbar(title = 'Adult Mortality ') %>% 
   layout(
-    title = str_c("Adult Mortality in ",input$year),
+    title = str_c("Adult Mortality in ",input$year2),
     geo = g
   )
 })
@@ -232,13 +232,13 @@ Column {.sidebar}
 
 
 ```{r}
-year = df %>% distinct(year) %>% pull()
+year3 = df %>% distinct(year) %>% pull()
 
 # selectInput widget
 selectInput(
-  inputId = "year", 
+  inputId = "year3", 
   label = h3("Select Year"),
-  choices = year,
+  choices = year3,
   selected = "2015")
 
 
@@ -261,7 +261,7 @@ g <- list(
   projection = list(type = 'Mercator')
 )
 
-infant %>% filter(year == input$year) %>% 
+infant %>% filter(year == input$year3) %>% 
   plot_geo() %>% 
   add_trace(
   z = ~infant_mort, color = ~infant_mort, colors = 'Blues',
@@ -269,7 +269,7 @@ infant %>% filter(year == input$year) %>%
   ) %>% 
   colorbar(title = 'Infant Mortality ') %>% 
   layout(
-    title = str_c("Infant Mortality in ",input$year),
+    title = str_c("Infant Mortality in ",input$year3),
     geo = g
   )
 })
@@ -311,13 +311,13 @@ Column {.sidebar}
 -----------------------------------------------------------------------
 
 ```{r}
-year = df %>% distinct(year) %>% pull()
+year4 = df %>% distinct(year) %>% pull()
 
 # selectInput widget
 selectInput(
-  inputId = "year", 
+  inputId = "year4", 
   label = h3("Select Year"),
-  choices = year,
+  choices = year4,
   selected = "2015")
 
 
@@ -341,7 +341,7 @@ g <- list(
   projection = list(type = 'Mercator')
 )
 
-alcohol %>% filter(year == input$year) %>% 
+alcohol %>% filter(year == input$year4) %>% 
   plot_geo() %>% 
   add_trace(
   z = ~alcohol, color = ~alcohol, colors = 'Blues',
@@ -349,7 +349,7 @@ alcohol %>% filter(year == input$year) %>%
   ) %>% 
   colorbar(title = 'Alcohol') %>% 
   layout(
-    title = str_c("Alcohol in ",input$year),
+    title = str_c("Alcohol in ",input$year4),
     geo = g
   )
 })
@@ -396,13 +396,13 @@ Column {.sidebar}
 -----------------------------------------------------------------------
 
 ```{r}
-year = df %>% distinct(year) %>% pull()
+year5 = df %>% distinct(year) %>% pull()
 
 # selectInput widget
 selectInput(
-  inputId = "year", 
+  inputId = "year5", 
   label = h3("Select Year"),
-  choices = year,
+  choices = year5,
   selected = "2015")
 
 
@@ -426,7 +426,7 @@ g <- list(
   projection = list(type = 'Mercator')
 )
 
-bmi %>% filter(year == input$year) %>% 
+bmi %>% filter(year == input$year5) %>% 
   plot_geo() %>% 
   add_trace(
   z = ~bmi, color = ~bmi, colors = 'Blues',
@@ -434,7 +434,7 @@ bmi %>% filter(year == input$year) %>%
   ) %>% 
   colorbar(title = 'BMI') %>% 
   layout(
-    title = str_c("BMI in ",input$year),
+    title = str_c("BMI in ",input$year5),
     geo = g
   )
 })
@@ -475,13 +475,13 @@ Column {.sidebar}
 -----------------------------------------------------------------------
 
 ```{r}
-year = df %>% distinct(year) %>% pull()
+year6 = df %>% distinct(year) %>% pull()
 
 # selectInput widget
 selectInput(
-  inputId = "year", 
+  inputId = "year6", 
   label = h3("Select Year"),
-  choices = year,
+  choices = year6,
   selected = "2015")
 
 
@@ -505,7 +505,7 @@ g <- list(
   projection = list(type = 'Mercator')
 )
 
-che_gdp %>% filter(year == input$year) %>% 
+che_gdp %>% filter(year == input$year6) %>% 
   plot_geo() %>% 
   add_trace(
   z = ~che_gdp, color = ~che_gdp, colors = 'Blues',
@@ -513,7 +513,7 @@ che_gdp %>% filter(year == input$year) %>%
   ) %>% 
   colorbar(title = 'Current Health Expenditure %') %>% 
   layout(
-    title = str_c("Current Health Expenditure in ",input$year),
+    title = str_c("Current Health Expenditure in ",input$year6),
     geo = g
   )
 })

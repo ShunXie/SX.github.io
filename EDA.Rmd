@@ -309,6 +309,18 @@ Thinness and obesity are two variables measuring similar characteristics. Ideall
 
 
 
+```{r}
+gdp_gni_correlation = merged_data %>% 
+  select(che_gdp, une_gni) %>% 
+  na.omit()
+res = cor(gdp_gni_correlation)
+res
+corrplot(res, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45)
+```
+
+GDP and GNI are two variables that are economic factors. While GDP focus on production level of an economy measured in economy's size and growth rate, GNI looks at the total dollar value of everything produced by a country and all income residents receive regardless of the location of the residents by [J.B. Maverick](https://www.investopedia.com/ask/answers/062315/gross-national-income-gni-or-gross-domestic-product-gdp-better-measure-economic-condition-country.asp#:~:text=GDP%20looks%20at%20the%20production,earned%20at%20home%20or%20abroad.). To our surprise, GNI and GDP are weekly correlated, hence we can use these two variables simultaneously in our analysis. 
+
 
 <br>
 <br>

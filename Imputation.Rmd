@@ -259,7 +259,7 @@ x^t_{i,j}=\frac{1}{K}\sum_k \frac{1}{|\mathbf{D}_t(a_i,a_k)|}x^t_{k,j}
 \end{equation}
 where K is the total number of countries that have values at year t for variable j.
 
-This is nicely packed in filling package in R.
+This is nicely packed in filling package in R. In our case, we choose k to be 4. This is according to the income level of countries. More detail is justified in clustering part in our analysis.
 
 ```{r,message=FALSE, warning=FALSE}
 raw_mat = 
@@ -267,7 +267,7 @@ raw_mat =
   select(-country, -country_code, -region,-income_group, -`Developed / Developing Countries`,percent_w_in_lower_house) %>% 
   as.matrix()
 
-imputed_mat = filling::fill.KNNimpute(raw_mat, k = 5)
+imputed_mat = filling::fill.KNNimpute(raw_mat, k = 2)
 
 ```
 

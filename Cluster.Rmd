@@ -1,0 +1,135 @@
+---
+title: "Exploratory Data Analysis"
+
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cosmo
+    code_folding: hide
+---
+
+```{r defaults, echo = FALSE, message = FALSE, warning = FALSE}
+# load necessary packages
+library(tidyverse)
+library(dplyr)
+library(factoextra)
+
+options(tibble.print_min = 5)
+options(digits=2)
+# set knitr defaults
+knitr::opts_chunk$set(
+    echo      = TRUE
+  , message   = FALSE
+  , fig.align = "center"
+)
+# set theme defaults
+theme_set(
+  theme_bw() +
+  theme(
+    legend.position = "bottom"
+    , plot.title    = element_text(hjust = 0.5)
+    , plot.subtitle = element_text(hjust = 0.5)    
+    , plot.caption  = element_text(hjust = 0.0)
+  )
+)
+# set color scale defaults
+options(
+    ggplot2.continuous.colour = "viridis"
+  , ggplot2.continuous.fill   = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete   = scale_fill_viridis_d
+```
+
+### Clustering
+
+
+```{r,message=FALSE, warning=FALSE}
+
+merged_data =
+  read_csv("data/Merged_expectation.csv") %>% 
+  filter(year == 2015) %>% 
+  select(une_life,alcohol, bmi, measles, basic_water, che_gdp, une_gni, une_literacy, PM_value) %>% 
+  drop_na()
+
+X_var = 
+  merged_data %>% 
+  select(alcohol, bmi, measles, basic_water, che_gdp, une_gni, une_literacy, PM_value)
+Y_var = 
+outcomes = merged_data %>% 
+  select(une_life)
+
+```
+
+```{r,message=FALSE, warning=FALSE}
+#Scale X variable
+Scale_X = X_var %>% 
+  na.omit() %>% 
+  scale()
+
+
+# Check where elbow occurs using WSS method
+fviz_nbclust(Scale_X, kmeans, method = "silhouette") + 
+  theme_bw()
+```
+
+
+```{r,message=FALSE, warning=FALSE}
+# get the kmean result and get the clusters
+k_result = 
+  kmeans(x = X_var, centers = 4)
+
+#Create the overall dataframe with combined Xvar Yvar and cluster
+Allvalues = 
+  X_var %>% 
+  broom::augment(k_result, .) %>% 
+  cbind(Y_var,.)
+
+
+
+
+# Plot predictor clusters against outcomes
+ggplot(data = Allvalues, aes(x = une_gni, y = une_life, color = .cluster)) + 
+  geom_point(size=3) + 
+  labs(x = "GNI", y = "Life Expectancy", title = "Life expectancy vs GNI after clustered", color = "Cluster")
+```
+
+Based on our result, we cluster use two groups. 
+
+```{r,message=FALSE, warning=FALSE}
+
+# Visualize cluster plot with reduction to two dimensions
+fviz_cluster(k_result, data = X_var, palette = "Set2")
+```
+
+This coincide our usage of k=2 clustering in imputation method. 
+
+For imputed data
+```{r,message=FALSE, warning=FALSE}
+
+imputed_data =
+  read_csv("data/Imputed_expectation.csv") %>% 
+  filter(year == 2015)
+
+X_var_imp = 
+  imputed_data %>% 
+  select(alcohol, bmi, measles, basic_water, che_gdp, une_gni, une_literacy, PM_value)%>% 
+  na.omit() %>% 
+  scale()
+
+Y_var_imp = 
+outcomes = imputed_data %>% 
+  select(une_life)
+
+# get the kmean result and get the clusters
+k_result_imp = 
+  kmeans(x = X_var_imp, centers = 4)
+
+fviz_cluster(k_result_imp, data = X_var_imp, palette = "Set2")
+
+
+```
+
+
+

@@ -12,6 +12,9 @@ output:
 library(tidyverse)
 library(dplyr)
 library(car)
+library(modelr)
+library(mgcv)
+library(patchwork)
 ```
 
 # Introduction
@@ -22,14 +25,16 @@ After our EDA and statistical analysis, we consider to generate a linear regress
 
 In the beginnig, to prepare our dataset for multiple linear regression, we delete mortality related variables, delete une_pop, which is not a good predictor of life expenctancy, and also delete variables that have high correlation values presented in EDA section. Specifically, we use "measles" to be the representative of vaccination variables--hepatitis, measles, polio, and diphtheria. Moreover, we use "bmi" to be another representative of age5_19thinness, age5_19obesity, and bmi. 
 
-In the end, we limit the data to year 2015. 
+In the end, we limit the data to year 2015, and set the Income Reference Group to Low Income.
 
 ```{r,message=FALSE, warning=FALSE}
 data <-
   read_csv("data/Merged_expectation.csv") %>%
   filter(year == 2015) %>% 
   select(alcohol:percent_w_in_lower_house) %>% 
-  select(-hepatitis, -polio, -diphtheria, -age5_19thinness, -age5_19obesity, -une_infant, -une_pop)
+  select(-hepatitis, -polio, -diphtheria, -age5_19thinness, -age5_19obesity, -une_infant, -une_pop) %>% 
+  mutate(income_group = as.factor(income_group),
+         income_group = relevel(income_group, ref = "Low income"))
 ```
 
 # Model 1
@@ -85,7 +90,7 @@ m1 %>%
   broom::tidy() %>%
   select(term, estimate, p.value) %>% 
   knitr::kable(
-      caption = "Estimate and P-value of Model 1 for Year 2015 Life Expectancy", 
+      caption = "Estimate and P-value of Model 1 for Year 2015 Life Expectancy (Income Reference Group is Low Income)", 
       col.names = c("Predictor", "Estimate", "P-value"),
       digits = 3
   )
@@ -93,7 +98,7 @@ m1 %>%
 
 From the above, variables like bmi, che_gdp, une_gni, PM_value are deleted according to backwards step function. One way to explain this is that these variables have high correlation with income_group--in higher income countries(une_gni), people have more access to healthy foods and healthy life styles (bmi), governments also spend more money on public health(che_gdp), as well as on building a clean environment(PM_value).
 
-Another thing that needs to be aware of is that the intersection of income group and women in parliament(percent_w_in_lower_house). The variable percent_w_in_lower_house is significant itself, but it is more significant in middle income and upper income groups. In other words, after a country reaches a certain level of income, increasing women's voice in the country actually helps people live longer, which follows the intention that we chose to include this variable in the first place.
+Another thing that needs to be aware of is that the intersection of income group and women in parliament(percent_w_in_lower_house). The variable percent_w_in_lower_house is significant itself, but it is more significant in middle income and upper income groups. In other words, after a country reaches a certain level of income, increasing women's voice in the country actually helps people live longer, which follows the intention that we chose to include this variable in the first place. (Since 0.156 - 0.152 > 0, keeping other variables constant, percent_w_in_lower_house increases, the predicted life expectancy will increase.)
 
 The model 1's R-adjusted score reaches `r summary(m1)$adj.r.squared`.
 
@@ -237,4 +242,4 @@ The transformed model 1's R-adjusted score reaches `r summary(m1_tr)$adj.r.squar
 
 Finally, our linear regression model on life expectancy is une_life ~ alcohol + measles + basic_water + income_group * percent_w_in_lower_house.
 
-# Cross Validation and Prediction
+# Cross Validation

@@ -376,7 +376,10 @@ div.tocify {
 
 <pre class="r"><code>library(tidyverse)
 library(dplyr)
-library(car)</code></pre>
+library(car)
+library(modelr)
+library(mgcv)
+library(patchwork)</code></pre>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>After our EDA and statistical analysis, we consider to generate a
@@ -399,7 +402,9 @@ and bmi.</p>
   read_csv(&quot;data/Merged_expectation.csv&quot;) %&gt;%
   filter(year == 2015) %&gt;% 
   select(alcohol:percent_w_in_lower_house) %&gt;% 
-  select(-hepatitis, -polio, -diphtheria, -age5_19thinness, -age5_19obesity, -une_infant, -une_pop)</code></pre>
+  select(-hepatitis, -polio, -diphtheria, -age5_19thinness, -age5_19obesity, -une_infant, -une_pop) %&gt;% 
+  mutate(income_group = as.factor(income_group),
+         income_group = relevel(income_group, ref = &quot;Low income&quot;))</code></pre>
 </div>
 <div id="model-1" class="section level1">
 <h1>Model 1</h1>
@@ -508,13 +513,13 @@ m1 %&gt;%
   broom::tidy() %&gt;%
   select(term, estimate, p.value) %&gt;% 
   knitr::kable(
-      caption = &quot;Estimate and P-value of Model 1 for Year 2015 Life Expectancy&quot;, 
+      caption = &quot;Estimate and P-value of Model 1 for Year 2015 Life Expectancy (Income Reference Group is Low Income)&quot;, 
       col.names = c(&quot;Predictor&quot;, &quot;Estimate&quot;, &quot;P-value&quot;),
       digits = 3
   )</code></pre>
 <table>
-<caption>Estimate and P-value of Model 1 for Year 2015 Life
-Expectancy</caption>
+<caption>Estimate and P-value of Model 1 for Year 2015 Life Expectancy
+(Income Reference Group is Low Income)</caption>
 <colgroup>
 <col width="77%" />
 <col width="12%" />
@@ -530,7 +535,7 @@ Expectancy</caption>
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">43.665</td>
+<td align="right">37.297</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
@@ -549,41 +554,41 @@ Expectancy</caption>
 <td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">income_groupLow income</td>
-<td align="right">-6.368</td>
+<td align="left">income_groupHigh income</td>
+<td align="right">6.368</td>
 <td align="right">0.009</td>
 </tr>
 <tr class="even">
 <td align="left">income_groupLower middle income</td>
-<td align="right">-2.932</td>
-<td align="right">0.102</td>
+<td align="right">3.437</td>
+<td align="right">0.068</td>
 </tr>
 <tr class="odd">
 <td align="left">income_groupUpper middle income</td>
-<td align="right">-2.010</td>
-<td align="right">0.280</td>
+<td align="right">4.358</td>
+<td align="right">0.065</td>
 </tr>
 <tr class="even">
 <td align="left">percent_w_in_lower_house</td>
-<td align="right">0.153</td>
-<td align="right">0.003</td>
+<td align="right">0.156</td>
+<td align="right">0.012</td>
 </tr>
 <tr class="odd">
-<td align="left">income_groupLow income:percent_w_in_lower_house</td>
-<td align="right">0.003</td>
+<td align="left">income_groupHigh income:percent_w_in_lower_house</td>
+<td align="right">-0.003</td>
 <td align="right">0.973</td>
 </tr>
 <tr class="even">
 <td align="left">income_groupLower middle
 income:percent_w_in_lower_house</td>
-<td align="right">-0.148</td>
-<td align="right">0.028</td>
+<td align="right">-0.151</td>
+<td align="right">0.041</td>
 </tr>
 <tr class="odd">
 <td align="left">income_groupUpper middle
 income:percent_w_in_lower_house</td>
-<td align="right">-0.149</td>
-<td align="right">0.035</td>
+<td align="right">-0.152</td>
+<td align="right">0.054</td>
 </tr>
 </tbody>
 </table>
@@ -600,8 +605,10 @@ variable percent_w_in_lower_house is significant itself, but it is more
 significant in middle income and upper income groups. In other words,
 after a country reaches a certain level of income, increasing women’s
 voice in the country actually helps people live longer, which follows
-the intention that we chose to include this variable in the first
-place.</p>
+the intention that we chose to include this variable in the first place.
+(Since 0.156 - 0.152 &gt; 0, keeping other variables constant,
+percent_w_in_lower_house increases, the predicted life expectancy will
+increase.)</p>
 <p>The model 1’s R-adjusted score reaches 0.7808107.</p>
 <p>Below are the analysis plots of the model. These plot shows that the
 residuals are normally distributed, independent, but may not have a
@@ -748,7 +755,7 @@ Only in Countries With Existing Literacy Data</caption>
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">61.984</td>
+<td align="right">48.798</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="even">
@@ -772,19 +779,19 @@ Only in Countries With Existing Literacy Data</caption>
 <td align="right">0.088</td>
 </tr>
 <tr class="even">
-<td align="left">income_groupLow income</td>
-<td align="right">-13.186</td>
+<td align="left">income_groupHigh income</td>
+<td align="right">13.186</td>
 <td align="right">0.000</td>
 </tr>
 <tr class="odd">
 <td align="left">income_groupLower middle income</td>
-<td align="right">-6.444</td>
-<td align="right">0.000</td>
+<td align="right">6.742</td>
+<td align="right">0.005</td>
 </tr>
 <tr class="even">
 <td align="left">income_groupUpper middle income</td>
-<td align="right">-4.491</td>
-<td align="right">0.001</td>
+<td align="right">8.695</td>
+<td align="right">0.002</td>
 </tr>
 </tbody>
 </table>
@@ -925,8 +932,8 @@ m1_tr %&gt;%
 <caption>Estimate and P-value of Transformed Model 1 for Year 2015 Life
 Expectancy</caption>
 <colgroup>
-<col width="76%" />
-<col width="13%" />
+<col width="77%" />
+<col width="12%" />
 <col width="10%" />
 </colgroup>
 <thead>
@@ -939,8 +946,8 @@ Expectancy</caption>
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">2655.205</td>
-<td align="right">0.025</td>
+<td align="right">695.168</td>
+<td align="right">0.403</td>
 </tr>
 <tr class="even">
 <td align="left">alcohol</td>
@@ -958,41 +965,41 @@ Expectancy</caption>
 <td align="right">0.000</td>
 </tr>
 <tr class="odd">
-<td align="left">income_groupLow income</td>
-<td align="right">-1960.037</td>
+<td align="left">income_groupHigh income</td>
+<td align="right">1960.037</td>
 <td align="right">0.011</td>
 </tr>
 <tr class="even">
 <td align="left">income_groupLower middle income</td>
-<td align="right">-1017.509</td>
-<td align="right">0.072</td>
+<td align="right">942.528</td>
+<td align="right">0.112</td>
 </tr>
 <tr class="odd">
 <td align="left">income_groupUpper middle income</td>
-<td align="right">-711.522</td>
-<td align="right">0.226</td>
+<td align="right">1248.515</td>
+<td align="right">0.093</td>
 </tr>
 <tr class="even">
 <td align="left">percent_w_in_lower_house</td>
-<td align="right">56.752</td>
-<td align="right">0.001</td>
+<td align="right">43.753</td>
+<td align="right">0.025</td>
 </tr>
 <tr class="odd">
-<td align="left">income_groupLow income:percent_w_in_lower_house</td>
-<td align="right">-12.999</td>
+<td align="left">income_groupHigh income:percent_w_in_lower_house</td>
+<td align="right">12.999</td>
 <td align="right">0.603</td>
 </tr>
 <tr class="even">
 <td align="left">income_groupLower middle
 income:percent_w_in_lower_house</td>
-<td align="right">-55.803</td>
-<td align="right">0.009</td>
+<td align="right">-42.804</td>
+<td align="right">0.065</td>
 </tr>
 <tr class="odd">
 <td align="left">income_groupUpper middle
 income:percent_w_in_lower_house</td>
-<td align="right">-54.972</td>
-<td align="right">0.014</td>
+<td align="right">-41.973</td>
+<td align="right">0.091</td>
 </tr>
 </tbody>
 </table>
@@ -1005,8 +1012,8 @@ decide to choose the original Model 1.</p>
 alcohol + measles + basic_water + income_group *
 percent_w_in_lower_house.</p>
 </div>
-<div id="cross-validation-and-prediction" class="section level1">
-<h1>Cross Validation and Prediction</h1>
+<div id="cross-validation" class="section level1">
+<h1>Cross Validation</h1>
 </div>
 
 

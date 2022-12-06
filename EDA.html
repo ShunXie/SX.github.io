@@ -627,46 +627,32 @@ not get vaccinated according to <a
 href="https://www.cdc.gov/measles/cases-outbreaks.html">CDC
 website</a>.</p>
 <pre class="r"><code>obe_thin_correlation = merged_data %&gt;% 
-  select(age5_19thinness, age5_19obesity) %&gt;% 
+  select(age5_19thinness, age5_19obesity,bmi) %&gt;% 
   na.omit()
 res = cor(obe_thin_correlation)
 res</code></pre>
-<pre><code>##                 age5_19thinness age5_19obesity
-## age5_19thinness            1.00          -0.55
-## age5_19obesity            -0.55           1.00</code></pre>
+<pre><code>##                 age5_19thinness age5_19obesity   bmi
+## age5_19thinness            1.00          -0.55 -0.69
+## age5_19obesity            -0.55           1.00  0.81
+## bmi                       -0.69           0.81  1.00</code></pre>
 <pre class="r"><code>corrplot(res, type = &quot;upper&quot;, order = &quot;hclust&quot;, 
          tl.col = &quot;black&quot;, tl.srt = 45)</code></pre>
 <p><img src="EDA_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Thinness and obesity are two variables measuring similar
+<p>BMI, Thinness and obesity are three variables measuring similar
 characteristics. Ideally, people that are thinner, is less likely to
-have obesity. Therefore, I make corelation heat map and it turns out
-that the two variables are quite correlated, with a value around -0.55.
-For the prevention of multi-colinearity, I choose obesity only in our
-analysis as it is more meaningful. Obesity is one of the problem that
-exists among people. Since cardiomyopathy of the obese is one of the
-leading causes in recent years by <a
+have obesity and a lower bmi value. Therefore, I make corelation heat
+map and it turns out that the three variables are quite correlated, with
+a value around -0.55. For the prevention of multi-colinearity, I choose
+bmi only in our analysis as it is more meaningful. A BMI value greater
+than 25 is classified as obesity based on <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4890841/">BMI
+Journal</a> and it is one of the problem that exists among people.
+Cardiomyopathy, for instance, is one of the leading problem due to
+obesity in recent years by <a
 href="https://www.tandfonline.com/doi/full/10.1586/14779072.2014.952283">Benoit
-et. al.</a>, we want to figure out whether obesity do lead to a decrease
-in life expectancy.</p>
-<pre class="r"><code>gdp_gni_correlation = merged_data %&gt;% 
-  select(che_gdp, une_gni) %&gt;% 
-  na.omit()
-res = cor(gdp_gni_correlation)
-res</code></pre>
-<pre><code>##         che_gdp une_gni
-## che_gdp    1.00    0.14
-## une_gni    0.14    1.00</code></pre>
-<pre class="r"><code>corrplot(res, type = &quot;upper&quot;, order = &quot;hclust&quot;, 
-         tl.col = &quot;black&quot;, tl.srt = 45)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>GDP and GNI are two variables that are economic factors. While GDP
-focus on production level of an economy measured in economy’s size and
-growth rate, GNI looks at the total dollar value of everything produced
-by a country and all income residents receive regardless of the location
-of the residents by <a
-href="https://www.investopedia.com/ask/answers/062315/gross-national-income-gni-or-gross-domestic-product-gdp-better-measure-economic-condition-country.asp#:~:text=GDP%20looks%20at%20the%20production,earned%20at%20home%20or%20abroad.">J.B.
-Maverick</a>. To our surprise, GNI and GDP are weekly correlated, hence
-we can use these two variables simultaneously in our analysis.</p>
+et. al.</a>. Thus, we want to figure out if bmi can be used to predict
+life expectancy and whether a high bmi do lead to a decrease in life
+expectancy.</p>
 <p><br> <br></p>
 </div>
 <div id="correlation-and-scatter-plot" class="section level1">
@@ -714,7 +700,7 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-20-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-19-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>Among four years, the trend of relation between life expectancy and
 alcohol are similar. Although the line of best fit split points into an
 evenly two parts, there are more points with low alcohol values. And
@@ -755,7 +741,7 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-21-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-20-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>Bmi has a positive correlation with life expectancy as shown in the
 plots, and the points for the four years are almost exactly the same.
 Linear trend seems to explain the relation well as suggested in the
@@ -797,7 +783,7 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-22-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-21-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>Measle vaccination coverage seems to indicate a high life expectancy
 when vaccination coverage is high. But such relation may be non linear
 as there are lots of values clustered in the upper right corner.</p>
@@ -837,7 +823,7 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-23-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-22-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>Although linear trend works well in the scatter plot between obesity
 and life expectancy, the points suggests a non-linear, perhaps a
 quadratic trends, in the graph. There is clearly a “r” shape pattern in
@@ -879,7 +865,7 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-24-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-23-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>Linear trends fit the relation between Life Expectancy and percentag
 of people access to basic water well. There is clearly an upward
 increasing trend.</p>
@@ -919,7 +905,7 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-25-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-24-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>Similar to obesity, the graph has a “r” pattern and thus, there exist
 a non linear correlation. Thus, linear relation may not be accurate to
 explain the association. However, the linear trend do include most of
@@ -961,7 +947,7 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-26-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-25-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>The expenditure also suggest a linear increasing trend for all years.
 Year 2015 seems to have an outlier with a very high education
 expenditure. Otherwise, the pattern is similar for the four years. The
@@ -1003,7 +989,7 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-27-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-26-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>The association between life expectancy and GNI per capita also shows
 a non-linear correlation with a “r” patter. Therefore, non-linear
 correlation analysis may be needed.</p>
@@ -1043,7 +1029,7 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-28-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-27-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>As seen in the scatter plot, population is not very correlated to
 life expectancy and the data are very focused on low population. A
 linear relation is not quite appropriate here.</p>
@@ -1083,7 +1069,7 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-29-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-28-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>Due to the missing values, literacy coverage does not have a lot of
 details. But linear trend do explain the over all association between
 life expectancy and percentage of people who are able to write and speak
@@ -1124,7 +1110,7 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-30-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-29-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>Since most of people are exposed to abnormal PM level, most of the PM
 value is clustered at 100. Linear relation may be sufficient to explain
 lower PM values but it may be difficult to include all the information
@@ -1165,7 +1151,7 @@ title &lt;- ggdraw() +
 
 
 plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-31-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-30-1.png" width="864" style="display: block; margin: auto;" /></p>
 <p>Health expenditure is positively correlated with life expectancy.
 However, there may be non linear trend as there is a curve bending at
 health expenditure = 3% of GDP.</p>
@@ -1280,9 +1266,9 @@ Pearson_Correlation_result %&gt;%
          
 
 grid.table(Pearson_Corr_res)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-32-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-31-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>grid.table(Pearson_Corr_res2)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-33-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-32-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>As indicated in the table, bmi, obesity, measles vaccination, gni per
 capita and health expenditure all have a high correlation with life
 expectancy, with a value close to 0.6. The correlation with water access
@@ -1499,9 +1485,9 @@ result_pval =
 
 
 grid.table(result_corr)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-34-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-33-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>grid.table(result_corr2)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-35-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="EDA_files/figure-html/unnamed-chunk-34-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>After take in consideration of non-linear trend, bmi, obesity,
 education expenditure, gni per capita has an average of approximately
 0.07 increase in the correlation. Population also increases from 0.03 to

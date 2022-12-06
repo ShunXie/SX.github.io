@@ -298,7 +298,7 @@ In our dataset, we have a lot of vaccinations for different diseases. Therefore,
 
 ```{r}
 obe_thin_correlation = merged_data %>% 
-  select(age5_19thinness, age5_19obesity) %>% 
+  select(age5_19thinness, age5_19obesity,bmi) %>% 
   na.omit()
 res = cor(obe_thin_correlation)
 res
@@ -306,21 +306,10 @@ corrplot(res, type = "upper", order = "hclust",
          tl.col = "black", tl.srt = 45)
 ```
 
-Thinness and obesity are two variables measuring similar characteristics. Ideally, people that are thinner, is less likely to have obesity. Therefore, I make corelation heat map and it turns out that the two variables are quite correlated, with a value around -0.55. For the prevention of multi-colinearity, I choose obesity only in our analysis as it is more meaningful. Obesity is one of the problem that exists among people. Since cardiomyopathy of the obese is one of the leading causes in recent years by [Benoit et. al.](https://www.tandfonline.com/doi/full/10.1586/14779072.2014.952283), we want to figure out whether obesity do lead to a decrease in life expectancy. 
+BMI, Thinness and obesity are three variables measuring similar characteristics. Ideally, people that are thinner, is less likely to have obesity and a lower bmi value. Therefore, I make corelation heat map and it turns out that the three variables are quite correlated, with a value around -0.55. For the prevention of multi-colinearity, I choose bmi only in our analysis as it is more meaningful. A BMI value greater than 25 is classified as obesity based on [BMI Journal](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4890841/) and it is one of the problem that exists among people. Cardiomyopathy, for instance, is one of the leading problem due to obesity in recent years by [Benoit et. al.](https://www.tandfonline.com/doi/full/10.1586/14779072.2014.952283). Thus, we want to figure out if bmi can be used to predict life expectancy and whether a high bmi do lead to a decrease in life expectancy. 
 
 
 
-```{r}
-gdp_gni_correlation = merged_data %>% 
-  select(che_gdp, une_gni) %>% 
-  na.omit()
-res = cor(gdp_gni_correlation)
-res
-corrplot(res, type = "upper", order = "hclust", 
-         tl.col = "black", tl.srt = 45)
-```
-
-GDP and GNI are two variables that are economic factors. While GDP focus on production level of an economy measured in economy's size and growth rate, GNI looks at the total dollar value of everything produced by a country and all income residents receive regardless of the location of the residents by [J.B. Maverick](https://www.investopedia.com/ask/answers/062315/gross-national-income-gni-or-gross-domestic-product-gdp-better-measure-economic-condition-country.asp#:~:text=GDP%20looks%20at%20the%20production,earned%20at%20home%20or%20abroad.). To our surprise, GNI and GDP are weekly correlated, hence we can use these two variables simultaneously in our analysis. 
 
 
 <br>

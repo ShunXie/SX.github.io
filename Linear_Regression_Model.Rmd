@@ -107,29 +107,75 @@ plot(m1)
 * The final Model 1 is
 une_life ~ alcohol + measles + basic_water + income_group * percent_w_in_lower_house
 
-Second, we only look at the countries with existing une_literacy data and found out NA in other variables of these countries, at year 2015.
+# Model 2
+
+Second, we only look at the countries with existing une_literacy data and found out the number of NA in other variables of these countries, at year 2015. The table below shows variables that have less than 5% NA's.
 
 ```{r,message=FALSE, warning=FALSE}
-data %>% 
-  filter(year == 2015) %>% 
+NA_table_2 <- data %>% 
   filter(is.na(une_literacy) == FALSE) %>% 
-  select(alcohol:percent_w_in_lower_house) %>% 
   is.na() %>% 
-  colSums() %>% 
-  knitr::kable(col.names = c("Counts of NA"))
+  colSums()
+NA_table_2[NA_table_2 <= 3] %>% 
+    knitr::kable(col.names = c("Counts of NA"))
 ```
 
 Here, limited to the variable that we have less than 5% NA's (which is less than 3 NAs), also exclude variables that have high correlation value, we could generate our second basic linear model, with selected variables of alcohol, bmi, measles, basic_water, che_gdp, une_gni, une_literacy, PM_value, income_group, percent_w_in_lower_house, and our response variable of une_life.
 
 * Model 2:
-une_life ~ alcohol + bmi + measles + basic_water + che_gdp + une_gni + une_literacy + PM_value, income_group + percent_w_in_lower_house + income_group * percent_w_in_lower_house
+une_life ~ alcohol + bmi + measles + basic_water + che_gdp + une_gni + une_literacy + PM_value + income_group + percent_w_in_lower_house + income_group * percent_w_in_lower_house
 
 (Also consider intersection here)
 
-```{r,message=FALSE, warning=FALSE}
+The following table shows the distribution of all numerical variables here.
 
+```{r,message=FALSE, warning=FALSE}
+# delete all the Na columns, and limit to countries with existing une_literacy data
+data_2 <- data %>% 
+  filter(is.na(une_literacy) == FALSE) %>% 
+  select(une_life, alcohol, bmi, measles, basic_water, che_gdp, une_gni, une_literacy, PM_value, income_group, percent_w_in_lower_house) %>% 
+  drop_na()
 ```
 
+```{r,message=FALSE, warning=FALSE}
+colname <- c("alcohol", "bmi", "measles", "basic_water", "che_gdp", "une_gni", "une_literacy", "PM_value", "percent_w_in_lower_house")
+par(mfrow=c(3, 3))
+data_2_a <- data.frame(data_2)
+for (i in 1:9) {
+  variable <- data_2_a[colname[i]][ ,1]
+  hist(variable, main = paste("Histogram of", colname[i], sep = " "), xlab = colname[i])
+}
+```
+
+Delete all the NA rows in the data, consider intersection between income_group and percent_w_in_lower_house, using step function with backwards direction. Then we generate our second model.
+ 
+```{r,message=FALSE, warning=FALSE}
+# fit the model two
+m <- lm(une_life ~ alcohol + bmi + measles + basic_water + che_gdp + une_gni + une_literacy + PM_value + income_group * percent_w_in_lower_house, data = data_2)
+# use stepwise function
+m2 <- step(m, direction = "backward", trace = FALSE)
+```
+
+```{r,message=FALSE, warning=FALSE}
+# create table for regression output
+m2 %>%
+  summary() %>%
+  broom::tidy() %>%
+  select(term, estimate, p.value) %>% 
+  knitr::kable(
+      caption = "Estimate and P-value of Model 2 for Year 2015 Life Expectancy Only in Countries With Existing Literacy Data", 
+      col.names = c("Predictor", "Estimate", "P-value"),
+      digits = 3
+  )
+```
+
+From the above, variables like alcohol, une_gni, une_literacy, PM_value,  income_group:percent_w_in_lower_houseare, percent_w_in_lower_houseare are deleted according to backwards step function. It is very different from the model 1 when we limit to `r nrow(data_2)` countries. Moreover, even though we specifically make sure every country has literacy data, literacy is not significant enough to be included in the linear regression model.
+
+The intersection of income group and women in parliament(percent_w_in_lower_house) is also been deleted. Therefore, we can conclude that the model we generate in a small range of countries with complete literacy data entries is very different from the model generated from a larger dataset, while literacy data is not significant in the small range of countries. To conclude, we should discard literacy variable, and also discard model 2.
+
+The model 2's R-adjusted score reaches `r summary(m2)$adj.r.squared`. This is reasonable, since we generate model 2 in a small range of countries.
+
+* Therefore, we should discard literacy variable, and also discard model 2. We should consider Model 1 as a great subset of the full model.
 
 * Model 3:
 We could try all the variables, with imputed data. use step method to find the best method.

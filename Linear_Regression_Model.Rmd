@@ -98,6 +98,8 @@ m1 %>%
 
 From the above, variables like bmi, che_gdp, une_gni, PM_value are deleted according to backwards step function. One way to explain this is that these variables have high correlation with income_group--in higher income countries(une_gni), people have more access to healthy foods and healthy life styles (bmi), governments also spend more money on public health(che_gdp), as well as on building a clean environment(PM_value).
 
+From the estimates, we can conclude that, increase of alcohol consumption has negative effects on life expectancy. Increasing access to vaccines and clean water, the empowerment of women, and higher income will lead to a longer life.
+
 Another thing that needs to be aware of is that the intersection of income group and women in parliament(percent_w_in_lower_house). The variable percent_w_in_lower_house is significant itself, but it is more significant in middle income and upper income groups. In other words, after a country reaches a certain level of income, increasing women's voice in the country actually helps people live longer, which follows the intention that we chose to include this variable in the first place. (Since 0.156 - 0.152 > 0, keeping other variables constant, percent_w_in_lower_house increases, the predicted life expectancy will increase.)
 
 The model 1's R-adjusted score reaches `r summary(m1)$adj.r.squared`.
@@ -279,3 +281,65 @@ cv_df %>%
 
 From the plot, RMSE is around 4.0, and spreads from 3.0 to 5.0, which is relatively a small and concentrated RMSE.
 
+# Prediction
+
+The below graphs will show our prediction on Year 2016 data. Since we only have percent_w_in_lower_house data in year 2015, we will still use the same value for year 2016.
+
+```{r,message=FALSE, warning=FALSE}
+# predict on merged_data year 2016
+data_2016 <-
+  read_csv("data/Merged_expectation.csv") %>%
+  filter(year == 2016) %>% 
+  select(une_life, alcohol, measles, basic_water, income_group) %>% 
+  bind_cols(data["percent_w_in_lower_house"]) %>% 
+  drop_na() %>% 
+  mutate(income_group = as.factor(income_group),
+         income_group = relevel(income_group, ref = "Low income"))
+prediction_2016 <- predict(m1, newdata = data_2016)
+# draw ggplot1
+ggp1 <- prediction_2016 %>% 
+  bind_cols(data_2016["une_life"])  %>% 
+  ggplot(aes(x = une_life, y = prediction_2016)) +
+  geom_point() + 
+  geom_abline(intercept = 0, slope = 1, color = "red") +
+  labs(
+    title = "Prediction V.S. Actual Life Expectancy On Year 2016 In Original Dataset",
+    x = "Actual Life Expectancy",
+    y = "Prediction"
+  )
+
+# predict on imputed_data year 2016
+data_2016_im <-
+  read_csv("data/Imputed_expectation.csv") %>%
+  filter(year == 2016) %>% 
+  select(une_life, alcohol, measles, basic_water, income_group) %>% 
+  bind_cols(data["percent_w_in_lower_house"]) %>% 
+  drop_na() %>% 
+  mutate(income_group = as.factor(income_group),
+         income_group = relevel(income_group, ref = "Low income"))
+prediction_2016_im <- predict(m1, newdata = data_2016_im)
+# draw ggplot2
+ggp2 <- prediction_2016_im %>% 
+  bind_cols(data_2016_im["une_life"])  %>% 
+  ggplot(aes(x = une_life, y = prediction_2016_im)) +
+  geom_point() + 
+  geom_abline(intercept = 0, slope = 1, color = "red") +
+  labs(
+    title = "Prediction V.S. Actual Life Expectancy On Year 2016 In Imputed Dataset",
+    x = "Actual Life Expectancy",
+    y = "Prediction"
+  )
+ggp1 / ggp2
+```
+
+The graph above is shown that almost every prediction is in a + or - 5 years range, and there is no difference in imputed dataset and original dataset--possibly there is no data imputed on these variables of Year 2016.
+
+If we consider a range in 3 years (+ or - 1.5 years) is a good prediction, lets see the percentage of predicted life expectancy in this range on Year 2016.
+
+```{r,message=FALSE, warning=FALSE}
+actual <- data_2016["une_life"]
+percent <- sum(prediction_2016 >= actual - 1.5 & prediction_2016 <= actual + 1.5) / length(prediction_2016)
+paste("The calculated result is ", round(percent, 3), ".")
+```
+
+Therefore, if we consider a range in 3 years (+ or - 1.5 years) is a good prediction, `r round(percent)` of predicted life expectancy will be in this range on Year 2016.

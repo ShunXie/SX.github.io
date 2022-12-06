@@ -600,6 +600,10 @@ income countries(une_gni), people have more access to healthy foods and
 healthy life styles (bmi), governments also spend more money on public
 health(che_gdp), as well as on building a clean
 environment(PM_value).</p>
+<p>From the estimates, we can conclude that, increase of alcohol
+consumption has negative effects on life expectancy. Increasing access
+to vaccines and clean water, the empowerment of women, and higher income
+will lead to a longer life.</p>
 <p>Another thing that needs to be aware of is that the intersection of
 income group and women in parliament(percent_w_in_lower_house). The
 variable percent_w_in_lower_house is significant itself, but it is more
@@ -1050,6 +1054,71 @@ cv_df %&gt;%
 <p><img src="Linear_Regression_Model_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p>From the plot, RMSE is around 4.0, and spreads from 3.0 to 5.0, which
 is relatively a small and concentrated RMSE.</p>
+</div>
+<div id="prediction" class="section level1">
+<h1>Prediction</h1>
+<p>The below graphs will show our prediction on Year 2016 data. Since we
+only have percent_w_in_lower_house data in year 2015, we will still use
+the same value for year 2016.</p>
+<pre class="r"><code># predict on merged_data year 2016
+data_2016 &lt;-
+  read_csv(&quot;data/Merged_expectation.csv&quot;) %&gt;%
+  filter(year == 2016) %&gt;% 
+  select(une_life, alcohol, measles, basic_water, income_group) %&gt;% 
+  bind_cols(data[&quot;percent_w_in_lower_house&quot;]) %&gt;% 
+  drop_na() %&gt;% 
+  mutate(income_group = as.factor(income_group),
+         income_group = relevel(income_group, ref = &quot;Low income&quot;))
+prediction_2016 &lt;- predict(m1, newdata = data_2016)
+# draw ggplot1
+ggp1 &lt;- prediction_2016 %&gt;% 
+  bind_cols(data_2016[&quot;une_life&quot;])  %&gt;% 
+  ggplot(aes(x = une_life, y = prediction_2016)) +
+  geom_point() + 
+  geom_abline(intercept = 0, slope = 1, color = &quot;red&quot;) +
+  labs(
+    title = &quot;Prediction V.S. Actual Life Expectancy On Year 2016 In Original Dataset&quot;,
+    x = &quot;Actual Life Expectancy&quot;,
+    y = &quot;Prediction&quot;
+  )
+
+# predict on imputed_data year 2016
+data_2016_im &lt;-
+  read_csv(&quot;data/Imputed_expectation.csv&quot;) %&gt;%
+  filter(year == 2016) %&gt;% 
+  select(une_life, alcohol, measles, basic_water, income_group) %&gt;% 
+  bind_cols(data[&quot;percent_w_in_lower_house&quot;]) %&gt;% 
+  drop_na() %&gt;% 
+  mutate(income_group = as.factor(income_group),
+         income_group = relevel(income_group, ref = &quot;Low income&quot;))
+prediction_2016_im &lt;- predict(m1, newdata = data_2016_im)
+# draw ggplot2
+ggp2 &lt;- prediction_2016_im %&gt;% 
+  bind_cols(data_2016_im[&quot;une_life&quot;])  %&gt;% 
+  ggplot(aes(x = une_life, y = prediction_2016_im)) +
+  geom_point() + 
+  geom_abline(intercept = 0, slope = 1, color = &quot;red&quot;) +
+  labs(
+    title = &quot;Prediction V.S. Actual Life Expectancy On Year 2016 In Imputed Dataset&quot;,
+    x = &quot;Actual Life Expectancy&quot;,
+    y = &quot;Prediction&quot;
+  )
+ggp1 / ggp2</code></pre>
+<p><img src="Linear_Regression_Model_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p>The graph above is shown that almost every prediction is in a + or -
+5 years range, and there is no difference in imputed dataset and
+original dataset–possibly there is no data imputed on these variables of
+Year 2016.</p>
+<p>If we consider a range in 3 years (+ or - 1.5 years) is a good
+prediction, lets see the percentage of predicted life expectancy in this
+range on Year 2016.</p>
+<pre class="r"><code>actual &lt;- data_2016[&quot;une_life&quot;]
+percent &lt;- sum(prediction_2016 &gt;= actual - 1.5 &amp; prediction_2016 &lt;= actual + 1.5) / length(prediction_2016)
+paste(&quot;The calculated result is &quot;, round(percent, 3), &quot;.&quot;)</code></pre>
+<pre><code>## [1] &quot;The calculated result is  0.369 .&quot;</code></pre>
+<p>Therefore, if we consider a range in 3 years (+ or - 1.5 years) is a
+good prediction, 0 of predicted life expectancy will be in this range on
+Year 2016.</p>
 </div>
 
 

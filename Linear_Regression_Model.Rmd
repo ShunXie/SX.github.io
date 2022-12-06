@@ -208,15 +208,15 @@ m1 %>%
 
 From the above table, Model 1 and Full Model do not have big difference on adjusted R^2, but Model 1 has less predictors, which is much better.
 
-# Additional Steps on Model 1--Transformation on Response Variable
+# Transformation on Response Variable of Model 1
 
-First, we want to find whether response variable une_life needs some transformation.
+First, we want to find whether response variable une_life needs transformation.
 
 ```{r,message=FALSE, warning=FALSE}
 inverseResponsePlot(m1, key = TRUE)
 ```
 
-From the aboveplot, the best $\lambda$ for model 1 is 2.17794, which is different from 1. Therefore, we will apply $\lambda$ equal to 2.17794 to une_life.
+From the above plot, the best $\lambda$ for model 1 is 2.17794, which is different from 1. Therefore, we will apply $\lambda$ equal to 2.17794 to une_life.
 
 ```{r,message=FALSE, warning=FALSE}
 # Fit model 1 with une_life^2.17794
@@ -233,6 +233,8 @@ m1_tr %>%
   )
 ```
 
-The transformed model 1's R-adjusted score reaches `r summary(m1_tr)$adj.r.squared`. The adjusted R square increases ~0.01 after transformation.
+The transformed model 1's R-adjusted score reaches `r summary(m1_tr)$adj.r.squared`. The adjusted R square increases ~0.01 after transformation, which is close to the adjusted R square of the full model. However, while the difference of adjusted R square is small, for better interpretation, we decide to choose the original Model 1.
+
+Finally, our linear regression model on life expectancy is une_life ~ alcohol + measles + basic_water + income_group * percent_w_in_lower_house.
 
 # Cross Validation and Prediction

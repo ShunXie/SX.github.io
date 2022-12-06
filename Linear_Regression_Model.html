@@ -893,10 +893,10 @@ m_full &lt;- lm(une_life ~ ., data = data_full)</code></pre>
 difference on adjusted R^2, but Model 1 has less predictors, which is
 much better.</p>
 </div>
-<div id="additional-steps-on-model-1transformation-on-response-variable"
+<div id="transformation-on-response-variable-of-model-1"
 class="section level1">
-<h1>Additional Steps on Model 1–Transformation on Response Variable</h1>
-<p>First, we want to find whether response variable une_life needs some
+<h1>Transformation on Response Variable of Model 1</h1>
+<p>First, we want to find whether response variable une_life needs
 transformation.</p>
 <pre class="r"><code>inverseResponsePlot(m1, key = TRUE)</code></pre>
 <p><img src="Linear_Regression_Model_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
@@ -905,7 +905,7 @@ transformation.</p>
 ## 2 -1.00000 1953.745
 ## 3  0.00000 1782.892
 ## 4  1.00000 1678.616</code></pre>
-<p>From the aboveplot, the best <span
+<p>From the above plot, the best <span
 class="math inline">\(\lambda\)</span> for model 1 is 2.17794, which is
 different from 1. Therefore, we will apply <span
 class="math inline">\(\lambda\)</span> equal to 2.17794 to une_life.</p>
@@ -997,7 +997,13 @@ income:percent_w_in_lower_house</td>
 </tbody>
 </table>
 <p>The transformed model 1’s R-adjusted score reaches 0.7886281. The
-adjusted R square increases ~0.01 after transformation.</p>
+adjusted R square increases ~0.01 after transformation, which is close
+to the adjusted R square of the full model. However, while the
+difference of adjusted R square is small, for better interpretation, we
+decide to choose the original Model 1.</p>
+<p>Finally, our linear regression model on life expectancy is une_life ~
+alcohol + measles + basic_water + income_group *
+percent_w_in_lower_house.</p>
 </div>
 <div id="cross-validation-and-prediction" class="section level1">
 <h1>Cross Validation and Prediction</h1>

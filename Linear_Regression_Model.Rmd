@@ -342,4 +342,4 @@ percent <- sum(prediction_2016 >= actual - 1.5 & prediction_2016 <= actual + 1.5
 paste("The calculated result is ", round(percent, 3), ".")
 ```
 
-Therefore, if we consider a range in 3 years (+ or - 1.5 years) is a good prediction, `r round(percent)` of predicted life expectancy will be in this range on Year 2016.
+Therefore, if we consider a range in 3 years (+ or - 1.5 years) is a good prediction, `r round(percent, 3)` of predicted life expectancy will be in this range on Year 2016.

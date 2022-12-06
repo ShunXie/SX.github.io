@@ -32,55 +32,80 @@ data <-
   select(-hepatitis, -polio, -diphtheria, -age5_19thinness, -age5_19obesity, -une_infant, -une_pop)
 ```
 
+# Model 1
 
-First, we look at how many missing data we have on each column, at year 2015.
+First, we look at the number of missing data we have on each column, at year 2015. The table below shows variables that have less than 5% NA's.
 
-```{r, message=FALSE, warning=FALSE}
-data <-
-  read_csv("data/Merged_expectation.csv")
-data %>% 
-  filter(year == 2015) %>% 
-  select(alcohol:percent_w_in_lower_house) %>% 
+```{r,message=FALSE, warning=FALSE}
+NA_table_1 <- data %>% 
   is.na() %>% 
-  colSums() %>% 
-  knitr::kable(col.names = c("Counts of NA"))
+  colSums()
+NA_table_1[NA_table_1 <= 10] %>% 
+    knitr::kable(col.names = c("Counts of NA"))
 ```
 
-Limited to the variable that we have less than 5% NA's (which is less than 10 NAs), also exclude variables that have high correlation value, we could generate our first basic linear model, with selected variables of alcohol, bmi, measles, basic_water, che_gdp (health expenditure per gdp), une_gni, PM_value, income_group, percent_w_in_lower_house, and our response variable of une_life.
+Limited to the variables that we have less than 5% NA's (which is less than 10 NAs), also exclude variables that have high correlation value, we could generate our first basic linear model, with selected variables of alcohol, bmi, measles, basic_water, che_gdp (health expenditure per gdp, gghe_d is deleted since it represents similar aspects), une_gni, PM_value, income_group (Developed/Developing Countries is deleted since it is similar to income_group), percent_w_in_lower_house, and our response variable of une_life.
 
 * Model 1:
 une_life ~ alcohol + bmi + measles + basic_water + che_gdp + une_gni + PM_value + income_group * percent_w_in_lower_house
 
-Delete all the NA rows, consider intersection here, using step function with backwards direction. Then we generate our first model.
+The following table shows the distribution of all numerical variables here.
 
+```{r,message=FALSE, warning=FALSE}
+colname <- c("alcohol", "bmi", "measles", "basic_water", "che_gdp", "une_gni", "PM_value", "percent_w_in_lower_house")
+par(mfrow=c(2, 4))
+data_1_a <- data.frame(data)
+for (i in 1:8) {
+  variable <- data_1_a[colname[i]][ ,1]
+  hist(variable, main = paste("Histogram of", colname[i], sep = " "), xlab = colname[i])
+}
+```
+
+Delete all the NA rows in the data, consider intersection between income_group and percent_w_in_lower_house, using step function with backwards direction. Then we generate our first model.
 
 ```{r,message=FALSE, warning=FALSE}
 # delete all the Na columns
 data_1 <- data %>% 
-  filter(year == 2015) %>% 
   select(une_life, alcohol, bmi, measles, basic_water, che_gdp, une_gni, PM_value, income_group, percent_w_in_lower_house) %>% 
   drop_na()
-
+```
+ 
+```{r}
+# fit the model one
 m <- lm(une_life ~ alcohol + bmi + measles + basic_water + che_gdp + une_gni + PM_value + income_group * percent_w_in_lower_house, data = data_1)
-
+# use stepwise function
 m1 <- step(m, direction = "backward", trace = FALSE)
-summary(m1)
+```
+
+
+```{r}
+# create table for regression output
+m1 %>%
+  summary() %>%
+  broom::tidy() %>%
+  select(term, estimate, p.value) %>% 
+  knitr::kable(
+      caption = "Estimate and P-value of Model 1 for Year 2015 Life Expectancy", 
+      col.names = c("Predictor", "Estimate", "P-value"),
+      digits = 3
+  )
 ```
 
 From the above, variables like bmi, che_gdp, une_gni, PM_value are deleted according to backwards step function. One way to explain this is that these variables have high correlation with income_group--in higher income countries(une_gni), people have more access to healthy foods and healthy life styles (bmi), governments also spend more money on public health(che_gdp), as well as on building a clean environment(PM_value).
 
-Another thing that needs to be aware of is that the intersection of income group and women in parliament (percent_w_in_lower_house). The variable percent_w_in_lower_house is significant itself, but it is more significant in middle income and upper income groups. In other words, after a country reaches a certain level of income, increasing women's voice in the country actually helps people live longer, which follows the intention that we chose to include this variable in the first place.
+Another thing that needs to be aware of is that the intersection of income group and women in parliament(percent_w_in_lower_house). The variable percent_w_in_lower_house is significant itself, but it is more significant in middle income and upper income groups. In other words, after a country reaches a certain level of income, increasing women's voice in the country actually helps people live longer, which follows the intention that we chose to include this variable in the first place.
 
-The model's R-adjusted score reaches 0.78.
+The model 1's R-adjusted score reaches `r summary(m1)$adj.r.squared`.
 
 Below are the analysis plots of the model. These plot shows that the residuals are normally distributed, independent, but may not have a constant variance--it has a linear trend in the end according to the third plot. In second plot, the points follows the line, so the regression function is linear. Therefore, maybe we don't need to add transformation to our response variable.
 
 ```{r,message=FALSE, warning=FALSE}
-anova(m1)
-
 par(mfrow=c(2,2))
 plot(m1)
 ```
+
+* The final Model 1 is
+une_life ~ alcohol + measles + basic_water + income_group * percent_w_in_lower_house
 
 Second, we only look at the countries with existing une_literacy data and found out NA in other variables of these countries, at year 2015.
 

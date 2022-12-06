@@ -26,7 +26,7 @@ In the end, we limit the data to year 2015.
 
 ```{r,message=FALSE, warning=FALSE}
 data <-
-  read_csv("Merged_expectation.csv") %>%
+  read_csv("data/Merged_expectation.csv") %>%
   filter(year == 2015) %>% 
   select(alcohol:percent_w_in_lower_house) %>% 
   select(-hepatitis, -polio, -diphtheria, -age5_19thinness, -age5_19obesity, -une_infant, -une_pop)
@@ -177,5 +177,62 @@ The model 2's R-adjusted score reaches `r summary(m2)$adj.r.squared`. This is re
 
 * Therefore, we should discard literacy variable, and also discard model 2. We should consider Model 1 as a great subset of the full model.
 
-* Model 3:
-We could try all the variables, with imputed data. use step method to find the best method.
+# Compare Model 1 with Full Model
+
+Full Model is the Year 2015 full dataset except mortality rate and except variables with more than 5% NAs.
+
+* Full Model: uni_life ~ hepatitis + polio + diphtheria + age5_19thinness + age5_19obesity + une_pop + alcohol + bmi + measles + basic_water + gghe_d + che_gdp + une_pop + une_gni + PM_value + income_group + percent_w_in_lower_house + Developed/Developing Countries
+
+```{r,message=FALSE, warning=FALSE}
+# generate the Year 2015 full dataset except mortality rate
+data_full <-
+  read_csv("data/Merged_expectation.csv") %>% 
+  filter(year == 2015) %>% 
+  select(une_life, hepatitis, polio, diphtheria, age5_19thinness, age5_19obesity, une_pop , alcohol, bmi, measles, basic_water, gghe_d, che_gdp, une_pop, une_gni, PM_value, income_group, percent_w_in_lower_house, `Developed / Developing Countries`) %>%
+  drop_na()
+m_full <- lm(une_life ~ ., data = data_full)
+```
+
+```{r,message=FALSE, warning=FALSE}
+m1 %>%
+  summary() %>% 
+  broom::glance() %>%
+  bind_rows(summary(m_full) %>% broom::glance()) %>%
+  mutate(model = c("Model 1", "Full Model")) %>%
+  select(model, everything()) %>% 
+  knitr::kable(
+      caption = "Comparision of Model 1 and Full Model", 
+      digits = 3
+  )
+```
+
+From the above table, Model 1 and Full Model do not have big difference on adjusted R^2, but Model 1 has less predictors, which is much better.
+
+# Additional Steps on Model 1--Transformation on Response Variable
+
+First, we want to find whether response variable une_life needs some transformation.
+
+```{r,message=FALSE, warning=FALSE}
+inverseResponsePlot(m1, key = TRUE)
+```
+
+From the aboveplot, the best $\lambda$ for model 1 is 2.17794, which is different from 1. Therefore, we will apply $\lambda$ equal to 2.17794 to une_life.
+
+```{r,message=FALSE, warning=FALSE}
+# Fit model 1 with une_life^2.17794
+m1_tr <- lm((une_life)^2.17794 ~ alcohol + measles + basic_water + income_group * percent_w_in_lower_house, data = data_1)
+# create table for regression output
+m1_tr %>%
+  summary() %>%
+  broom::tidy() %>%
+  select(term, estimate, p.value) %>% 
+  knitr::kable(
+      caption = "Estimate and P-value of Transformed Model 1 for Year 2015 Life Expectancy", 
+      col.names = c("Predictor", "Estimate", "P-value"),
+      digits = 3
+  )
+```
+
+The transformed model 1's R-adjusted score reaches `r summary(m1_tr)$adj.r.squared`. The adjusted R square increases ~0.01 after transformation.
+
+# Cross Validation and Prediction

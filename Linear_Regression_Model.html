@@ -397,7 +397,8 @@ Specifically, we use “measles” to be the representative of vaccination
 variables–hepatitis, measles, polio, and diphtheria. Moreover, we use
 “bmi” to be another representative of age5_19thinness, age5_19obesity,
 and bmi.</p>
-<p>In the end, we limit the data to year 2015.</p>
+<p>In the end, we limit the data to year 2015, and set the Income
+Reference Group to Low Income.</p>
 <pre class="r"><code>data &lt;-
   read_csv(&quot;data/Merged_expectation.csv&quot;) %&gt;%
   filter(year == 2015) %&gt;% 
@@ -1014,6 +1015,41 @@ percent_w_in_lower_house.</p>
 </div>
 <div id="cross-validation" class="section level1">
 <h1>Cross Validation</h1>
+<ul>
+<li>Model: une_life ~ alcohol + measles + basic_water + income_group *
+percent_w_in_lower_house.</li>
+</ul>
+<p>We divides the Year 2015 dataset to train ans test two datasets 100
+times. The graph below shows RMSE distribution in test datasets.</p>
+<pre class="r"><code># generate a cv dataframe 
+cv_df &lt;-
+  crossv_mc(data_1, 100) %&gt;% 
+  mutate(
+    train = map(train, as_tibble),
+    test = map(test, as_tibble))
+# fit the model to the generated CV dataframe
+cv_df &lt;-
+  cv_df %&gt;% 
+  mutate(
+    model  = map(train, ~lm(une_life ~ alcohol + measles + basic_water + income_group * percent_w_in_lower_house, data = .x)),
+    rmse = map2_dbl(model, test, ~rmse(model = .x, data = .y)))
+# plot the prediction error
+cv_df %&gt;% 
+  select(rmse) %&gt;% 
+  pivot_longer(
+    everything(),
+    names_to = &quot;model&quot;, 
+    values_to = &quot;rmse&quot;) %&gt;% 
+  ggplot(aes(x= model, y = rmse)) + 
+  geom_violin() +
+  labs(
+    title = &quot;Prediction Errors For Our Model Under CV&quot;,
+    x = &quot;Model 1&quot;,
+    y = &quot;Prediction Errors&quot;
+  ) </code></pre>
+<p><img src="Linear_Regression_Model_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>From the plot, RMSE is around 4.0, and spreads from 3.0 to 5.0, which
+is relatively a small and concentrated RMSE.</p>
 </div>
 
 

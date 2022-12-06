@@ -11,9 +11,27 @@ output:
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(dplyr)
+library(car)
 ```
 
+# Introduction
+
 After our EDA and statistical analysis, we consider to generate a linear regression to better express the relationship between Life Expectancy and other variables. In particular, we set une_life as our response variable and we only look at the year of 2015. 
+
+# Dataset Preparation
+
+In the beginnig, to prepare our dataset for multiple linear regression, we delete mortality related variables, delete une_pop, which is not a good predictor of life expenctancy, and also delete variables that have high correlation values presented in EDA section. Specifically, we use "measles" to be the representative of vaccination variables--hepatitis, measles, polio, and diphtheria. Moreover, we use "bmi" to be another representative of age5_19thinness, age5_19obesity, and bmi. 
+
+In the end, we limit the data to year 2015. 
+
+```{r,message=FALSE, warning=FALSE}
+data <-
+  read_csv("Merged_expectation.csv") %>%
+  filter(year == 2015) %>% 
+  select(alcohol:percent_w_in_lower_house) %>% 
+  select(-hepatitis, -polio, -diphtheria, -age5_19thinness, -age5_19obesity, -une_infant, -une_pop)
+```
+
 
 First, we look at how many missing data we have on each column, at year 2015.
 

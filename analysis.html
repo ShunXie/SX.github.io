@@ -703,8 +703,6 @@ class="section level2">
     values_from = avg_by_year_region
   ) %&gt;% 
   knitr::kable(digits = 3)</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;region&#39;. You can override using the
-## `.groups` argument.</code></pre>
 <table>
 <colgroup>
 <col width="6%" />
@@ -882,6 +880,20 @@ class="section level2">
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>data %&gt;% 
+  janitor::clean_names() %&gt;% 
+  group_by(region,year) %&gt;% 
+  summarise(avg_by_year_region = mean(une_life,na.rm = T)) %&gt;% 
+  ggplot(aes(x = year, y = avg_by_year_region, color = region)) +
+  geom_line() + geom_point() + labs(title = &quot;Average Life Expectancy by Region, Year&quot;) + ylab (&quot;Average Life Expectancy&quot;)</code></pre>
+<p><img src="analysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+ 
+<ul>
+<li>The table and line graph above show the descriptive statistics and
+overall trend.</li>
+<li>It is clearly shown in the plot that Africa has a much lower life
+expectancy than the other regions.</li>
+</ul>
  
 </div>
 <div id="life-expectancy-by-income-level" class="section level2">
@@ -928,7 +940,36 @@ class="section level2">
   labs(title = &quot;Boxplot of Life Expectancy by Income Groups&quot;) +
   xlab(&quot;Income Groups&quot;) +
   ylab(&quot;Life Expectancy&quot;)</code></pre>
-<p><img src="analysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="analysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+ 
+<ul>
+<li>The boxes of different income groups are almost not overlapping with
+each other.
+<ul>
+<li>The pattern is clear that people from higher income group tend to
+have a higher life expectancy.</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[H_0:  \sigma^2_{group \ 1}
+=\  \sigma^2_{group \ 2}\ \text { vs } \ H_1: \sigma^2_{group\ 1}
+\neq\  \sigma^2_{group\ 2} \]</span></p>
+<ul>
+<li>We have performed variance tests and conclude that the variances are
+not equal between any two groups. Since the method is similar to what we
+have used and displayed when studying the regional differences, we do
+not show the process here.</li>
+</ul>
+ 
+<p><span class="math display">\[H_0:  \text{mean life_exp}_{group \ 1} =
+\ \text{mean life_exp}_{group \ 2}\ \text { vs } \ H_1: \text{mean
+life_exp}_{group \ 1} \neq \text{mean life_exp}_{group\ 2} \]</span></p>
+<ul>
+<li>We have also performed 2 sample t.test to compare the mean life
+expectancy between groups. We conclude that the means are not equal
+between any two groups. Since the method is similar to what we have used
+and displayed when studying the regional differences, we do not show the
+process here.</li>
+</ul>
  
 </div>
 <div id="life-expectancy-by-development-status" class="section level2">
@@ -964,7 +1005,7 @@ class="section level2">
   labs(title = &quot;Boxplot of Life Expectancy by Development Status&quot;) +
   xlab(&quot;Development Status&quot;) +
   ylab(&quot;Life Expectancy&quot;)</code></pre>
-<p><img src="analysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="analysis_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
  
 </div>
 <div

@@ -202,7 +202,7 @@ The null hypothesis for the prop.test is that the two proportions are equal. The
 \ \par
 ## 4. Average Life Expectancy by (region, year) Combination
 
-```{r}
+```{r,message=FALSE}
 data %>% 
   janitor::clean_names() %>% 
   group_by(region,year) %>% 
@@ -215,6 +215,23 @@ data %>%
 
 
 ```
+
+```{r,message=FALSE}
+data %>% 
+  janitor::clean_names() %>% 
+  group_by(region,year) %>% 
+  summarise(avg_by_year_region = mean(une_life,na.rm = T)) %>% 
+  ggplot(aes(x = year, y = avg_by_year_region, color = region)) +
+  geom_line() + geom_point() + labs(title = "Average Life Expectancy by Region, Year") + ylab ("Average Life Expectancy")
+
+
+```
+
+
+\ \par
+
+  * The table and line graph above show the descriptive statistics and overall trend.
+  * It is clearly shown in the plot that Africa has a much lower life expectancy than the other regions.
 
 
 \ \par
@@ -242,6 +259,20 @@ data %>%
 
 ```
 
+\ \par
+  * The boxes of different income groups are almost not overlapping with each other. 
+  * The pattern is clear that people from higher income group tend to have a higher life expectancy.
+  
+
+$$H_0:  \sigma^2_{group \ 1} =\  \sigma^2_{group \ 2}\ \text { vs } \ H_1: \sigma^2_{group\ 1} \neq\  \sigma^2_{group\ 2} $$
+ 
+ 
+  * We have performed variance tests and conclude that the variances are not equal between any two groups. Since the method is similar to what we have used and displayed when studying the regional differences, we do not show the process here.
+  
+  \ \par
+$$H_0:  \text{mean life_exp}_{group \ 1} = \ \text{mean life_exp}_{group \ 2}\ \text { vs } \ H_1: \text{mean life_exp}_{group \ 1} \neq \text{mean life_exp}_{group\ 2} $$
+  
+  * We have also performed 2 sample t.test to compare the mean life expectancy between groups. We conclude that the means are not equal between any two groups. Since the method is similar to what we have used and displayed when studying the regional differences, we do not show the process here.
 
 
 

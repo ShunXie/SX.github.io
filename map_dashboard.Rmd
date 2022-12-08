@@ -2,11 +2,11 @@
 title: "World Map Dashboard"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
-    vertical_layout: fill
+    orientation: rows
     source_code: embed
 runtime: shiny
 ---
+
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
@@ -17,11 +17,12 @@ library(shiny)
 ```
 
 
-```{r, include=FALSE}
+```{r,include=FALSE}
 
 df <- read_csv("./data/Merged_expectation.csv")
 df <- df %>%
   select(country_code,country,une_life,year,region) 
+
   
 ```
 
@@ -29,7 +30,7 @@ df <- df %>%
 
 mortality <- read_csv("./data/Merged_expectation.csv")
 mortality <- mortality %>%
-  select(country_code,country,adult_mortality,year) 
+  select(country_code,country,adult_mortality,year,region) 
   
 ```
 
@@ -37,7 +38,7 @@ mortality <- mortality %>%
 
 infant <- read_csv("./data/Merged_expectation.csv")
 infant <- infant %>%
-  select(country_code,country,infant_mort,year) 
+  select(country_code,country,infant_mort,year,region) 
   
 ```
 
@@ -45,7 +46,7 @@ infant <- infant %>%
 
 alcohol <- read_csv("./data/Merged_expectation.csv")
 alcohol <- alcohol %>%
-  select(country_code,country,alcohol,year) 
+  select(country_code,country,alcohol,year,region) 
   
 ```
 
@@ -53,16 +54,17 @@ alcohol <- alcohol %>%
 ```{r, include=FALSE}
 bmi <- read_csv("./data/Merged_expectation.csv")
 bmi <- bmi %>%
-  select(country_code,country,bmi,year) 
+  select(country_code,country,bmi,year,region) 
   
 ```
 
 ```{r, include=FALSE}
 che_gdp <- read_csv("./data/Merged_expectation.csv")
 che_gdp <- che_gdp %>%
-  select(country_code,country,che_gdp,year) 
+  select(country_code,country,che_gdp,year,region) 
   
 ```
+
 
 Life Expectancy
 ===================================== 
@@ -87,7 +89,7 @@ selectInput(
 
 
 
-Column {.tabset}
+Row
 -----------------------------------------------------------------------
 
 ### Life Expectancy
@@ -121,6 +123,9 @@ df %>% filter(year == input$year) %>%
 ```
 
 
+Row {.tabset .tabset-fade}
+-------------------------------------
+
 
 ### Description
 
@@ -136,11 +141,25 @@ Take the year of 2015 as an example,
 \ \par
   * Central and Southern Africa have relatively shorter life expectancy because the color is lighter,
   
-  
 
 
+### Boxplot
 
+```{r}
+renderPlotly({
+boxplot <- df %>% filter(year == input$year) %>% 
+  ggplot(aes(x = fct_reorder(region,une_life), y = une_life, fill = region)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Life Expectancy by Regions") +
+  xlab("Region") +
+  ylab("Life Expectancy") + 
+  theme(axis.text.x = element_text(hjust = 1, angle = 10,size = 8))
 
+ggplotly(boxplot)
+
+})
+
+```
 
 
 
@@ -164,7 +183,9 @@ selectInput(
 
 ```
 
-Column {.tabset}
+
+
+Row
 -----------------------------------------------------------------------
 
 ### Adult Mortality 
@@ -198,6 +219,10 @@ mortality %>% filter(year == input$year2) %>%
 ```
 
 
+Row {.tabset .tabset-fade}
+-------------------------------------
+
+
 ### Description
 
 
@@ -217,7 +242,23 @@ Take the year of 2015 as an example,
 
 
 
+### Boxplot
 
+```{r}
+renderPlotly({
+boxplot <- mortality %>% filter(year == input$year) %>% 
+  ggplot(aes(x = fct_reorder(region,adult_mortality), y = adult_mortality, fill = region)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Adult Mortality Rate by Regions") +
+  xlab("Region") +
+    ylab("Adult Mortality Rate") + 
+  theme(axis.text.x = element_text(hjust = 1, angle = 10,size = 8))
+
+ggplotly(boxplot)
+
+})
+
+```
 
 
 

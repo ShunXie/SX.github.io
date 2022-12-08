@@ -11,7 +11,7 @@
 
 <meta name="author" content="Jingyi Yao" />
 
-<meta name="date" content="2022-12-07" />
+<meta name="date" content="2022-12-08" />
 
 <title>Analysis</title>
 
@@ -300,7 +300,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Analysis</h1>
 <h4 class="author">Jingyi Yao</h4>
-<h4 class="date">2022-12-07</h4>
+<h4 class="date">2022-12-08</h4>
 
 </div>
 
@@ -316,105 +316,8 @@ scale_fill_discrete = scale_fill_viridis_d</code></pre>
  
 <pre class="r"><code>data = read_csv(&quot;./data/Merged_expectation.csv&quot;)</code></pre>
  
-<div id="life-expectancy-by-year-2000---2016" class="section level2">
-<h2>1. Life Expectancy by Year (2000 - 2016)</h2>
-<pre class="r"><code>data %&gt;% 
-  janitor::clean_names() %&gt;% 
-  group_by(year) %&gt;% 
-  summarise(avg_by_year = mean(une_life,na.rm = T)) %&gt;% 
-  arrange(avg_by_year) %&gt;% 
-  knitr::kable(digits = 3)</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">year</th>
-<th align="right">avg_by_year</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">2000</td>
-<td align="right">66.272</td>
-</tr>
-<tr class="even">
-<td align="right">2001</td>
-<td align="right">66.563</td>
-</tr>
-<tr class="odd">
-<td align="right">2002</td>
-<td align="right">66.811</td>
-</tr>
-<tr class="even">
-<td align="right">2003</td>
-<td align="right">67.101</td>
-</tr>
-<tr class="odd">
-<td align="right">2004</td>
-<td align="right">67.478</td>
-</tr>
-<tr class="even">
-<td align="right">2005</td>
-<td align="right">67.789</td>
-</tr>
-<tr class="odd">
-<td align="right">2006</td>
-<td align="right">68.156</td>
-</tr>
-<tr class="even">
-<td align="right">2007</td>
-<td align="right">68.524</td>
-</tr>
-<tr class="odd">
-<td align="right">2008</td>
-<td align="right">68.918</td>
-</tr>
-<tr class="even">
-<td align="right">2009</td>
-<td align="right">69.323</td>
-</tr>
-<tr class="odd">
-<td align="right">2010</td>
-<td align="right">69.705</td>
-</tr>
-<tr class="even">
-<td align="right">2011</td>
-<td align="right">70.110</td>
-</tr>
-<tr class="odd">
-<td align="right">2012</td>
-<td align="right">70.460</td>
-</tr>
-<tr class="even">
-<td align="right">2013</td>
-<td align="right">70.809</td>
-</tr>
-<tr class="odd">
-<td align="right">2014</td>
-<td align="right">71.155</td>
-</tr>
-<tr class="even">
-<td align="right">2015</td>
-<td align="right">71.403</td>
-</tr>
-<tr class="odd">
-<td align="right">2016</td>
-<td align="right">71.699</td>
-</tr>
-</tbody>
-</table>
-<pre class="r"><code>data %&gt;% 
-  janitor::clean_names() %&gt;% 
-  group_by(year)  %&gt;% 
-  ggplot(aes(x = factor(year),y = une_life,fill = year)) +
-  geom_boxplot() +
-  labs(title = &quot;Boxplot of Life Expectancy by Year&quot;) +
-  xlab(&quot;Year&quot;) +
-  ylab(&quot;Life Expectancy&quot;)</code></pre>
-<p><img src="analysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
- 
-</div>
 <div id="life-expectation-by-regions" class="section level2">
-<h2>2. Life Expectation by Regions</h2>
+<h2>1. Life Expectation by Regions</h2>
 <pre class="r"><code>data %&gt;% 
   janitor::clean_names() %&gt;% 
   group_by(region) %&gt;% 
@@ -455,6 +358,16 @@ scale_fill_discrete = scale_fill_viridis_d</code></pre>
 </tr>
 </tbody>
 </table>
+ 
+<ul>
+<li><p>The table shows the arranged average life expectancy of each
+region from 2000 to 2016.</p></li>
+<li><p>The range of average life expectancy among regions is about 8
+years.</p></li>
+<li><p>Europe has the highest average life expectancy while Africa has
+the lowest.</p></li>
+</ul>
+ 
 <pre class="r"><code>data %&gt;% 
   janitor::clean_names() %&gt;% 
   group_by(region) %&gt;% 
@@ -464,7 +377,18 @@ scale_fill_discrete = scale_fill_viridis_d</code></pre>
   xlab(&quot;Region&quot;) +
   ylab(&quot;Life Expectancy&quot;) + 
   theme(axis.text.x = element_text(hjust = 1, angle = 10,size = 8))</code></pre>
-<p><img src="analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+ 
+<ul>
+<li><p>The boxplot shows the distribution of life expectancy in each
+region.</p></li>
+<li><p>The variance of life expectancy is higher in Eastern
+Mediterranean and Africa.</p></li>
+<li><p>The Americas has many outliers with low life expectancy</p></li>
+<li><p>We can roughly tell from the plot that the variances of life
+expectancy among regions are not equal. Thus, we may perform a
+statistical test to check heteroscedasticity</p></li>
+</ul>
  
 <div id="test-of-equal-variance" class="section level4">
 <h4>test of equal variance</h4>
@@ -496,13 +420,27 @@ scale_fill_discrete = scale_fill_viridis_d</code></pre>
 </tbody>
 </table>
  
+<p>The null hypothesis for Bartlett test is that the variances are
+equal. The result shows that the p-value is less than 0.05. Thus, we may
+reject the null and conclude that the variances of life expectancy among
+different regions is not equal. Consequently, we cannot perform ANOVA to
+test the difference in mean life expectancy. We should perform t.test
+with unknown unequal variances instead.</p>
+ 
 </div>
 </div>
 <div
 id="t.test-compare-mean-life-expectancy-between-americas-and-europe"
 class="section level2">
-<h2>3. t.test : Compare Mean Life Expectancy Between Americas and
+<h2>2. t.test : Compare Mean Life Expectancy Between Americas and
 Europe</h2>
+ 
+<p>From the boxplot above, we find that the life expectancy in Americas
+and Europe distribute almost in the same interval. Though the median of
+Europe is higher, the variance in Americas seems smaller. Thus, we want
+to study if the mean life expectancy in the two regions are
+significantly different.</p>
+ 
 <div id="extract-life-expectancy-in-americas-and-europe"
 class="section level4">
 <h4>extract life expectancy in Americas and Europe</h4>
@@ -616,7 +554,7 @@ Europe &lt;- data %&gt;%
 <div
 id="prop.test-compare-the-proportion-of-life-expectancy-over-70-between-western-pacific-and-south-east-asia"
 class="section level2">
-<h2>4. prop.test : Compare the Proportion of Life Expectancy Over 70
+<h2>3. prop.test : Compare the Proportion of Life Expectancy Over 70
 Between Western Pacific and South-East Asia</h2>
 <pre class="r"><code>data %&gt;% 
   janitor::clean_names() %&gt;% 
@@ -705,7 +643,7 @@ continuity correction</td>
 </div>
 <div id="average-life-expectancy-by-region-year-combination"
 class="section level2">
-<h2>5. Average Life Expectancy by (region, year) Combination</h2>
+<h2>4. Average Life Expectancy by (region, year) Combination</h2>
 <pre class="r"><code>data %&gt;% 
   janitor::clean_names() %&gt;% 
   group_by(region,year) %&gt;% 
@@ -897,7 +835,7 @@ class="section level2">
  
 </div>
 <div id="life-expectancy-by-income-level" class="section level2">
-<h2>6. Life Expectancy by Income Level</h2>
+<h2>5. Life Expectancy by Income Level</h2>
 <pre class="r"><code>data %&gt;% 
   janitor::clean_names()  %&gt;% 
   filter(!is.na(income_group)) %&gt;%  
@@ -940,11 +878,11 @@ class="section level2">
   labs(title = &quot;Boxplot of Life Expectancy by Income Groups&quot;) +
   xlab(&quot;Income Groups&quot;) +
   ylab(&quot;Life Expectancy&quot;)</code></pre>
-<p><img src="analysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="analysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
  
 </div>
 <div id="life-expectancy-by-development-status" class="section level2">
-<h2>7. Life Expectancy by Development Status</h2>
+<h2>6. Life Expectancy by Development Status</h2>
 <pre class="r"><code>data %&gt;% 
   janitor::clean_names() %&gt;% 
   group_by(developed_developing_countries) %&gt;% 
@@ -976,13 +914,13 @@ class="section level2">
   labs(title = &quot;Boxplot of Life Expectancy by Development Status&quot;) +
   xlab(&quot;Development Status&quot;) +
   ylab(&quot;Life Expectancy&quot;)</code></pre>
-<p><img src="analysis_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="analysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
  
 </div>
 <div
 id="t.test-comapre-mean-life-expectancy-between-developed-and-developing-countries"
 class="section level2">
-<h2>8. t.test : Comapre Mean Life Expectancy Between Developed and
+<h2>7. t.test : Comapre Mean Life Expectancy Between Developed and
 Developing Countries</h2>
 <div id="extract-developed-and-developing-life-expectancy"
 class="section level4">

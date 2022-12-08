@@ -331,19 +331,34 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="about.html">About</a>
+  <a href="Introduction.html">Introduction</a>
 </li>
 <li>
-  <a href="dashboard.html">Dashboard</a>
+  <a href="Imputation.html">Data</a>
 </li>
 <li>
-  <a href="mailto:&lt;you@youremail.com&gt;">
+  <a href="EDA.html">EDA</a>
+</li>
+<li>
+  <a href="analysis.html">Prelimary Analysis</a>
+</li>
+<li>
+  <a href="Linear_Regression_Model.html">Regression</a>
+</li>
+<li>
+  <a href="Conclusion.html">Conclusion</a>
+</li>
+<li>
+  <a href="https://7lx8uo-txbrook.shinyapps.io/map_dashboard/#section-life-expectancy">Shiny App</a>
+</li>
+<li>
+  <a href="mailto:sx2337@cumc.columbia.edu?subject=About%20your%20website">
     <span class="fa fa-envelope fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="http://github.com/&lt;YOUR_GH_NAME&gt;/">
+  <a href="https://github.com/ShunXie/SX.github.io/">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -362,9 +377,9 @@ div.tocify {
 </div>
 
 
+<p><br> <br></p>
 <div id="background-information-of-the-datasets" class="section level1">
 <h1>Background Information of the datasets</h1>
-<p><br> <br></p>
 <div id="life-expectancy-dataset" class="section level3">
 <h3>Life Expectancy Dataset</h3>
 <p>We choose WHO Life Expectancy Dataset as our main dataset in our
@@ -658,40 +673,40 @@ head(Imputed_expectancy %&gt;% select(-percent_w_in_lower_house))</code></pre>
 ## 5          AFG Afghanistan Eastern Mediterranean 2004    58.42978   15.44257
 ## 6          AFG Afghanistan Eastern Mediterranean 2005    58.90924   15.52284
 ##   adult_mortality infant_mort age1_4mort   alcohol  bmi age5_19thinness
-## 1        316.0496    0.098245   0.011050 0.2413161 21.7            20.6
+## 1        316.0496    0.098245   0.011050 0.4562055 21.7            20.6
 ## 2        307.2416    0.095925   0.010625 3.5850006 21.8            20.4
-## 3        292.3430    0.093330   0.010130 2.4964202 21.9            20.2
+## 3        292.3430    0.093330   0.010130 2.8226608 21.9            20.2
 ## 4        286.4569    0.090470   0.009655 1.4059016 22.0            20.0
-## 5        281.8943    0.087595   0.009210 0.8176617 22.1            19.8
+## 5        281.8943    0.087595   0.009210 1.2471070 22.1            19.8
 ## 6        277.1813    0.084630   0.008785 0.0162300 22.2            19.6
 ##   age5_19obesity hepatitis measles polio diphtheria basic_water   doctors
-## 1            0.6  77.62282      27    24         24    27.77190 0.6641236
-## 2            0.7  67.94286      37    35         33    27.79726 1.8990000
-## 3            0.8  75.94442      35    36         36    29.90076 0.8537491
-## 4            0.9  45.72630      39    41         41    32.00507 0.5847760
-## 5            1.0  72.57173      48    50         50    34.12623 0.9575233
-## 6            1.1  75.00000      50    58         58    36.26526 0.8882858
-##   hospitals gni_capita    gghe_d  che_gdp  une_pop une_infant une_life une_hiv
-## 1  2.964247   802.1334 0.7777427 4.704074 20779.95       90.6   55.841     0.1
-## 2  5.563851  1060.0000 2.8719383 4.466796 21606.99       88.0   56.308     0.1
-## 3 15.323127   870.0000 0.0841800 9.443390 22600.77       85.4   56.784     0.1
-## 4 20.785362   920.0000 0.6509600 8.941260 23680.87       82.8   57.271     0.1
-## 5 20.908994   920.0000 0.5429300 9.808470 24726.68       80.1   57.772     0.1
-## 6 22.819185  1020.0000 0.5291800 9.948290 25654.28       77.4   58.290     0.1
+## 1            0.6  76.13455      27    24         24    27.77190 1.2765444
+## 2            0.7  63.08343      37    35         33    27.79726 1.8990000
+## 3            0.8  59.30483      35    36         36    29.90076 0.6222422
+## 4            0.9  45.72630      39    41         41    32.00507 0.5924861
+## 5            1.0  72.57173      48    50         50    34.12623 1.8573966
+## 6            1.1  77.74015      50    58         58    36.26526 0.8882858
+##    hospitals gni_capita   gghe_d  che_gdp  une_pop une_infant une_life une_hiv
+## 1 10.8848037   802.1334 1.269651 4.704074 20779.95       90.6   55.841     0.1
+## 2  0.3974671  1060.0000 1.261272 7.475627 21606.99       88.0   56.308     0.1
+## 3  1.3794334   870.0000 0.084180 9.443390 22600.77       85.4   56.784     0.1
+## 4  2.0646647   920.0000 0.650960 8.941260 23680.87       82.8   57.271     0.1
+## 5  0.4324454   920.0000 0.542930 9.808470 24726.68       80.1   57.772     0.1
+## 6  0.4522802  1020.0000 0.529180 9.948290 25654.28       77.4   58.290     0.1
 ##     une_gni une_poverty une_edu_spend une_literacy une_school PM_value
-## 1  931.0142    85.61553      3.268848     23.81166   1.629209      100
-## 2 1225.1817    60.60985      3.582721     46.02771   1.511937      100
-## 3 1164.8368    41.14439      3.227860     34.62730   1.424328      100
-## 4  944.2435    51.22490      3.040833     38.24146   2.217760      100
-## 5 1524.5696    60.58547      3.567654     31.68558   2.518301      100
-## 6 1157.3764    49.27037      1.623665     61.68090   5.858899      100
+## 1 1489.0950    55.63216      3.680991     25.85447   1.749346      100
+## 2 1225.1817    49.12178      3.551295     41.16730   1.483752      100
+## 3 1164.8368    44.05501      3.523739     37.47373   1.773259      100
+## 4  916.3069    56.79214      3.040833     36.09267   2.433609      100
+## 5 1524.5696    50.40688      3.567654     34.79328   2.220193      100
+## 6 1157.3764    35.58763      1.623665     61.54435   3.098234      100
 ##   health_exp income_group Developed / Developing Countries
-## 1   4.254823   Low income                       Developing
-## 2   4.314861   Low income                       Developing
-## 3   4.314567   Low income                       Developing
-## 4   4.405711   Low income                       Developing
-## 5   4.254121   Low income                       Developing
-## 6   4.338188   Low income                       Developing</code></pre>
+## 1   8.528833   Low income                       Developing
+## 2   8.590851   Low income                       Developing
+## 3   8.593708   Low income                       Developing
+## 4   8.653995   Low income                       Developing
+## 5   8.654724   Low income                       Developing
+## 6   8.650319   Low income                       Developing</code></pre>
 <pre class="r"><code>write.csv(Imputed_expectancy , file = &quot;data/Imputed_expectation.csv&quot;)</code></pre>
 </div>
 

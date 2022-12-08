@@ -12,10 +12,10 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Background Information of the datasets
+<br>
+<br>
 
-<br>
-<br>
+# Background Information of the datasets
 
 
 ### Life Expectancy Dataset

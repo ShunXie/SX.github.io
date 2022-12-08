@@ -1,5 +1,5 @@
 ---
-title: "Linear Regression Model"
+title: "Linear Regression and Clustering"
 output: 
   html_document:
     toc: true
@@ -15,6 +15,7 @@ library(car)
 library(modelr)
 library(mgcv)
 library(patchwork)
+library(factoextra)
 ```
 
 # Introduction
@@ -343,3 +344,99 @@ paste("The calculated result is ", round(percent, 3), ".")
 ```
 
 Therefore, if we consider a range in 3 years (+ or - 1.5 years) is a good prediction, `r round(percent, 3)` of predicted life expectancy will be in this range on Year 2016.
+
+<br>
+<br>
+
+
+# Clustering
+
+Clustering Analysis is an unsupervised method that cluster the countries of interest into groups in a high dimensional vector space, based on the information of predictors values, i.e. alcohol consumption, bmi value, measle vaccinations and etc in our analysis. Different from prediction, we focus on how countries are correlated with each other based on their predictors and more importantly, the optimal number of groups we can partition into based on all predictors. Based on the optimal number of groups, we can essentially impute our model using k mean clustering method. In our data cleaning, we impute our data using k=4. Here, we check whether k=4 is a good choice based on k mean clustering. The following code runs over k groups where k is between 1 to 10.
+
+```{r,message=FALSE, warning=FALSE}
+
+merged_data =
+  read_csv("data/Merged_expectation.csv") %>% 
+  filter(year == 2015) %>% 
+  select(une_life,alcohol, bmi, measles, basic_water, che_gdp, une_gni, une_literacy, PM_value) %>% 
+  drop_na()
+
+X_var = 
+  merged_data %>% 
+  select(alcohol, bmi, measles, basic_water, che_gdp, une_gni, une_literacy, PM_value)
+Y_var = 
+outcomes = merged_data %>% 
+  select(une_life)
+
+
+#Scale X variable
+Scale_X = X_var %>% 
+  na.omit() %>% 
+  scale()
+
+
+fviz_nbclust(Scale_X, kmeans, method = "silhouette") + 
+  theme_bw()
+```
+
+Here, we use silhouette method, which focus on how similar a point is within-cluster in comparison with other clusters [paper](https://www.analyticsvidhya.com/blog/2021/05/k-mean-getting-the-optimal-number-of-clusters/#:~:text=The%20silhouette%20coefficient%20or%20silhouette,to%20other%20clusters%20(separation).). Based on the result, we discover that k =2,3 and 4 all has the highest sihouette width. k reaches its optimal value when k=4 and the optimal value coincide with our chosen k for k mean imputation value. 
+
+
+```{r,message=FALSE, warning=FALSE}
+# get the kmean result and get the clusters
+k_result = 
+  kmeans(x = X_var, centers = 4)
+
+#Create the overall dataframe with combined Xvar Yvar and cluster
+Allvalues = 
+  X_var %>% 
+  broom::augment(k_result, .) %>% 
+  cbind(Y_var,.)
+
+
+
+
+# Plot predictor clusters against outcomes
+ggplot(data = Allvalues, aes(x = une_gni, y = une_life, color = .cluster)) + 
+  geom_point(size=3) + 
+  labs(x = "GNI", y = "Life Expectancy", title = "Life expectancy vs GNI after clustered", color = "Cluster")
+```
+
+Although the algorithm is high dimensional, it is always better to visualize in a lower dimensional case when we only consider life expectancy and the predictor values. Here I choose GNI as an example. After clustering, we can clearly see that GNI with different clustered are clustered at different locations. This clustering may coincide with our previous classification with respect to different income group. High income group indicated by yellow color clearly has a relatively high life expectancy whereas low income group with low GNI value implied by the green group has a low life expectancy. 
+
+
+```{r,message=FALSE, warning=FALSE}
+
+# Visualize cluster plot with reduction to two dimensions
+fviz_cluster(k_result, data = X_var, palette = "Set2")
+```
+
+On the other hand, we plot based on the two highest variance explained dimension determined by principal component analysis (PCA). Most information are explained in the dimension 1 (44.4%) and dimension 2 (20.4%). As seen in the plot, only cluster 4 is clearly different from the other clusters. Cluster 1,2 and 3 are all intercorrelated with each other. This coincide with some of the time series plot in EDA part, i.e. number of doctors per 10,000 people and educational spend, which income groups overlapped with each other. 
+
+```{r,message=FALSE, warning=FALSE}
+
+imputed_data =
+  read_csv("data/Imputed_expectation.csv") %>% 
+  filter(year == 2015)
+
+X_var_imp = 
+  imputed_data %>% 
+  select(alcohol, bmi, measles, basic_water, che_gdp, une_gni, une_literacy, PM_value)%>% 
+  na.omit() %>% 
+  scale()
+
+Y_var_imp = 
+outcomes = imputed_data %>% 
+  select(une_life)
+
+# get the kmean result and get the clusters
+k_result_imp = 
+  kmeans(x = X_var_imp, centers = 4)
+
+fviz_cluster(k_result_imp, data = X_var_imp, palette = "Set2")
+
+
+```
+
+
+After imputation with k=4 mean clustering, the four groups are now separated from each other. This is reasonable because we impute with k=4 groups. Although the information may be biased, We can visualize that a high dimension 1 will lead to a high values in dimension 2. To our surprise, a low value in dimension 1 may also have a high value in dimension 2. This may because that some of the low income countries with low economic-related values may also have a high PM value. 

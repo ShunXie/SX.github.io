@@ -1,7 +1,11 @@
 ---
-title: "Proposal"
-author: "Youlan Shen(ys3637), Jingyi Yao(jy3269), Yuchen Zhang(yz4437), Shun Xie(sx2337)"
-output: html_document
+title: "Plan"
+
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cosmo
 ---
 
 ```{r setup, include=FALSE}

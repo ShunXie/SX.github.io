@@ -1,0 +1,20 @@
+---
+title: ""
+
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+People in different regions have different life expectancies. Even in New York, life expectancy varies over regions due to different economic statuses, different infrastructures, etc. Other factors such as the explosion of measles and polio in the previous century also had a great impact on life expectancy. Studies in the course of epidemiology and the emergence of pandemics such as Covid-19 and SARS have shown us how devastating viruses can be and how vulnerable people are facing epidemics. In response, people produce vaccines to avoid being infected before becoming immune. Inspired by the course we learn, it is natural to wonder about the effect of vaccinations on life expectancy and perhaps to figure out the factors that could potentially have the most influential impact on life expectancy: social-economic factors, public health factors, or both.
+
+Longevity is one of the factors people pursue over centuries. Numerous articles such as The Value of Health and Longevity by [Murphy, et. al.](https://www.journals.uchicago.edu/doi/full/10.1086/508033) and Exercise and longevity by [Gremeaux et. al.](https://www.sciencedirect.com/science/article/pii/S0378512212003015) all stated the desire for longevity and offered various suggestions to maintain good health in both quantitative and theoretical ways. On the other hand, the emergence of Public health also aims to increase life expectancy by preventing, intervening, monitoring, evaluating diseases, environmental hazards, and promoting healthy behaviors. Indeed, with vast improvements in health and quality of life after the invention of Public Health, the global average life expectancy has more than doubled since 1900 [Roser 2013](https://ourworldindata.org/life-expectancy). With the importance of long life expectancy, Our project aims to identify the factors that contribute to life expectancy, both positively and negatively, so that individuals can make decisions on personal behavior. More importantly, from a macro perspective, governments for different countries can publish legislation such as mandatory vaccinations based on our results to increase average life expectancy.
+

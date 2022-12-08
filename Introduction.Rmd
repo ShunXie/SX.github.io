@@ -18,3 +18,16 @@ People in different regions have different life expectancies. Even in New York, 
 
 Longevity is one of the factors people pursue over centuries. Numerous articles such as The Value of Health and Longevity by [Murphy, et. al.](https://www.journals.uchicago.edu/doi/full/10.1086/508033) and Exercise and longevity by [Gremeaux et. al.](https://www.sciencedirect.com/science/article/pii/S0378512212003015) all stated the desire for longevity and offered various suggestions to maintain good health in both quantitative and theoretical ways. On the other hand, the emergence of Public health also aims to increase life expectancy by preventing, intervening, monitoring, evaluating diseases, environmental hazards, and promoting healthy behaviors. Indeed, with vast improvements in health and quality of life after the invention of Public Health, the global average life expectancy has more than doubled since 1900 [Roser 2013](https://ourworldindata.org/life-expectancy). With the importance of long life expectancy, Our project aims to identify the factors that contribute to life expectancy, both positively and negatively, so that individuals can make decisions on personal behavior. More importantly, from a macro perspective, governments for different countries can publish legislation such as mandatory vaccinations based on our results to increase average life expectancy.
 
+Some existing research shows that life expectancy is related to some factors, including genetic factors, lifestyle choices, and access to healthcare. 
+
+Genetics: A person's genes can play a role in determining their lifespan. Certain genetic disorders or conditions, such as cystic fibrosis or Down syndrome, can shorten a person's lifespan.
+
+Lifestyle choices: Lifestyle choices, such as smoking, excessive alcohol consumption, and lack of exercise, can negatively impact life expectancy. On the other hand, healthy behaviors, such as regular exercise, eating a balanced diet, and avoiding harmful substances, can increase life expectancy.
+
+Access to healthcare: Access to quality healthcare can play a significant role in determining life expectancy. People who have access to regular medical care, preventive services, and treatment for chronic conditions are more likely to live longer than those who do not.
+
+Socioeconomic factors: Socioeconomic factors, such as income, education, and occupation, can also influence life expectancy. In general, people who have higher incomes, higher levels of education, and professional occupations tend to live longer than those who do not.
+
+Environmental factors: Environmental factors, such as pollution, exposure to toxins, and living conditions, can also affect life expectancy. People who live in environments with high levels of pollution, toxins, or poor living conditions may have a lower life expectancy than those who live in healthier environments.
+
+

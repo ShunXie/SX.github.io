@@ -390,8 +390,8 @@ expectancy among regions are not equal. Thus, we may perform a
 statistical test to check heteroscedasticity</p></li>
 </ul>
  
-<div id="test-of-equal-variance" class="section level4">
-<h4>test of equal variance</h4>
+<div id="test-of-equal-variances" class="section level4">
+<h4>test of equal variances</h4>
 <pre class="r"><code>bartlett.test(une_life ~ factor(region),data = data) %&gt;% 
   broom::tidy() %&gt;% 
   knitr::kable()</code></pre>
@@ -420,8 +420,8 @@ statistical test to check heteroscedasticity</p></li>
 </tbody>
 </table>
  
-<p><span class="math display">\[H_0:  Equal\ \ Variance \ \ Among\ \
-Regions \ \text { vs } \ H_1: Unequal\ \ Variance \]</span></p>
+<p><span class="math display">\[H_0:  Equal\ \ variance \ \ among\ \
+regions \ \text { vs } \ H_1: Unequal\ \ variance \]</span></p>
  
 <p>The null hypothesis for Bartlett test is that the variances are
 equal. The result shows that the p-value is less than 0.05. Thus, we may
@@ -1034,119 +1034,26 @@ here.</li>
 </ul>
  
 </div>
-<div
-id="t.test-comapre-mean-life-expectancy-between-developed-and-developing-countries"
-class="section level2">
-<h2>7. t.test : Comapre Mean Life Expectancy Between Developed and
-Developing Countries</h2>
-<div id="extract-developed-and-developing-life-expectancy"
-class="section level4">
-<h4>extract developed and developing life expectancy</h4>
-<pre class="r"><code>developing &lt;- data %&gt;% 
-  janitor::clean_names() %&gt;% 
-  filter(developed_developing_countries == &quot;Developing&quot;) %&gt;% 
-  pull(une_life)
-
-
-developed &lt;- data %&gt;% 
-  janitor::clean_names() %&gt;% 
-  filter(developed_developing_countries == &quot;Developed&quot;) %&gt;% 
-  pull(une_life) </code></pre>
-</div>
-<div id="test-equal-variance-1" class="section level4">
-<h4>test equal variance</h4>
-<pre class="r"><code>var.test(developing,developed,alternative = &quot;two.sided&quot;,conf.level = 0.95) %&gt;% 
-  broom::tidy() %&gt;% 
-  knitr::kable()</code></pre>
-<pre><code>## Multiple parameters; naming those columns num.df, den.df</code></pre>
-<table>
-<colgroup>
-<col width="8%" />
-<col width="6%" />
-<col width="6%" />
-<col width="9%" />
-<col width="7%" />
-<col width="8%" />
-<col width="9%" />
-<col width="30%" />
-<col width="11%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="right">estimate</th>
-<th align="right">num.df</th>
-<th align="right">den.df</th>
-<th align="right">statistic</th>
-<th align="right">p.value</th>
-<th align="right">conf.low</th>
-<th align="right">conf.high</th>
-<th align="left">method</th>
-<th align="left">alternative</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">4.873158</td>
-<td align="right">2328</td>
-<td align="right">781</td>
-<td align="right">4.873158</td>
-<td align="right">0</td>
-<td align="right">4.337938</td>
-<td align="right">5.456289</td>
-<td align="left">F test to compare two variances</td>
-<td align="left">two.sided</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="t.test-with-unknown-unequal-variances" class="section level4">
-<h4>t.test with unknown unequal variances</h4>
-<pre class="r"><code>t.test(developing,developed,alternative = &quot;less&quot;,conf.level = 0.95,paired = F,var.equal = FALSE ) %&gt;% 
-  broom::tidy() %&gt;% 
-  knitr::kable()</code></pre>
-<table>
-<colgroup>
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<col width="7%" />
-<col width="8%" />
-<col width="7%" />
-<col width="8%" />
-<col width="21%" />
-<col width="10%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="right">estimate</th>
-<th align="right">estimate1</th>
-<th align="right">estimate2</th>
-<th align="right">statistic</th>
-<th align="right">p.value</th>
-<th align="right">parameter</th>
-<th align="right">conf.low</th>
-<th align="right">conf.high</th>
-<th align="left">method</th>
-<th align="left">alternative</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">-11.28125</td>
-<td align="right">66.12163</td>
-<td align="right">77.40288</td>
-<td align="right">-48.09326</td>
-<td align="right">0</td>
-<td align="right">2859.462</td>
-<td align="right">-Inf</td>
-<td align="right">-10.89529</td>
-<td align="left">Welch Two Sample t-test</td>
-<td align="left">less</td>
-</tr>
-</tbody>
-</table>
-</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>In this part, we applied statistical analysis to studying the
+differences in life expectancy caused by various factors. We first
+examine the distribution features and then choose appropriate tests to
+perform.</p>
+<p>We draw the following conclusions from the tests and plots result
+:</p>
+<ul>
+<li><p>Life expectancy in Americas and Europe have significantly
+different means.</p></li>
+<li><p>Europe has the highest mean life expectancy in the
+world.</p></li>
+<li><p>Africa has the lowest life expectancy in the world.</p></li>
+<li><p>Western Pacific and South-East Asia has approximately the same
+proportion of life expectancy over 65.</p></li>
+<li><p>Average life expectancy are significantly different among income
+groups and development status. People with higher income and from more
+developed countries tend to live longer.</p></li>
+</ul>
 </div>
 
 

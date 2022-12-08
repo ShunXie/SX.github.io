@@ -77,7 +77,7 @@ data %>%
 
 
 \ \par
-#### test of equal variance
+#### test of equal variances
 ```{r}
 bartlett.test(une_life ~ factor(region),data = data) %>% 
   broom::tidy() %>% 
@@ -86,7 +86,7 @@ bartlett.test(une_life ~ factor(region),data = data) %>%
 ```
 
 \ \par
-$$H_0:  Equal\ \ Variance \ \ Among\ \ Regions \ \text { vs } \ H_1: Unequal\ \ Variance $$
+$$H_0:  Equal\ \ variance \ \ among\ \ regions \ \text { vs } \ H_1: Unequal\ \ variance $$
 
 \ \par
 The null hypothesis for Bartlett test is that the variances are equal. The
@@ -317,46 +317,24 @@ $$H_0:  \text{mean life_exp}_{developing} = \ \text{mean life_exp}_{developed}\ 
 
 
 
-
-
-
-
 \ \par
-## 7. t.test : Comapre Mean Life Expectancy Between Developed and Developing Countries
+## Summary
 
-#### extract developed and developing life expectancy
-```{r}
-developing <- data %>% 
-  janitor::clean_names() %>% 
-  filter(developed_developing_countries == "Developing") %>% 
-  pull(une_life)
+In this part, we applied statistical analysis to studying the differences in life expectancy caused by various factors. We first examine the distribution features and then choose appropriate tests to perform.
 
+We draw the following conclusions from the tests and plots result :
 
-developed <- data %>% 
-  janitor::clean_names() %>% 
-  filter(developed_developing_countries == "Developed") %>% 
-  pull(une_life) 
-
-```
-
-
-#### test equal variance
-```{r}
-var.test(developing,developed,alternative = "two.sided",conf.level = 0.95) %>% 
-  broom::tidy() %>% 
-  knitr::kable()
-
-```
+  * Life expectancy in Americas and Europe have significantly different means. 
+  
+  * Europe has the highest mean life expectancy in the world.
+  
+  * Africa has the lowest life expectancy in the world.
+  
+  * Western Pacific and South-East Asia has approximately the same proportion of life expectancy over 65.
+  
+  * Average life expectancy are significantly different among income groups and development status. People with higher income and from more developed countries tend to live longer.
 
 
-#### t.test with unknown unequal variances
-
-```{r}
-t.test(developing,developed,alternative = "less",conf.level = 0.95,paired = F,var.equal = FALSE ) %>% 
-  broom::tidy() %>% 
-  knitr::kable()
-
-```
 
 
 

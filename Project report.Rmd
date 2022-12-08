@@ -63,7 +63,7 @@ The left tab is the interactive world map. It displays the variable's value of e
 
 The right tab is the description of the map. We chose the year of 2015 as an example to provide interpretation of each variable. This example works as an instruction for the interactive world map, meaning that users can interpret the variables in other years in similar ways.
 
-You may have access to our shiny app by clicking on the link at the navigation bar or click here.
+You may have access to our shiny app by clicking on the link at the navigation bar or click [here](https://7lx8uo-txbrook.shinyapps.io/map_dashboard/#section-bmi)
 
 
 

@@ -332,19 +332,34 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="about.html">About</a>
+  <a href="Introduction.html">Introduction</a>
 </li>
 <li>
-  <a href="dashboard.html">Dashboard</a>
+  <a href="Imputation.html">Data</a>
 </li>
 <li>
-  <a href="mailto:&lt;you@youremail.com&gt;">
+  <a href="EDA.html">EDA</a>
+</li>
+<li>
+  <a href="analysis.html">Prelimary Analysis</a>
+</li>
+<li>
+  <a href="Linear_Regression_Model.html">Regression</a>
+</li>
+<li>
+  <a href="Conclusion.html">Conclusion</a>
+</li>
+<li>
+  <a href="https://7lx8uo-txbrook.shinyapps.io/map_dashboard/#section-life-expectancy">Shiny App</a>
+</li>
+<li>
+  <a href="mailto:sx2337@cumc.columbia.edu?subject=About%20your%20website">
     <span class="fa fa-envelope fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="http://github.com/&lt;YOUR_GH_NAME&gt;/">
+  <a href="https://github.com/ShunXie/SX.github.io/">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -468,8 +483,750 @@ class="section level3">
 </div>
 <div id="additional-analysis" class="section level2">
 <h2>Additional analysis</h2>
-<div id="analysis-test-part" class="section level3">
-<h3>Analysis Test Part</h3>
+ 
+<div id="statistical-analysis" class="section level3">
+<h3>Statistical Analysis</h3>
+ 
+</div>
+<div id="life-expectation-by-regions" class="section level3">
+<h3>1. Life Expectation by Regions</h3>
+<pre class="r"><code>data %&gt;% 
+  janitor::clean_names() %&gt;% 
+  group_by(region) %&gt;% 
+  summarise(avg_by_region = mean(une_life,na.rm = T)) %&gt;% 
+  arrange(avg_by_region) %&gt;% 
+  knitr::kable(digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">region</th>
+<th align="right">avg_by_region</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Africa</td>
+<td align="right">57.070</td>
+</tr>
+<tr class="even">
+<td align="left">South-East Asia</td>
+<td align="right">68.754</td>
+</tr>
+<tr class="odd">
+<td align="left">Eastern Mediterranean</td>
+<td align="right">70.070</td>
+</tr>
+<tr class="even">
+<td align="left">Western Pacific</td>
+<td align="right">71.604</td>
+</tr>
+<tr class="odd">
+<td align="left">Americas</td>
+<td align="right">73.347</td>
+</tr>
+<tr class="even">
+<td align="left">Europe</td>
+<td align="right">75.700</td>
+</tr>
+</tbody>
+</table>
+ 
+<ul>
+<li><p>The table shows the arranged average life expectancy of each
+region from 2000 to 2016.</p></li>
+<li><p>The range of average life expectancy among regions is about 8
+years.</p></li>
+<li><p>Europe has the highest average life expectancy while Africa has
+the lowest.</p></li>
+</ul>
+ 
+<pre class="r"><code>data %&gt;% 
+  janitor::clean_names() %&gt;% 
+  group_by(region) %&gt;% 
+  ggplot(aes(x = fct_reorder(region,une_life), y = une_life, fill = region)) +
+  geom_boxplot() +
+  labs(title = &quot;Boxplot of Life Expectancy by Regions&quot;) +
+  xlab(&quot;Region&quot;) +
+  ylab(&quot;Life Expectancy&quot;) + 
+  theme(axis.text.x = element_text(hjust = 1, angle = 10,size = 8))</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+ 
+<ul>
+<li><p>The boxplot shows the distribution of life expectancy in each
+region.</p></li>
+<li><p>The variance of life expectancy is higher in Eastern
+Mediterranean and Africa.</p></li>
+<li><p>The Americas has many outliers with low life expectancy</p></li>
+<li><p>We can roughly tell from the plot that the variances of life
+expectancy among regions are not equal. Thus, we may perform a
+statistical test to check heteroscedasticity</p></li>
+</ul>
+ 
+<div id="test-of-equal-variances" class="section level4">
+<h4>test of equal variances</h4>
+<pre class="r"><code>bartlett.test(une_life ~ factor(region),data = data) %&gt;% 
+  broom::tidy() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="11%" />
+<col width="14%" />
+<col width="60%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+<th align="right">parameter</th>
+<th align="left">method</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">318.8595</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="left">Bartlett test of homogeneity of variances</td>
+</tr>
+</tbody>
+</table>
+ 
+<p><span class="math display">\[H_0:  Equal\ \ variance \ \ among\ \
+regions \ \text { vs } \ H_1: Unequal\ \ variance \]</span></p>
+ 
+<p>The null hypothesis for Bartlett test is that the variances are
+equal. The result shows that the p-value is less than 0.05. Thus, we may
+reject the null and conclude that the variances of life expectancy among
+different regions is not equal. Consequently, we cannot perform ANOVA to
+test the difference of mean life expectancy in all the six regions. We
+should perform t.test between two selected regions separately.</p>
+ 
+</div>
+</div>
+<div
+id="t.test-compare-mean-life-expectancy-between-americas-and-europe"
+class="section level3">
+<h3>2. t.test : Compare Mean Life Expectancy Between Americas and
+Europe</h3>
+ 
+<p>From the boxplot above, we find that the life expectancy in Americas
+and Europe distribute almost in the same interval. Though the median of
+Europe is higher, the variance in Americas seems smaller. Thus, we want
+to study if the mean life expectancy in the two regions are
+significantly different.</p>
+ 
+<div id="extract-life-expectancy-in-americas-and-europe"
+class="section level4">
+<h4>extract life expectancy in Americas and Europe</h4>
+<pre class="r"><code>Americas &lt;- data %&gt;% 
+  janitor::clean_names() %&gt;% 
+  filter(region == &quot;Americas&quot;) %&gt;% 
+  pull(une_life)
+
+
+Europe &lt;- data %&gt;% 
+  janitor::clean_names() %&gt;% 
+  filter(region == &quot;Europe&quot;) %&gt;% 
+  pull(une_life) </code></pre>
+ 
+<p>In order to decide on which type of t.test we should perform, we need
+to compare the variance in Americas and Europe first.</p>
+<p>We can roughly tell from the boxplot that Americas has a smaller
+variance. But there also exist many outliers with low life expectancy
+values in Americas. Thus, we turn to statistical test to decide on the
+relationship.</p>
+ 
+</div>
+<div id="test-equal-variance" class="section level4">
+<h4>test equal variance</h4>
+<pre class="r"><code>var.test(Americas,Europe,alternative = &quot;two.sided&quot;,conf.level = 0.95) %&gt;% 
+  broom::tidy() %&gt;% 
+  knitr::kable()</code></pre>
+<pre><code>## Multiple parameters; naming those columns num.df, den.df</code></pre>
+<table>
+<colgroup>
+<col width="9%" />
+<col width="6%" />
+<col width="6%" />
+<col width="9%" />
+<col width="8%" />
+<col width="9%" />
+<col width="9%" />
+<col width="29%" />
+<col width="11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">estimate</th>
+<th align="right">num.df</th>
+<th align="right">den.df</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+<th align="right">conf.low</th>
+<th align="right">conf.high</th>
+<th align="left">method</th>
+<th align="left">alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.7259117</td>
+<td align="right">560</td>
+<td align="right">849</td>
+<td align="right">0.7259117</td>
+<td align="right">4.12e-05</td>
+<td align="right">0.6248981</td>
+<td align="right">0.8452553</td>
+<td align="left">F test to compare two variances</td>
+<td align="left">two.sided</td>
+</tr>
+</tbody>
+</table>
+ 
+<p><span class="math display">\[H_0:  \sigma^2_{Americas}
+=\  \sigma^2_{Europe}\ \text { vs } \ H_1: \sigma^2_{Americas}
+\neq\  \sigma^2_{Europe} \]</span></p>
+ 
+<p>The null hypothesis for the variance test is that the two variance
+are equal. The result shows that the p-value is much less than 0.05.
+Thus, we may reject the null hypothesis and conclude that the variances
+are not equal. Next, we should perform 2 sample t.test with unknown and
+unequal variance.</p>
+ 
+</div>
+<div id="sample-t.test-with-unknown-unequal-variances"
+class="section level4">
+<h4>2 sample t.test with unknown unequal variances</h4>
+<pre class="r"><code>t.test(Americas,Europe,alternative = &quot;less&quot;,conf.level = 0.95,paired = F,var.equal = FALSE ) %&gt;% 
+  broom::tidy() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<colgroup>
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+<col width="7%" />
+<col width="8%" />
+<col width="7%" />
+<col width="8%" />
+<col width="21%" />
+<col width="10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">estimate</th>
+<th align="right">estimate1</th>
+<th align="right">estimate2</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+<th align="right">parameter</th>
+<th align="right">conf.low</th>
+<th align="right">conf.high</th>
+<th align="left">method</th>
+<th align="left">alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">-2.352754</td>
+<td align="right">73.34729</td>
+<td align="right">75.70004</td>
+<td align="right">-9.837228</td>
+<td align="right">0</td>
+<td align="right">1320.964</td>
+<td align="right">-Inf</td>
+<td align="right">-1.959081</td>
+<td align="left">Welch Two Sample t-test</td>
+<td align="left">less</td>
+</tr>
+</tbody>
+</table>
+ 
+<p><span class="math display">\[H_0:  \text{mean life_exp}_{Americas} =
+\ \text{mean life_exp}_{Europe}\ \text { vs } \ H_1: \text{mean
+life_exp}_{Americas} \neq \text{mean life_exp}_{Europe} \]</span></p>
+ 
+<p>The null hypothesis for the t.test is that the two variance are
+equal. The result shows that the p-value is much less than 0.05. Thus,
+we may reject the null hypothesis and conclude that the mean of life
+expectancy in Americas and Europe are different. Since the test
+statistics is negative, we know that mean life expectancy in Americas is
+smaller than Europe.</p>
+ 
+</div>
+</div>
+<div
+id="prop.test-compare-the-proportion-of-life-expectancy-over-70-between-western-pacific-and-south-east-asia"
+class="section level3">
+<h3>3. prop.test : Compare the Proportion of Life Expectancy Over 70
+Between Western Pacific and South-East Asia</h3>
+ 
+<p>We can tell from the boxplot above that the boxes of Western Pacific
+and South-East Asia are almost overlapping. The majority of them seem to
+be over 65 years. Thus we are interested in comparing the proportion of
+life expectancy over 65 year in the two regions.</p>
+<pre class="r"><code>data %&gt;% 
+  janitor::clean_names() %&gt;% 
+  filter(region == &quot;Western Pacific&quot;) %&gt;% 
+  summarise(above_65 = sum(une_life &gt; 65),
+            total = n()) %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">above_65</th>
+<th align="right">total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">304</td>
+<td align="right">357</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>data %&gt;% 
+  janitor::clean_names() %&gt;% 
+  filter(region == &quot;South-East Asia&quot;)  %&gt;% 
+  summarise(above_65 = sum(une_life &gt; 65),
+            total = n()) %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">above_65</th>
+<th align="right">total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">149</td>
+<td align="right">187</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>prop.test(c(304,149),n = c(357,187),correct = F) %&gt;% 
+  broom::tidy() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<colgroup>
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="7%" />
+<col width="6%" />
+<col width="46%" />
+<col width="7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">estimate1</th>
+<th align="right">estimate2</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+<th align="right">parameter</th>
+<th align="right">conf.low</th>
+<th align="right">conf.high</th>
+<th align="left">method</th>
+<th align="left">alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.8515406</td>
+<td align="right">0.7967914</td>
+<td align="right">2.640731</td>
+<td align="right">0.1041556</td>
+<td align="right">1</td>
+<td align="right">-0.0137086</td>
+<td align="right">0.1232069</td>
+<td align="left">2-sample test for equality of proportions without
+continuity correction</td>
+<td align="left">two.sided</td>
+</tr>
+</tbody>
+</table>
+ 
+<p><span class="math display">\[H_0:  \text{Proportion}_{Western\
+Pacific} = \ \text{Proportion}_{South-East\ Asia}\ \text { vs } \ H_1:
+\text{mean life_exp}_{Western\ Pacific} \neq \text{mean
+life_exp}_{South-East\ Asia} \]</span></p>
+ 
+<p>The null hypothesis for the prop.test is that the two proportions are
+equal. The result shows that the p-value is approximately 0.104. Thus,
+under the significance level of 0.05, we fail to reject the null. We
+have evidence that the proportion of life expectancy above 65 in Western
+Pacific is the same as in South-East Asia.</p>
+ 
+</div>
+<div id="average-life-expectancy-by-region-year-combination"
+class="section level3">
+<h3>4. Average Life Expectancy by (region, year) Combination</h3>
+<pre class="r"><code>data %&gt;% 
+  janitor::clean_names() %&gt;% 
+  group_by(region,year) %&gt;% 
+  summarise(avg_by_year_region = mean(une_life,na.rm = T)) %&gt;% 
+  pivot_wider(
+    names_from = region,
+    values_from = avg_by_year_region
+  ) %&gt;% 
+  knitr::kable(digits = 3)</code></pre>
+<table>
+<colgroup>
+<col width="6%" />
+<col width="8%" />
+<col width="10%" />
+<col width="26%" />
+<col width="8%" />
+<col width="19%" />
+<col width="19%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">year</th>
+<th align="right">Africa</th>
+<th align="right">Americas</th>
+<th align="right">Eastern Mediterranean</th>
+<th align="right">Europe</th>
+<th align="right">South-East Asia</th>
+<th align="right">Western Pacific</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2000</td>
+<td align="right">52.816</td>
+<td align="right">71.661</td>
+<td align="right">68.080</td>
+<td align="right">73.602</td>
+<td align="right">64.851</td>
+<td align="right">69.400</td>
+</tr>
+<tr class="even">
+<td align="right">2001</td>
+<td align="right">53.040</td>
+<td align="right">71.900</td>
+<td align="right">68.350</td>
+<td align="right">73.923</td>
+<td align="right">65.463</td>
+<td align="right">69.706</td>
+</tr>
+<tr class="odd">
+<td align="right">2002</td>
+<td align="right">53.294</td>
+<td align="right">72.129</td>
+<td align="right">68.619</td>
+<td align="right">74.072</td>
+<td align="right">66.068</td>
+<td align="right">69.995</td>
+</tr>
+<tr class="even">
+<td align="right">2003</td>
+<td align="right">53.681</td>
+<td align="right">72.354</td>
+<td align="right">68.889</td>
+<td align="right">74.252</td>
+<td align="right">66.644</td>
+<td align="right">70.304</td>
+</tr>
+<tr class="odd">
+<td align="right">2004</td>
+<td align="right">54.192</td>
+<td align="right">72.580</td>
+<td align="right">69.159</td>
+<td align="right">74.642</td>
+<td align="right">67.181</td>
+<td align="right">70.611</td>
+</tr>
+<tr class="even">
+<td align="right">2005</td>
+<td align="right">54.744</td>
+<td align="right">72.789</td>
+<td align="right">69.425</td>
+<td align="right">74.784</td>
+<td align="right">67.677</td>
+<td align="right">70.899</td>
+</tr>
+<tr class="odd">
+<td align="right">2006</td>
+<td align="right">55.385</td>
+<td align="right">72.994</td>
+<td align="right">69.684</td>
+<td align="right">75.063</td>
+<td align="right">68.134</td>
+<td align="right">71.175</td>
+</tr>
+<tr class="even">
+<td align="right">2007</td>
+<td align="right">56.106</td>
+<td align="right">73.201</td>
+<td align="right">69.930</td>
+<td align="right">75.287</td>
+<td align="right">68.566</td>
+<td align="right">71.439</td>
+</tr>
+<tr class="odd">
+<td align="right">2008</td>
+<td align="right">56.840</td>
+<td align="right">73.395</td>
+<td align="right">70.161</td>
+<td align="right">75.613</td>
+<td align="right">68.983</td>
+<td align="right">71.692</td>
+</tr>
+<tr class="even">
+<td align="right">2009</td>
+<td align="right">57.594</td>
+<td align="right">73.601</td>
+<td align="right">70.378</td>
+<td align="right">75.957</td>
+<td align="right">69.388</td>
+<td align="right">71.970</td>
+</tr>
+<tr class="odd">
+<td align="right">2010</td>
+<td align="right">58.343</td>
+<td align="right">73.796</td>
+<td align="right">70.585</td>
+<td align="right">76.255</td>
+<td align="right">69.780</td>
+<td align="right">72.185</td>
+</tr>
+<tr class="even">
+<td align="right">2011</td>
+<td align="right">59.065</td>
+<td align="right">73.985</td>
+<td align="right">70.788</td>
+<td align="right">76.672</td>
+<td align="right">70.161</td>
+<td align="right">72.409</td>
+</tr>
+<tr class="odd">
+<td align="right">2012</td>
+<td align="right">59.807</td>
+<td align="right">74.170</td>
+<td align="right">70.993</td>
+<td align="right">76.863</td>
+<td align="right">70.526</td>
+<td align="right">72.657</td>
+</tr>
+<tr class="even">
+<td align="right">2013</td>
+<td align="right">60.445</td>
+<td align="right">74.343</td>
+<td align="right">71.203</td>
+<td align="right">77.166</td>
+<td align="right">70.873</td>
+<td align="right">72.892</td>
+</tr>
+<tr class="odd">
+<td align="right">2014</td>
+<td align="right">61.062</td>
+<td align="right">74.512</td>
+<td align="right">71.420</td>
+<td align="right">77.483</td>
+<td align="right">71.204</td>
+<td align="right">73.113</td>
+</tr>
+<tr class="even">
+<td align="right">2015</td>
+<td align="right">61.641</td>
+<td align="right">74.669</td>
+<td align="right">71.645</td>
+<td align="right">77.493</td>
+<td align="right">71.516</td>
+<td align="right">73.316</td>
+</tr>
+<tr class="odd">
+<td align="right">2016</td>
+<td align="right">62.131</td>
+<td align="right">74.826</td>
+<td align="right">71.875</td>
+<td align="right">77.773</td>
+<td align="right">71.809</td>
+<td align="right">73.504</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>data %&gt;% 
+  janitor::clean_names() %&gt;% 
+  group_by(region,year) %&gt;% 
+  summarise(avg_by_year_region = mean(une_life,na.rm = T)) %&gt;% 
+  ggplot(aes(x = year, y = avg_by_year_region, color = region)) +
+  geom_line() + geom_point() + labs(title = &quot;Average Life Expectancy by Region, Year&quot;) + ylab (&quot;Average Life Expectancy&quot;)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+ 
+<ul>
+<li>The table and line graph above show the descriptive statistics and
+overall trend.</li>
+<li>It is clearly shown in the plot that Africa has a much lower life
+expectancy than the other regions.</li>
+</ul>
+ 
+</div>
+<div id="life-expectancy-by-income-level" class="section level3">
+<h3>5. Life Expectancy by Income Level</h3>
+<pre class="r"><code>data %&gt;% 
+  janitor::clean_names()  %&gt;% 
+  filter(!is.na(income_group)) %&gt;%  
+  group_by(income_group) %&gt;% 
+  summarise(avg_by_income = mean(une_life,na.rm = T)) %&gt;% 
+  arrange(avg_by_income) %&gt;% 
+  knitr::kable(digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">income_group</th>
+<th align="right">avg_by_income</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Low income</td>
+<td align="right">56.798</td>
+</tr>
+<tr class="even">
+<td align="left">Lower middle income</td>
+<td align="right">64.725</td>
+</tr>
+<tr class="odd">
+<td align="left">Upper middle income</td>
+<td align="right">70.861</td>
+</tr>
+<tr class="even">
+<td align="left">High income</td>
+<td align="right">77.818</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>data %&gt;% 
+  janitor::clean_names() %&gt;% 
+  filter(!is.na(income_group)) %&gt;% 
+  group_by(income_group) %&gt;% 
+  ggplot(aes(x = fct_reorder(income_group,une_life), y = une_life,fill = income_group)) +
+  geom_boxplot() +
+  labs(title = &quot;Boxplot of Life Expectancy by Income Groups&quot;) +
+  xlab(&quot;Income Groups&quot;) +
+  ylab(&quot;Life Expectancy&quot;)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+ 
+<ul>
+<li>The boxes of different income groups are almost not overlapping with
+each other.</li>
+<li>The pattern is clear that people from higher income group tend to
+have a higher life expectancy.</li>
+</ul>
+<p><span class="math display">\[H_0:  \sigma^2_{group \ i}
+=\  \sigma^2_{group \ j}\ \text { vs } \ H_1: \sigma^2_{group\ i}
+\neq\  \sigma^2_{group\ j} \]</span></p>
+<ul>
+<li>We have performed variance tests and conclude that the variances are
+not equal between any two groups. Since the method is similar to what we
+have used and displayed when studying the regional differences, we do
+not show the process here.</li>
+</ul>
+ 
+<p><span class="math display">\[H_0:  \text{mean life_exp}_{group \ i} =
+\ \text{mean life_exp}_{group \ j}\ \text { vs } \ H_1: \text{mean
+life_exp}_{group \ i} \neq \text{mean life_exp}_{group\ j} \]</span></p>
+<ul>
+<li>We have also performed 2 sample t.test to compare the mean life
+expectancy between groups. We conclude that the means are not equal
+between any two groups. Since the method is similar to what we have used
+and displayed when studying the regional differences, we do not show the
+process here.</li>
+</ul>
+ 
+</div>
+<div id="life-expectancy-by-development-status" class="section level3">
+<h3>6. Life Expectancy by Development Status</h3>
+<pre class="r"><code>data %&gt;% 
+  janitor::clean_names() %&gt;% 
+  group_by(developed_developing_countries) %&gt;% 
+  summarise(avg_by_dev = mean(une_life,na.rm = T)) %&gt;% 
+  knitr::kable(digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">developed_developing_countries</th>
+<th align="right">avg_by_dev</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Developed</td>
+<td align="right">77.403</td>
+</tr>
+<tr class="even">
+<td align="left">Developing</td>
+<td align="right">66.122</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>data %&gt;% 
+  janitor::clean_names() %&gt;% 
+  group_by(developed_developing_countries) %&gt;% 
+  ggplot(aes(x = developed_developing_countries, y = une_life,fill = developed_developing_countries)) +
+  geom_boxplot() +
+  labs(title = &quot;Boxplot of Life Expectancy by Development Status&quot;) +
+  xlab(&quot;Development Status&quot;) +
+  ylab(&quot;Life Expectancy&quot;)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+ 
+<ul>
+<li>The boxes of different development status are almost not overlapping
+with each other.</li>
+<li>The pattern is clear that people in developed countries tend to have
+a higher life expectancy.</li>
+</ul>
+<p><span class="math display">\[H_0:  \sigma^2_{developing}
+=\  \sigma^2_{developed}\ \text { vs } \ H_1: \sigma^2_{developing}
+\neq\  \sigma^2_{developed} \]</span></p>
+<ul>
+<li>We have performed variance test and conclude that the variances are
+not equal between the two categories. Since the method is similar to
+what we have used and displayed when studying the regional differences,
+we do not show the process here.</li>
+</ul>
+ 
+<p><span class="math display">\[H_0:  \text{mean life_exp}_{developing}
+= \ \text{mean life_exp}_{developed}\ \text { vs } \ H_1: \text{mean
+life_exp}_{developing} \neq \text{mean life_exp}_{developed}
+\]</span></p>
+<ul>
+<li>We have also performed 2 sample t.test to compare the mean life
+expectancy between the two groups. We conclude that the means are not
+equal. Since the method is similar to what we have used and displayed
+when studying the regional differences, we do not show the process
+here.</li>
+</ul>
+ 
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<p>In this part, we applied statistical analysis to studying the
+differences in life expectancy caused by various factors. We first
+examine the distribution features and then choose appropriate tests to
+perform.</p>
+<p>We draw the following conclusions from the tests and plots result
+:</p>
+<ul>
+<li><p>Life expectancy in Americas and Europe have significantly
+different means.</p></li>
+<li><p>Europe has the highest mean life expectancy in the
+world.</p></li>
+<li><p>Africa has the lowest life expectancy in the world.</p></li>
+<li><p>Western Pacific and South-East Asia has approximately the same
+proportion of life expectancy over 65.</p></li>
+<li><p>Average life expectancy are significantly different among income
+groups and development status. People with higher income and from more
+developed countries tend to live longer.</p></li>
+</ul>
+ 
 </div>
 <div id="linear-model" class="section level3">
 <h3>Linear Model</h3>

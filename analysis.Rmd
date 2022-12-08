@@ -348,7 +348,3 @@ We draw the following conclusions from the tests and plots result :
 
 
 
-
-
-
-

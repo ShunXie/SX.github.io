@@ -87,6 +87,8 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
+
+\ \par
 ```{r,message=FALSE,include = FALSE}
 data = read_csv("./data/Merged_expectation.csv")
 
@@ -95,7 +97,7 @@ data = read_csv("./data/Merged_expectation.csv")
 
 
 \ \par
-### 1.  Life Expectation by Regions
+## 1.  Life Expectation by Regions
 
 ```{r}
 data %>% 
@@ -141,9 +143,12 @@ data %>%
   * We can roughly tell from the plot that the variances of life expectancy among regions are not equal. Thus, we may perform a statistical test to check heteroscedasticity
 
 
-
 \ \par
 #### test of equal variances
+
+\ \par
+$$H_0:  Equal\ \ variance \ \ among\ \ regions \ \text { vs } \ H_1: Unequal\ \ variance $$
+
 ```{r}
 bartlett.test(une_life ~ factor(region),data = data) %>% 
   broom::tidy() %>% 
@@ -151,8 +156,6 @@ bartlett.test(une_life ~ factor(region),data = data) %>%
 
 ```
 
-\ \par
-$$H_0:  Equal\ \ variance \ \ among\ \ regions \ \text { vs } \ H_1: Unequal\ \ variance $$
 
 \ \par
 The null hypothesis for Bartlett test is that the variances are equal. The
@@ -160,10 +163,8 @@ result shows that the p-value is less than 0.05. Thus, we may reject the null an
 Consequently, we cannot perform ANOVA to test the difference of mean life expectancy in all the six regions. We should perform t.test between two selected regions separately.
 
 
-
-
 \ \par
-### 2. t.test : Compare Mean Life Expectancy Between Americas and Europe
+## 2. t.test : Compare Mean Life Expectancy Between Americas and Europe
 
 \ \par
 From the boxplot above, we find that the life expectancy in Americas and Europe distribute almost in the same interval. Though the median of Europe is higher, the variance in Americas seems smaller. Thus, we want to study if the mean life expectancy in the two regions are significantly different.
@@ -194,6 +195,11 @@ We can roughly tell from the boxplot that Americas has a smaller variance. But t
 
 \ \par
 #### test equal variance
+
+\ \par
+$$H_0:  \sigma^2_{Americas} =\  \sigma^2_{Europe}\ \text { vs } \ H_1: \sigma^2_{Americas} \neq\  \sigma^2_{Europe} $$
+
+
 ```{r}
 var.test(Americas,Europe,alternative = "two.sided",conf.level = 0.95) %>% 
   broom::tidy() %>% 
@@ -201,8 +207,7 @@ var.test(Americas,Europe,alternative = "two.sided",conf.level = 0.95) %>%
 
 ```
 
-\ \par
-$$H_0:  \sigma^2_{Americas} =\  \sigma^2_{Europe}\ \text { vs } \ H_1: \sigma^2_{Americas} \neq\  \sigma^2_{Europe} $$
+
 
 \ \par
 The null hypothesis for the variance test is that the two variance are equal. The result shows that the p-value is much less than 0.05. Thus, we may reject the null hypothesis and conclude that the variances are not equal. Next, we should perform 2 sample t.test with unknown and unequal variance.
@@ -211,6 +216,9 @@ The null hypothesis for the variance test is that the two variance are equal. Th
 \ \par
 #### 2 sample t.test with unknown unequal variances
 
+\ \par
+$$H_0:  \text{mean life_exp}_{Americas} = \ \text{mean life_exp}_{Europe}\ \text { vs } \ H_1: \text{mean life_exp}_{Americas} \neq \text{mean life_exp}_{Europe} $$
+
 ```{r}
 t.test(Americas,Europe,alternative = "less",conf.level = 0.95,paired = F,var.equal = FALSE ) %>% 
   broom::tidy() %>% 
@@ -218,8 +226,7 @@ t.test(Americas,Europe,alternative = "less",conf.level = 0.95,paired = F,var.equ
 
 ```
 
-\ \par
-$$H_0:  \text{mean life_exp}_{Americas} = \ \text{mean life_exp}_{Europe}\ \text { vs } \ H_1: \text{mean life_exp}_{Americas} \neq \text{mean life_exp}_{Europe} $$
+
 
 \ \par
 The null hypothesis for the t.test is that the two variance are equal. The result shows that the p-value is much less than 0.05. Thus, we may reject the null hypothesis and conclude that the mean of life expectancy in Americas and Europe are different. Since the test statistics is negative, we know that mean life expectancy in Americas is smaller than Europe. 
@@ -227,11 +234,15 @@ The null hypothesis for the t.test is that the two variance are equal. The resul
 
 
 \ \par
-### 3. prop.test : Compare the Proportion of Life Expectancy Over 70 Between Western Pacific and South-East Asia
+## 3. prop.test : Compare the Proportion of Life Expectancy Over 70 Between Western Pacific and South-East Asia
 
 
 \ \par
 We can tell from the boxplot above that the boxes of Western Pacific and South-East Asia are almost overlapping. The majority of them seem to be over 65 years. Thus we are interested in comparing the proportion of life expectancy over 65 year in the two regions.
+
+
+\ \par
+$$H_0:  \text{Proportion}_{Western\ Pacific} = \ \text{Proportion}_{South-East\ Asia}\ \text { vs } \ H_1: \text{mean life_exp}_{Western\ Pacific} \neq \text{mean life_exp}_{South-East\ Asia} $$
 
 
 ```{r}
@@ -257,8 +268,6 @@ prop.test(c(304,149),n = c(357,187),correct = F) %>%
 ```
 
 
-\ \par
-$$H_0:  \text{Proportion}_{Western\ Pacific} = \ \text{Proportion}_{South-East\ Asia}\ \text { vs } \ H_1: \text{mean life_exp}_{Western\ Pacific} \neq \text{mean life_exp}_{South-East\ Asia} $$
 
 \ \par
 The null hypothesis for the prop.test is that the two proportions are equal. The result shows that the p-value is approximately 0.104. Thus, under the significance level of 0.05, we fail to reject the null. We have evidence that the proportion of life expectancy above 65 in Western Pacific is the same as in South-East Asia.
@@ -266,7 +275,7 @@ The null hypothesis for the prop.test is that the two proportions are equal. The
 
 
 \ \par
-### 4. Average Life Expectancy by (region, year) Combination
+## 4. Average Life Expectancy by (region, year) Combination
 
 ```{r,message=FALSE}
 data %>% 
@@ -301,7 +310,7 @@ data %>%
 
 
 \ \par
-### 5. Life Expectancy by Income Level
+## 5. Life Expectancy by Income Level
 
 ```{r}
 data %>% 
@@ -336,7 +345,6 @@ $$H_0:  \sigma^2_{group \ i} =\  \sigma^2_{group \ j}\ \text { vs } \ H_1: \sigm
  
   * We have performed variance tests and conclude that the variances are not equal between any two groups. Since the method is similar to what we have used and displayed when studying the regional differences, we do not show the process here.
   
-  \ \par
 $$H_0:  \text{mean life_exp}_{group \ i} = \ \text{mean life_exp}_{group \ j}\ \text { vs } \ H_1: \text{mean life_exp}_{group \ i} \neq \text{mean life_exp}_{group\ j} $$
   
   * We have also performed 2 sample t.test to compare the mean life expectancy between groups. We conclude that the means are not equal between any two groups. Since the method is similar to what we have used and displayed when studying the regional differences, we do not show the process here.
@@ -344,7 +352,7 @@ $$H_0:  \text{mean life_exp}_{group \ i} = \ \text{mean life_exp}_{group \ j}\ \
 
 
 \ \par
-### 6. Life Expectancy by Development Status
+## 6. Life Expectancy by Development Status
 
 ```{r}
 data %>% 
@@ -376,7 +384,7 @@ $$H_0:  \sigma^2_{developing} =\  \sigma^2_{developed}\ \text { vs } \ H_1: \sig
  
   * We have performed variance test and conclude that the variances are not equal between the two categories. Since the method is similar to what we have used and displayed when studying the regional differences, we do not show the process here.
   
-  \ \par
+
 $$H_0:  \text{mean life_exp}_{developing} = \ \text{mean life_exp}_{developed}\ \text { vs } \ H_1: \text{mean life_exp}_{developing} \neq \text{mean life_exp}_{developed} $$
   
   * We have also performed 2 sample t.test to compare the mean life expectancy between the two groups. We conclude that the means are not equal. Since the method is similar to what we have used and displayed when studying the regional differences, we do not show the process here.
@@ -384,7 +392,7 @@ $$H_0:  \text{mean life_exp}_{developing} = \ \text{mean life_exp}_{developed}\ 
 
 
 \ \par
-### Summary
+## Summary
 
 In this part, we applied statistical analysis to studying the differences in life expectancy caused by various factors. We first examine the distribution features and then choose appropriate tests to perform.
 

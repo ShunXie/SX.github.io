@@ -65,6 +65,8 @@ The right tab is the description of the map. We chose the year of 2015 as an exa
 
 You may have access to our shiny app by clicking on the link at the navigation bar or click [here](https://7lx8uo-txbrook.shinyapps.io/map_dashboard/#section-bmi)
 
+We also attached our source code to the app. If you are interested in how we built the map using dashboard and shiny, you may click on the button on the top right corner.
+
 
 
 ## Additional analysis

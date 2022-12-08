@@ -283,7 +283,9 @@ selectInput(
 
 ```
 
-Column {.tabset}
+
+
+Row
 -----------------------------------------------------------------------
 
 ### Infant Mortality 
@@ -318,6 +320,9 @@ infant %>% filter(year == input$year3) %>%
 
 
 
+Row {.tabset .tabset-fade}
+-------------------------------------
+
 ### Description
 
 
@@ -337,7 +342,23 @@ Take the year of 2015 as an example,
 
 
 
+### Boxplot
 
+```{r}
+renderPlotly({
+boxplot <- infant %>% filter(year == input$year) %>% 
+  ggplot(aes(x = fct_reorder(region,infant_mort), y = infant_mort, fill = region)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Infant Mortality Rate by Regions") +
+  xlab("Region") +
+  ylab("Infant Mortality Rate") + 
+  theme(axis.text.x = element_text(hjust = 1, angle = 10,size = 8))
+
+ggplotly(boxplot)
+
+})
+
+```
 
 
 
@@ -363,7 +384,7 @@ selectInput(
 ```
 
 
-Column {.tabset}
+Row
 -----------------------------------------------------------------------
 
 ### Alcohol
@@ -397,6 +418,10 @@ alcohol %>% filter(year == input$year4) %>%
 ```
 
 
+
+Row {.tabset .tabset-fade}
+-------------------------------------
+
 ### Description
 
 
@@ -419,6 +444,23 @@ Take the year of 2015 as an example,
 
 
 
+### Boxplot
+
+```{r}
+renderPlotly({
+boxplot <- alcohol %>% filter(year == input$year) %>% 
+  ggplot(aes(x = fct_reorder(region,alcohol), y = alcohol, fill = region)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Alcohol Consumption Level by Regions") +
+  xlab("Region") +
+  ylab("Alcohol") + 
+  theme(axis.text.x = element_text(hjust = 1, angle = 10,size = 8))
+
+ggplotly(boxplot)
+
+})
+
+```
 
 
 
@@ -448,7 +490,7 @@ selectInput(
 ```
 
 
-Column {.tabset}
+Row
 -----------------------------------------------------------------------
 
 ### BMI
@@ -483,6 +525,9 @@ bmi %>% filter(year == input$year5) %>%
 
 
 
+Row {.tabset .tabset-fade}
+-------------------------------------
+
 ### Description
 
 
@@ -495,13 +540,30 @@ Take the year of 2015 as an example,
   * America, Egypt, Saudi Arabia and Libya have the highest BMI level in the world.
   
 \ \par
-  * Central and Southern Africa, Eastern and Soutern Asia have a lower BMI level.
+  * Central and Southern Africa, Eastern and Southern Asia have a lower BMI level.
   
 \ \par
   * Almost all European countries have a BMI level above 26.
   
 
 
+### Boxplot
+
+```{r}
+renderPlotly({
+boxplot <- bmi %>% filter(year == input$year) %>% 
+  ggplot(aes(x = fct_reorder(region,bmi), y = bmi, fill = region)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of BMI by Regions") +
+  xlab("Region") +
+  ylab("BMI") + 
+  theme(axis.text.x = element_text(hjust = 1, angle = 10,size = 8))
+
+ggplotly(boxplot)
+
+})
+
+```
 
 
 
@@ -527,7 +589,8 @@ selectInput(
 ```
 
 
-Column {.tabset}
+
+Row
 -----------------------------------------------------------------------
 
 ### Current Health Expenditure
@@ -561,6 +624,10 @@ che_gdp %>% filter(year == input$year6) %>%
 ```
 
 
+Row {.tabset .tabset-fade}
+-------------------------------------
+
+
 ### Description
 
 
@@ -575,7 +642,24 @@ Take the year of 2015 as an example,
   \ \par
   * Generally speaking, Americas, Western and Northern Europe , Australia, New Zealand and Janpan have higher current health expenditure level.
   
-  
+
+### Boxplot
+
+```{r}
+renderPlotly({
+boxplot <- che_gdp %>% filter(year == input$year) %>% 
+  ggplot(aes(x = fct_reorder(region,che_gdp), y = che_gdp, fill = region)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of CHE by Regions") +
+  xlab("Region") +
+  ylab("CHE") + 
+  theme(axis.text.x = element_text(hjust = 1, angle = 10,size = 8))
+
+ggplotly(boxplot)
+
+})
+
+```
 
 
 

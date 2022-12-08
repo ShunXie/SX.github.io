@@ -944,15 +944,13 @@ expectancy than the other regions.</li>
  
 <ul>
 <li>The boxes of different income groups are almost not overlapping with
-each other.
-<ul>
+each other.</li>
 <li>The pattern is clear that people from higher income group tend to
 have a higher life expectancy.</li>
-</ul></li>
 </ul>
-<p><span class="math display">\[H_0:  \sigma^2_{group \ 1}
-=\  \sigma^2_{group \ 2}\ \text { vs } \ H_1: \sigma^2_{group\ 1}
-\neq\  \sigma^2_{group\ 2} \]</span></p>
+<p><span class="math display">\[H_0:  \sigma^2_{group \ i}
+=\  \sigma^2_{group \ j}\ \text { vs } \ H_1: \sigma^2_{group\ i}
+\neq\  \sigma^2_{group\ j} \]</span></p>
 <ul>
 <li>We have performed variance tests and conclude that the variances are
 not equal between any two groups. Since the method is similar to what we
@@ -960,9 +958,9 @@ have used and displayed when studying the regional differences, we do
 not show the process here.</li>
 </ul>
  
-<p><span class="math display">\[H_0:  \text{mean life_exp}_{group \ 1} =
-\ \text{mean life_exp}_{group \ 2}\ \text { vs } \ H_1: \text{mean
-life_exp}_{group \ 1} \neq \text{mean life_exp}_{group\ 2} \]</span></p>
+<p><span class="math display">\[H_0:  \text{mean life_exp}_{group \ i} =
+\ \text{mean life_exp}_{group \ j}\ \text { vs } \ H_1: \text{mean
+life_exp}_{group \ i} \neq \text{mean life_exp}_{group\ j} \]</span></p>
 <ul>
 <li>We have also performed 2 sample t.test to compare the mean life
 expectancy between groups. We conclude that the means are not equal
@@ -1006,6 +1004,34 @@ process here.</li>
   xlab(&quot;Development Status&quot;) +
   ylab(&quot;Life Expectancy&quot;)</code></pre>
 <p><img src="analysis_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+ 
+<ul>
+<li>The boxes of different development status are almost not overlapping
+with each other.</li>
+<li>The pattern is clear that people in developed countries tend to have
+a higher life expectancy.</li>
+</ul>
+<p><span class="math display">\[H_0:  \sigma^2_{developing}
+=\  \sigma^2_{developed}\ \text { vs } \ H_1: \sigma^2_{developing}
+\neq\  \sigma^2_{developed} \]</span></p>
+<ul>
+<li>We have performed variance test and conclude that the variances are
+not equal between the two categories. Since the method is similar to
+what we have used and displayed when studying the regional differences,
+we do not show the process here.</li>
+</ul>
+ 
+<p><span class="math display">\[H_0:  \text{mean life_exp}_{developing}
+= \ \text{mean life_exp}_{developed}\ \text { vs } \ H_1: \text{mean
+life_exp}_{developing} \neq \text{mean life_exp}_{developed}
+\]</span></p>
+<ul>
+<li>We have also performed 2 sample t.test to compare the mean life
+expectancy between the two groups. We conclude that the means are not
+equal. Since the method is similar to what we have used and displayed
+when studying the regional differences, we do not show the process
+here.</li>
+</ul>
  
 </div>
 <div

@@ -419,6 +419,7 @@ statistical test to check heteroscedasticity</p></li>
 </tr>
 </tbody>
 </table>
+ 
 <p><span class="math display">\[H_0:  Equal\ \ Variance \ \ Among\ \
 Regions \ \text { vs } \ H_1: Unequal\ \ Variance \]</span></p>
  
@@ -510,6 +511,7 @@ relationship.</p>
 </tr>
 </tbody>
 </table>
+ 
 <p><span class="math display">\[H_0:  \sigma^2_{Americas}
 =\  \sigma^2_{Europe}\ \text { vs } \ H_1: \sigma^2_{Americas}
 \neq\  \sigma^2_{Europe} \]</span></p>
@@ -569,9 +571,11 @@ class="section level4">
 </tr>
 </tbody>
 </table>
+ 
 <p><span class="math display">\[H_0:  \text{mean life_exp}_{Americas} =
 \ \text{mean life_exp}_{Europe}\ \text { vs } \ H_1: \text{mean
 life_exp}_{Americas} \neq \text{mean life_exp}_{Europe} \]</span></p>
+ 
 <p>The null hypothesis for the t.test is that the two variance are
 equal. The result shows that the p-value is much less than 0.05. Thus,
 we may reject the null hypothesis and conclude that the mean of life
@@ -586,6 +590,11 @@ id="prop.test-compare-the-proportion-of-life-expectancy-over-70-between-western-
 class="section level2">
 <h2>3. prop.test : Compare the Proportion of Life Expectancy Over 70
 Between Western Pacific and South-East Asia</h2>
+ 
+<p>We can tell from the boxplot above that the boxes of Western Pacific
+and South-East Asia are almost overlapping. The majority of them seem to
+be over 65 years. Thus we are interested in comparing the proportion of
+life expectancy over 65 year in the two regions.</p>
 <pre class="r"><code>data %&gt;% 
   janitor::clean_names() %&gt;% 
   filter(region == &quot;Western Pacific&quot;) %&gt;% 
@@ -669,6 +678,17 @@ continuity correction</td>
 </tr>
 </tbody>
 </table>
+ 
+<p><span class="math display">\[H_0:  \text{Proportion}_{Western\
+Pacific} = \ \text{Proportion}_{South-East\ Asia}\ \text { vs } \ H_1:
+\text{mean life_exp}_{Western\ Pacific} \neq \text{mean
+life_exp}_{South-East\ Asia} \]</span></p>
+ 
+<p>The null hypothesis for the prop.test is that the two proportions are
+equal. The result shows that the p-value is approximately 0.104. Thus,
+under the significance level of 0.05, we fail to reject the null. We
+have evidence that the proportion of life expectancy above 65 in Western
+Pacific is the same as in South-East Asia.</p>
  
 </div>
 <div id="average-life-expectancy-by-region-year-combination"

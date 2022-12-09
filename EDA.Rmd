@@ -912,7 +912,7 @@ where $\sigma_x=\sqrt{var(x)}$ and $\sigma_y=\sqrt{var(y)}$.
 
 The coefficient as a value between $-1\leq\rho(x,y)\leq1$. If the coefficient is zero, then x and y does not have correlation at all. If the coefficient is closer to a value of +1 or -1, then the correlation between the two variable is stronger. A +1 coefficient means the two variables have a perfect positive correlation whereas a -1 value means the two variables have a perfect negative correlation. 
 
-#### Results
+### Results
 
 Over the time:
 ```{r,message = FALSE, warning = FALSE}

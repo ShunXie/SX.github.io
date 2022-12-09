@@ -1,5 +1,5 @@
 ---
-title: ""
+title: "Introduction"
 
 output: 
   html_document:
@@ -12,11 +12,14 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+\ \par
 # Motivation
 
 Two of our group members celebrated their birthday in November, and immediately they started wondering how many birthdays remain in their life, how long could they survive in this world.
 
 
+\ \par
+\ \par
 # Initial Question
 
 Initial questions:
@@ -28,7 +31,8 @@ Do different countries have significantly different life expectancy?
 What factors account for the differences in life expectancy in different countries and regions?
 
 
-
+\ \par
+\ \par
 # Introduction
 
 People in different regions have different life expectancies. Even in New York, life expectancy varies over regions due to different economic statuses, different infrastructures, etc. Other factors such as the explosion of measles and polio in the previous century also had a great impact on life expectancy. Studies in the course of epidemiology and the emergence of pandemics such as Covid-19 and SARS have shown us how devastating viruses can be and how vulnerable people are facing epidemics. In response, people produce vaccines to avoid being infected before becoming immune. Inspired by the course we learn, it is natural to wonder about the effect of vaccinations on life expectancy and perhaps to figure out the factors that could potentially have the most influential impact on life expectancy: social-economic factors, public health factors, or both.
@@ -37,17 +41,23 @@ Longevity is one of the factors people pursue over centuries. Numerous articles 
 
 There are papers focused on predicting life expectancy. In the work by [Clarke et. al.](How accurate are doctors, nurses and medical students at predicting life expectancy? - ScienceDirect), they stratified the result predicted by different occupations, namely doctors nurse and medical students, and  discover a low prediction accuracy (10%) based only on disease factors. Therefore, in our paper, we decide to consider more non-medical variables. On the other hand, the architectural model designed by [Sormin et. al.](Predictions of World Population Life Expectancy Using Cyclical Order Weight / Bias - IOPscience) reaches an accuracy of 97% in predicting life expectancy on a global level. However, the model was over-complicated (requires a 1000 epoch training) and it can not identify potential significant factors based on the model. Takes into consideration of all factors, we consider linear model as our main regression method and choose economic factors and health related factors (discuss later). 
 
-
-### Related work
+\ \par
+\ \par
+## Related work
  
 Some existing research shows that life expectancy is related to some factors, including genetics: A person's genes can play a role in determining their lifespan. Certain genetic disorders or conditions, such as cystic fibrosis or Down syndrome, can shorten a person's lifespan[Ruby, 2018](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6218226). And, Lifestyle choices: Lifestyle choices, such as smoking, excessive alcohol consumption, and lack of exercise, can negatively impact life expectancy. On the other hand, healthy behaviors, such as regular exercise, eating a balanced diet, and avoiding harmful substances, can increase life expectancy[Mehta 2017](https://www.healthaffairs.org/doi/full/10.1377/hlthaff.2016.1569). Also, Access to healthcare: Access to quality healthcare can play a significant role in determining life expectancy. People who have access to regular medical care, preventive services, and treatment for chronic conditions are more likely to live longer than those who do not[Chan 2012](https://journals.sagepub.com/doi/full/10.1177/1010539512454163). Socioeconomic factors: Socioeconomic factors, such as income, education, and occupation, can also influence life expectancy. In general, people who have higher incomes, higher levels of education, and professional occupations tend to live longer than those who do not[Lin 2003](https://www.jstor.org/stable/48666299#metadata_info_tab_contents). Additionally , Environmental factor is also important: Environmental factors, such as pollution, exposure to toxins, and living conditions, can also affect life expectancy. People who live in environments with high levels of pollution, toxins, or poor living conditions may have a lower life expectancy than those who live in healthier environments[Tchounwou 2021](https://www.mdpi.com/1660-4601/18/16/8559).
  
  
-### Sources
+\ \par
+\ \par
+## Sources
  
 Our main datasets is WHO Life Exp Dataset, which covers the years 2000-2016 for 183 countries, including 32 variables  such as health-related factors and GNI per capita. It is extracted from the following website: https://www.kaggle.com/datasets/mmattson/who-national-life-expectancy?resource=download
- 
-### Variable Selection
+
+
+\ \par
+\ \par
+## Variable Selection
  
 Based on the current research and the data we had, we decided to study the impressions of the variables by country on life expectancy. We decided to remove data related to mortality, because life expectancy is calculated from these data, so those are meaningless to predict life expectancy. Other variables can be considered relevant and for following study. For example, the GDP and development status of the country, local disease situation, education level, and the living habits of people in the country like alcohol consumption . 
  

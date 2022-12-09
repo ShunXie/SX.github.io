@@ -468,8 +468,8 @@ expectancy among regions are not equal. Thus, we may perform a
 statistical test to check heteroscedasticity</p></li>
 </ul>
  
-<div id="test-of-equal-variances" class="section level4">
-<h4>test of equal variances</h4>
+<div id="test-of-equal-variances" class="section level3">
+<h3>test of equal variances</h3>
  
 <p><span class="math display">\[H_0:  Equal\ \ variance \ \ among\ \
 regions \ \text { vs } \ H_1: Unequal\ \ variance \]</span></p>
@@ -507,7 +507,7 @@ reject the null and conclude that the variances of life expectancy among
 different regions is not equal. Consequently, we cannot perform ANOVA to
 test the difference of mean life expectancy in all the six regions. We
 should perform t.test between two selected regions separately.</p>
- 
+<p><br> <br></p>
 </div>
 </div>
 <div
@@ -523,8 +523,8 @@ to study if the mean life expectancy in the two regions are
 significantly different.</p>
  
 <div id="extract-life-expectancy-in-americas-and-europe"
-class="section level4">
-<h4>extract life expectancy in Americas and Europe</h4>
+class="section level3">
+<h3>extract life expectancy in Americas and Europe</h3>
 <pre class="r"><code>Americas &lt;- data %&gt;% 
   janitor::clean_names() %&gt;% 
   filter(region == &quot;Americas&quot;) %&gt;% 
@@ -544,8 +544,8 @@ values in Americas. Thus, we turn to statistical test to decide on the
 relationship.</p>
  
 </div>
-<div id="test-equal-variance" class="section level4">
-<h4>test equal variance</h4>
+<div id="test-equal-variance" class="section level3">
+<h3>test equal variance</h3>
  
 <p><span class="math display">\[H_0:  \sigma^2_{Americas}
 =\  \sigma^2_{Europe}\ \text { vs } \ H_1: \sigma^2_{Americas}
@@ -602,8 +602,8 @@ unequal variance.</p>
  
 </div>
 <div id="sample-t.test-with-unknown-unequal-variances"
-class="section level4">
-<h4>2 sample t.test with unknown unequal variances</h4>
+class="section level3">
+<h3>2 sample t.test with unknown unequal variances</h3>
  
 <p><span class="math display">\[H_0:  \text{mean life_exp}_{Americas} =
 \ \text{mean life_exp}_{Europe}\ \text { vs } \ H_1: \text{mean
@@ -660,7 +660,7 @@ we may reject the null hypothesis and conclude that the mean of life
 expectancy in Americas and Europe are different. Since the test
 statistics is negative, we know that mean life expectancy in Americas is
 smaller than Europe.</p>
- 
+<p><br> <br></p>
 </div>
 </div>
 <div
@@ -767,7 +767,7 @@ equal. The result shows that the p-value is approximately 0.104. Thus,
 under the significance level of 0.05, we fail to reject the null. We
 have evidence that the proportion of life expectancy above 65 in Western
 Pacific is the same as in South-East Asia.</p>
- 
+<p><br> <br></p>
 </div>
 <div id="average-life-expectancy-by-region-year-combination"
 class="section level2">
@@ -972,7 +972,7 @@ overall trend.</li>
 <li>It is clearly shown in the plot that Africa has a much lower life
 expectancy than the other regions.</li>
 </ul>
- 
+<p><br> <br></p>
 </div>
 <div id="life-expectancy-by-income-level" class="section level2">
 <h2>5. Life Expectancy by Income Level</h2>
@@ -1045,7 +1045,7 @@ between any two groups. Since the method is similar to what we have used
 and displayed when studying the regional differences, we do not show the
 process here.</li>
 </ul>
- 
+<p><br> <br></p>
 </div>
 <div id="life-expectancy-by-development-status" class="section level2">
 <h2>6. Life Expectancy by Development Status</h2>
@@ -1108,7 +1108,7 @@ equal. Since the method is similar to what we have used and displayed
 when studying the regional differences, we do not show the process
 here.</li>
 </ul>
- 
+<p><br> <br></p>
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>

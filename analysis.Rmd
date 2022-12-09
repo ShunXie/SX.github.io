@@ -76,11 +76,8 @@ data %>%
 
 
 
-
-
-
 \ \par
-#### test of equal variances
+### test of equal variances
 
 \ \par
 $$H_0:  Equal\ \ variance \ \ among\ \ regions \ \text { vs } \ H_1: Unequal\ \ variance $$
@@ -101,7 +98,9 @@ Consequently, we cannot perform ANOVA to test the difference of mean life expect
 
 
 
-\ \par
+<br>
+<br>
+
 ## 2. t.test : Compare Mean Life Expectancy Between Americas and Europe
 
 \ \par
@@ -109,7 +108,7 @@ From the boxplot above, we find that the life expectancy in Americas and Europe 
 
 
 \ \par
-#### extract life expectancy in Americas and Europe
+### extract life expectancy in Americas and Europe
 ```{r}
 Americas <- data %>% 
   janitor::clean_names() %>% 
@@ -132,7 +131,7 @@ In order to decide on which type of t.test we should perform, we need to compare
 We can roughly tell from the boxplot that Americas has a smaller variance. But there also exist many outliers with low life expectancy values in Americas. Thus, we turn to statistical test to decide on the relationship.
 
 \ \par
-#### test equal variance
+### test equal variance
 
 \ \par
 $$H_0:  \sigma^2_{Americas} =\  \sigma^2_{Europe}\ \text { vs } \ H_1: \sigma^2_{Americas} \neq\  \sigma^2_{Europe} $$
@@ -152,7 +151,7 @@ The null hypothesis for the variance test is that the two variance are equal. Th
 
 
 \ \par
-#### 2 sample t.test with unknown unequal variances
+### 2 sample t.test with unknown unequal variances
 
 \ \par
 $$H_0:  \text{mean life_exp}_{Americas} = \ \text{mean life_exp}_{Europe}\ \text { vs } \ H_1: \text{mean life_exp}_{Americas} \neq \text{mean life_exp}_{Europe} $$
@@ -171,7 +170,9 @@ The null hypothesis for the t.test is that the two variance are equal. The resul
 
 
 
-\ \par
+<br>
+<br>
+
 ## 3. prop.test : Compare the Proportion of Life Expectancy Over 70 Between Western Pacific and South-East Asia
 
 
@@ -212,7 +213,9 @@ The null hypothesis for the prop.test is that the two proportions are equal. The
 
 
 
-\ \par
+<br>
+<br>
+
 ## 4. Average Life Expectancy by (region, year) Combination
 
 ```{r,message=FALSE}
@@ -247,7 +250,9 @@ data %>%
   * It is clearly shown in the plot that Africa has a much lower life expectancy than the other regions.
 
 
-\ \par
+<br>
+<br>
+
 ## 5. Life Expectancy by Income Level
 
 ```{r}
@@ -289,7 +294,9 @@ $$H_0:  \text{mean life_exp}_{group \ i} = \ \text{mean life_exp}_{group \ j}\ \
 
 
 
-\ \par
+<br>
+<br>
+
 ## 6. Life Expectancy by Development Status
 
 ```{r}
@@ -329,7 +336,9 @@ $$H_0:  \text{mean life_exp}_{developing} = \ \text{mean life_exp}_{developed}\ 
 
 
 
-\ \par
+<br>
+<br>
+
 ## Summary
 
 In this part, we applied statistical analysis to studying the differences in life expectancy caused by various factors. We first examine the distribution features and then choose appropriate tests to perform.

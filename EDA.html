@@ -392,6 +392,8 @@ div.tocify {
 </div>
 
 
+ 
+ 
 <div id="shiny-app" class="section level1">
 <h1>Shiny App</h1>
 <p>Life expectancy as well as other included variables changes over
@@ -401,6 +403,9 @@ developed by our teammate, which illustrates the life expectancy for
 individual countries in the world wide scale. A screen shot is as
 following:</p>
 <p><img src="images/shiny_app.png" /></p>
+ 
+ 
+ 
 </div>
 <div id="time-series-plot" class="section level1">
 <h1>Time series plot</h1>
@@ -569,17 +574,17 @@ have by far the highest value among other countries.</p>
 <pre class="r"><code>ts1 = Time_series_plot(&quot;une_pop&quot;,merged_data)
 ts2 = Time_series_income(&quot;une_pop&quot;,merged_data)
 plot_grid(ts1, ts2)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-12-1.png" width="864" style="display: block; margin: auto;" />
-The population in developing countries is much higher than population in
-developed countries. Interestingly, when we consider the population
+<p><img src="EDA_files/figure-html/unnamed-chunk-12-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>The population in developing countries is much higher than population
+in developed countries. Interestingly, when we consider the population
 among different income groups, we can see that lower middle income
 countries have the highest population, whereas low income countries and
 high income countries both have value around 20,000,000.</p>
 <pre class="r"><code>ts1 = Time_series_plot(&quot;une_literacy&quot;,merged_data)
 ts2 = Time_series_income(&quot;une_literacy&quot;,merged_data)
 plot_grid(ts1, ts2)</code></pre>
-<p><img src="EDA_files/figure-html/unnamed-chunk-13-1.png" width="864" style="display: block; margin: auto;" />
-The literacy coverage has some missing value. In particular, all
+<p><img src="EDA_files/figure-html/unnamed-chunk-13-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>The literacy coverage has some missing value. In particular, all
 developed countries have a missing value in year 2006. But as indicated
 in the plots, literacy coverage is higher in developed and high income
 countries. Additionally, developing countries have an increasing trend
@@ -621,7 +626,7 @@ res = cor(mortality_correlation)
 corrplot(res, type = &quot;upper&quot;, order = &quot;hclust&quot;, 
          tl.col = &quot;black&quot;, tl.srt = 45)</code></pre>
 <p><img src="EDA_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>The heat map shows that the chosen factors, namely mortality,
+<p>heat map shows that the chosen factors, namely mortality,
 life_expectancy are very correlated. Mortality is negatively correlated
 to une life expectancy and it is directly correlated to infant mortality
 and mortality for children from age 1 to 4. This may because life
@@ -1202,9 +1207,10 @@ distance methods.</p>
 of the linear relation between two variables <a
 href="https://link.springer.com/chapter/10.1007/978-3-642-00296-0_5">paper</a>.
 It has the formula defined in following definition:</p>
-<p><br> <br></p>
-<div id="definition-pearson" class="section level4">
-<h4>Definition Pearson</h4>
+ 
+</div>
+<div id="definition-pearson" class="section level3">
+<h3>Definition Pearson</h3>
 <p>Let x and y be two random variables with zero mean and <span
 class="math inline">\(x,y\in \mathbb R\)</span>, the pearson correlation
 coefficient is defined as:</p>
@@ -1221,7 +1227,7 @@ coefficient is closer to a value of +1 or -1, then the correlation
 between the two variable is stronger. A +1 coefficient means the two
 variables have a perfect positive correlation whereas a -1 value means
 the two variables have a perfect negative correlation.</p>
-</div>
+ 
 </div>
 <div id="results" class="section level3">
 <h3>Results</h3>
@@ -1362,8 +1368,9 @@ V^2(X,Y;w) = ||f_{X,Y}(a,b)-f_X(a)f_Y(b)||^2_w=
 \int_{\mathbb{R}^{p+q}}|f_{X,Y}(a,b)-f_X(a)f_Y(b)|^2 w( a, b)\,d a\, d b
 \end{equation}
 \]</span></p>
-<div id="proof" class="section level5">
-<h5>Proof</h5>
+</div>
+<div id="proof" class="section level4">
+<h4>Proof</h4>
 <p><em>The criterion of independent means that for vectors <span
 class="math inline">\(a\)</span>, <span
 class="math inline">\(b\)</span>, the probability density function <span
@@ -1387,7 +1394,6 @@ al., only non-integrable functions satisfy the condition for weight
 function. In order to specify the formula, I need the following
 lemma</p>
 <p><br> <br></p>
-</div>
 </div>
 <div id="lemma-1" class="section level4">
 <h4>Lemma 1</h4>
@@ -1416,8 +1422,8 @@ distance covariance will be well-defined. Note by the weight, I have
 )^{-1}dadb\)</span>. This is proven in the following definition. \</p>
 <p><br> <br></p>
 </div>
-<div id="deinition-4" class="section level4">
-<h4>Deinition 4</h4>
+<div id="definition-4" class="section level4">
+<h4>Definition 4</h4>
 <p>Define the distance covariance (dCov) for random vectors <span
 class="math inline">\(X\)</span> and <span
 class="math inline">\(Y\)</span> with finite expectation as the

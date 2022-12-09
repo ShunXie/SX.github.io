@@ -55,6 +55,8 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete   = scale_fill_viridis_d
 ```
 
+\ \par
+\ \par
 # Shiny App
 
 Life expectancy as well as other included variables changes over decades. A way of seeing the trend is via shiny app [here](https://7lx8uo-txbrook.shinyapps.io/map_dashboard/#section-current-health-expenditure) developed by our teammate, which illustrates the life expectancy for individual countries in the world wide scale. A screen shot is as following:
@@ -63,6 +65,9 @@ Life expectancy as well as other included variables changes over decades. A way 
 ![](images/shiny_app.png)
 
 
+\ \par
+\ \par
+\ \par
 # Time series plot
 
 With our existence data, we need to evaluate the overall trend with respect to different types of countries. One way to differentiate country is to identify that whether the country is classified as developed or developing country. In the work by [SP Heyneman](https://www.journals.uchicago.edu/doi/pdf/10.1086/451180?casa_token=9gJkljIq_ukAAAAA:j3C4Kv-0Jp_gUpmVKvxFAxT1oGg8ryzRaHR_hdBX7QlqrAPGKU36A43QBGZ65AItaKU-LrLn6NE), he claimed that the change of economic status and school has a big difference between developed and developing country. We treat these variables as our predictors to the life expectancy. Therefore, it is likely that the predictors are different between developed and developing country. On the other hand, people with different income have different life expectancy. According to [Chatty et. al.](https://jamanetwork.com/journals/jama/article-abstract/2513561), the richest 1% income group has a 14.6 years and 10.1 years higher life expectancy for men and women respectively against the poorest 1% of income group. Therefore, we plot the trends for different variables over time with respect to development of the country and income group of the country. 
@@ -131,6 +136,7 @@ plot_grid(ts1, ts2)
 
 ```
 
+
 Life expectancy as our dependent variable has similar trends for both developed and developing countries. Two life expectancy indices have a persistent increase over time. However, the expectancy for developed countries is 10 years higher than the developing countries over 16 years. The similar trends also holds for different income groups but countries classified  in low income group has a higher growth rate for life expectancy than other groups. 
 
 
@@ -140,13 +146,16 @@ ts2 = Time_series_income("adult_mortality",merged_data)
 plot_grid(ts1, ts2)
 ```
 
+
 Adult mortality has a similar trend with life expectancy, but in a reversed order. The mortality rate in developing and low income countries decreases with a higher rate than developed and high income countries. 
+
 
 ```{r,message = FALSE, warning = FALSE, fig.width=9}
 ts1 = Time_series_plot("alcohol",merged_data)
 ts2 = Time_series_income("alcohol",merged_data)
 plot_grid(ts1, ts2)
 ```
+
 
 Alcohol seems to have a stable trends for all countries. However, alcohol consuption in developed countries have a much higher value than developing country, and countries classified as high and upper middle income have a higher alcohol consuption value than lower middle and low income, where countries in the latter two two categories have a value of 2 bottles per capita.
 
@@ -158,6 +167,7 @@ ts1 = Time_series_plot("bmi",merged_data)
 ts2 = Time_series_income("bmi",merged_data)
 plot_grid(ts1, ts2)
 ```
+
 
 Over years, bmi for most of countries increases and countries in different categories all increases regardless of development and income group of the country. Interestingly, upper middle income countries exceed the bmi for high income countries, whereas low income countries has a by far lower value than other countries. Also, developing countries has a higher rate of increase as indicated by a steeper line (higher tangent) according to the time series plot.
 
@@ -171,6 +181,7 @@ ts2 = Time_series_income("measles",merged_data)
 plot_grid(ts1, ts2)
 ```
 
+
 Measles vaccination coverage increases for developing countries and developed countries have a persistently high vaccination coverage. On the other hand, developing countries and low income countries has a soar in vaccination coverage over the time period. 
 
 ```{r,message = FALSE, warning = FALSE,fig.width=9}
@@ -178,6 +189,7 @@ ts1 = Time_series_plot("age5_19obesity",merged_data)
 ts2 = Time_series_income("age5_19obesity",merged_data)
 plot_grid(ts1, ts2)
 ```
+
 
 Although due to the development over time period, the problem obesity worsen and increases over all countries. Upper middle income and developing countries have a higher increase in obesity rate. 
 
@@ -187,6 +199,7 @@ ts1 = Time_series_plot("basic_water",merged_data)
 ts2 = Time_series_income("basic_water",merged_data)
 plot_grid(ts1, ts2)
 ```
+
 
 Time series plot for basic water indicates an increase in percentage of people getting basic water over time for developing and lower income countries. On the other hand, high income and developed countries have a constant high basic water coverage. 
 
@@ -198,14 +211,8 @@ ts2 = Time_series_income("doctors",merged_data)
 plot_grid(ts1, ts2)
 ```
 
+
 Time series plot for doctors per 10,000 people has interesting trends. Despite the constant increase in high income countries and developed countries, other countries seems to have a fluctuation over the period. There is a sudden decrease in 2004 where SARS explodes. As a result by [Magdalena et. al.](https://www.mdpi.com/1648-9144/57/4/325), there are 48.94% of the doctors treated infected patients and 7.4% of the doctors were confirmed infected during the first 6 month period. This could potentially lead to death of doctors in lower middle income, low income and developing countries. 
-
-
-
-
-
-
-
 
 
 
@@ -215,6 +222,7 @@ ts1 = Time_series_plot("une_edu_spend",merged_data)
 ts2 = Time_series_income("une_edu_spend",merged_data)
 plot_grid(ts1, ts2)
 ```
+
 
 Education expenditure for all countries varies. High and developed countries have the highest expenditure among all countries over all years. 
 
@@ -230,15 +238,14 @@ The gni is different for developed and developing country over the year. While d
 
 
 
-
 ```{r,message = FALSE, warning = FALSE,fig.width=9}
 ts1 = Time_series_plot("une_pop",merged_data)
 ts2 = Time_series_income("une_pop",merged_data)
 plot_grid(ts1, ts2)
 ```
+
+
 The population in developing countries is much higher than population in developed countries. Interestingly, when we consider the population among different income groups, we can see that lower middle income countries have the highest population, whereas low income countries and high income countries both have value around 20,000,000. 
-
-
 
 
 
@@ -248,6 +255,8 @@ ts1 = Time_series_plot("une_literacy",merged_data)
 ts2 = Time_series_income("une_literacy",merged_data)
 plot_grid(ts1, ts2)
 ```
+
+
 The literacy coverage has some missing value. In particular, all developed countries have a missing value in year 2006. But as indicated in the plots, literacy coverage is higher in developed and high income countries. Additionally, developing countries have an increasing trend in literacy whereas low income countries have a fluctuation but a non increasing or decreasing trend. 
 
 
@@ -257,6 +266,7 @@ ts2 = Time_series_income("PM_value",merged_data)
 plot_grid(ts1, ts2)
 ```
  
+
 Consider only non-missing data, PM value decreases for high and developed countries. The countries with low and lower middle income have a persistent high PM value over the periods, with approximately 100 percentage of total population exposed to levels exceeding WHO guideline value. 
 
 
@@ -267,6 +277,7 @@ ts1 = Time_series_plot("gghe_d",merged_data)
 ts2 = Time_series_income("gghe_d",merged_data)
 plot_grid(ts1, ts2)
 ```
+
 
 Health expenditure in developed countries soar over the years from 2000 to 2016, from 4% to 5% of total GDP. Developing countries also have an increase in the health expenditure, but with a lower rate. For different income level, high income countries have the highest expenditure on health and it has an increasing trend. However, health expenditure measured in percentage of GDP decreases among low income countries. 
 
@@ -286,7 +297,8 @@ corrplot(res, type = "upper", order = "hclust",
          tl.col = "black", tl.srt = 45)
 ```
 
-The heat map shows that the chosen factors, namely mortality, life_expectancy are very correlated. Mortality is negatively correlated to une life expectancy and it is directly correlated to infant mortality and mortality for children from age 1 to 4. This may because life expectancy is calculated based on mortality rate. Although linear relation can perfectly explain the two relation, it is not a good idea to include such variable as it is directly a variable for calculating life expectancy. Therefore, it is not a good idea to include mortality as our predictor. 
+
+ heat map shows that the chosen factors, namely mortality, life_expectancy are very correlated. Mortality is negatively correlated to une life expectancy and it is directly correlated to infant mortality and mortality for children from age 1 to 4. This may because life expectancy is calculated based on mortality rate. Although linear relation can perfectly explain the two relation, it is not a good idea to include such variable as it is directly a variable for calculating life expectancy. Therefore, it is not a good idea to include mortality as our predictor. 
 
 ```{r}
 disease_correlation = merged_data %>% 
@@ -313,6 +325,7 @@ corrplot(res, type = "upper", order = "hclust",
          tl.col = "black", tl.srt = 45)
 ```
 
+
 BMI, Thinness and obesity are three variables measuring similar characteristics. Ideally, people that are thinner, is less likely to have obesity and a lower bmi value. Therefore, I make corelation heat map and it turns out that the three variables are quite correlated, with a value around -0.55. For the prevention of multi-colinearity, I choose bmi only in our analysis as it is more meaningful. A BMI value greater than 25 is classified as obesity based on [BMI Journal](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4890841/) and it is one of the problem that exists among people. Cardiomyopathy, for instance, is one of the leading problem due to obesity in recent years by [Benoit et. al.](https://www.tandfonline.com/doi/full/10.1586/14779072.2014.952283). Thus, we want to figure out if bmi can be used to predict life expectancy and whether a high bmi do lead to a decrease in life expectancy. 
 
 
@@ -326,10 +339,6 @@ BMI, Thinness and obesity are three variables measuring similar characteristics.
 # Correlation and Scatter Plot:
 
 Visualization via scatter plot is a way to further discover the pairwise relation between two chosen variable. By plotting the scatter plot and fitted using best linear line, we can potential obtain the relationship between variables and how well linear trend can explain the data. Since we choose Life expectancy as our response variable, we can plot the scatter plot between life expectancy and other chosen predictors to see the correlation between variables. 
-
-
-
-
 
 
 
@@ -374,6 +383,7 @@ plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1,
 
 
 ```
+
 
 Among four years, the trend of relation between life expectancy and alcohol are similar. Although the line of best fit split points into an evenly two parts, there are more points with low alcohol values. And linear trend may not fully explain such relation. 
 
@@ -420,6 +430,7 @@ plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1,
 
 ```
 
+
 Bmi has a positive correlation with life expectancy as shown in the plots, and the points for the four years are almost exactly the same. Linear trend seems to explain the relation well as suggested in the scatter plots. When bmi increases, the life expectancy is likely to have a higher value, although we cannot check the causation in behind.
 
 
@@ -464,6 +475,7 @@ plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1,
 
 
 ```
+
 
 Measle vaccination coverage seems to indicate a high life expectancy when vaccination coverage is high. But such relation may be non linear as there are lots of values clustered in the upper right corner.
 
@@ -510,6 +522,7 @@ plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1,
 
 ```
 
+
 Although linear trend works well in the scatter plot between obesity and life expectancy, the points suggests a non-linear, perhaps a quadratic trends, in the graph. There is clearly a "r" shape pattern in the graph. Similar to other plots, the four years have almost the same scatter plot.
 
 
@@ -555,6 +568,7 @@ plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1,
 
 ```
 
+
 Linear trends fit the relation between Life Expectancy and percentag of people access to basic water well. There is clearly an upward increasing trend. 
 
 ```{r,message = FALSE, warning = FALSE,fig.width=9}
@@ -598,6 +612,7 @@ plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1,
 
 
 ```
+
 
 Similar to obesity, the graph has a "r" pattern and thus, there exist a non linear correlation. Thus, linear relation may not be accurate to explain the association. However, the linear trend do include most of the information, so it might be sufficient to just use linear relation. We will check it further in later analysis. 
 
@@ -644,6 +659,7 @@ plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1,
 
 ```
 
+
 The expenditure also suggest a linear increasing trend for all years. Year 2015 seems to have an outlier with a very high education expenditure. Otherwise, the pattern is similar for the four years. The scatter plot is quite spread out, so there may be some indication of non linear trend but we cannot conclude from the scatter plot. 
 
 
@@ -688,6 +704,7 @@ plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1,
 
 
 ```
+
 
 The association between life expectancy and GNI per capita also shows a non-linear correlation with a "r" patter. Therefore, non-linear correlation analysis may be needed. 
 
@@ -734,6 +751,7 @@ plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1,
 
 ```
 
+
 As seen in the scatter plot, population is not very correlated to life expectancy and the data are very focused on low population. A linear relation is not quite appropriate here. 
 
 
@@ -778,6 +796,7 @@ plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1,
 
 
 ```
+
 
 Due to the missing values, literacy coverage does not have a lot of details. But linear trend do explain the over all association between life expectancy and percentage of people who are able to write and speak a language. 
 
@@ -827,6 +846,7 @@ plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1,
 
 ```
 
+
 Since most of people are exposed to abnormal PM level, most of the PM value is clustered at 100. Linear relation may be sufficient to explain lower PM values but it may be difficult to include all the information for high PM value. 
 
 
@@ -873,6 +893,7 @@ plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1,
 
 ```
 
+
 Health expenditure is positively correlated with life expectancy. However, there may be non linear trend as there is a curve bending at health expenditure = 3% of GDP. 
 
 
@@ -894,10 +915,8 @@ Although scatter plot gives us some visualization of correlation between variabl
 Pearson correlation is a common EDA method that measures the strength of the linear relation between
 two variables [paper](https://link.springer.com/chapter/10.1007/978-3-642-00296-0_5). It has the formula defined in following definition:
 
-<br>
-<br>
-
-#### Definition Pearson
+\ \par
+### Definition Pearson
 
 Let x and y be two random variables with zero mean and $x,y\in \mathbb R$, the pearson correlation coefficient is defined as:
 
@@ -912,6 +931,7 @@ where $\sigma_x=\sqrt{var(x)}$ and $\sigma_y=\sqrt{var(y)}$.
 
 The coefficient as a value between $-1\leq\rho(x,y)\leq1$. If the coefficient is zero, then x and y does not have correlation at all. If the coefficient is closer to a value of +1 or -1, then the correlation between the two variable is stronger. A +1 coefficient means the two variables have a perfect positive correlation whereas a -1 value means the two variables have a perfect negative correlation. 
 
+\ \par
 ### Results
 
 Over the time:
@@ -1034,7 +1054,7 @@ V^2(X,Y;w) = ||f_{X,Y}(a,b)-f_X(a)f_Y(b)||^2_w= \int_{\mathbb{R}^{p+q}}|f_{X,Y}(
 \end{equation}
 \]
 
-##### Proof
+#### Proof
 *The criterion of independent means that for vectors $a$, $b$, the probability density function $f_X(a)$, $f_Y(b)$ and their joint probability density function $f_{X,Y}(a,b)$ satisfies $f_{X,Y}(a,b)=f_X(a)f_Y(b)$. Therefore, I have $V^2(X,Y;w)=||0||^2_w=0$ if they are independent hence the equation satisfy the condition that $V^2=0$ only if variables are independent. (see [paper](https://d1wqtxts1xzle7.cloudfront.net/61217354/solucionario_estadistica_papoulis20191114-47174-4f1occ-with-cover-page-v2.pdf?Expires=1669433644&Signature=PaZvHQ0E9kQ6FyxALEPJ5A1LFgJ3-4zYvgbzSUP7obp~cfIuvZe~8QTXle4i6usOg6MOXKs-KkOUzwVgAz60n4dm5r595qPuZPhzyfu9pE~2hydHWubyH8dfZa-59DF07O3hPFdPgPDrvSGiOWFtfuD2HXBXN2IQ4nm~UJ94pPMG7K8q0jh4WYqDp7WbQ-9WQ5hFULnUKGIH2ok7rwAFEbHqMBR6FAIHJO8gtUjaTtMhc6K4OIAmzBnoqgSOInEE6kXy4agsg1sboDLyxxJMOfJa33GPNRlwrU1Yv69wcb3rsjtjL2s9JGM4mJATS6xpRspz0RBDDZqXSIngfjmE0w__&Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA))*
 
 
@@ -1077,7 +1097,7 @@ By using such weight function and lemma 3.1, the definition of distance covarian
 <br>
 <br>
 
-#### Deinition 4
+#### Definition 4
 Define the distance covariance (dCov) for random vectors $X$ and $Y$ with finite expectation as the following non-negative figure:
 \[
 \begin{equation}

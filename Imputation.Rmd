@@ -12,8 +12,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<br>
-<br>
+\ \par
 
 # Background Information of the datasets
 

@@ -407,7 +407,7 @@ We draw the following conclusions from the tests and plots result :
   
   * Western Pacific and South-East Asia has approximately the same proportion of life expectancy over 65.
   
-  * Average life expectancy are significantly different among income groups and development status. People with higher income and from more developed countries tend to live longer.
+  * Average life expectancy are significantly different among income groups and development status groups. People with higher income and from more developed countries tend to live longer.
 
 
 

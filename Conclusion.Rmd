@@ -11,7 +11,9 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
- 
+
+<br>
+
 # Findings and Conclusion
 
   In our report, we first cleaned our data and utilized the k-means imputation to deal with missing value.
@@ -23,14 +25,19 @@ knitr::opts_chunk$set(echo = TRUE)
   From the regression, we concluded that the access to vaccines and basic clean water is really important, they have positive effects, while higher income and less alcohol will also lead to a longer life. Most importantly, we showed that the empowerment of women is significant to life expectancy, especially in middle income and upper income groups, which means increasing women’s voice in the country actually helps people live longer. Our model’s adjusted R^2 is 0.78.
   
   By using clustering analysis on the data in 2015, we validate that k mean imputation with 4 groups is the optimal choice for imputation. We also show the result of k mean clustering of the imputed data in the two dimensions with highest explained variance. 
- 
+
+
+<br>
+
 # Challenges
 
   In our major dataset, many variables have missing values over the years 2000 to 2016. We tried to impute them using a clustering method. However, for the variables that have more than 10% NAs, the validity of imputation is greatly reduced. So, in the end, the imputation effect is not ideal enough.
   
   Additionally, we think it necessary to include more variables to cover the aspects of society, economics, environment, health, and so on. Human lifespan is the result of complex influence of multiple factors. The variables we have now are not comprehensive enough to build a better model and make more accurate predictions.
- 
- 
+
+
+<br>
+
 # Limitation, Insights, Further Improvements
 
   Our project focuses on a general level of countries in the world—for instance, the difference of life expectancy in developed countries and developing countries. While we gained some generality of the idea, we lost some specificity. We have less idea of countries within the same income level, especially lower income countries. At the same time, we did not explore the difference of life expectancy in states or regions within a country, like comparison of Urban versus rural areas, which should be conducted in further studies.

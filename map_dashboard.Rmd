@@ -439,7 +439,7 @@ Take the year of 2015 as an example,
 \ \par
   * Uganda has the highest alcohol consumption level in Africa.
   
-  \ \par
+\ \par
   * Estonia, a country in the Northern Europe, has the highest alcohol consumption level in the world.
 
 
@@ -639,7 +639,7 @@ Take the year of 2015 as an example,
 \ \par
   * America and Sierra Leone have the highest current health expenditure in the world.
   
-  \ \par
+\ \par
   * Generally speaking, Americas, Western and Northern Europe , Australia, New Zealand and Janpan have higher current health expenditure level.
   
 

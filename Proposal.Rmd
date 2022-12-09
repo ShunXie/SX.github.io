@@ -57,4 +57,4 @@ Select reasonable variables: We need to find more variables for our dataset, in 
   * 11.21~11.27 Finish EDA Section, Time Series Plot and analysis linear model part, beginning Interactive World Map.
   * 11.28~12.4 Finish the World Map, begin Website design and begin to write the report.
   * 12.5~12.10 Finish the report and video.
-  * 12.11~12.15 Finish presentation ppt and scripts.
+  * 12.11~ Enjoy a life without DS project. (So sad TAT)

@@ -384,58 +384,488 @@ div.tocify {
 
 <div id="world-life-expectancylive-to-thrive" class="section level1">
 <h1>World Life Expectancy—Live to thrive</h1>
+<p><br> <br></p>
 <div id="motivation" class="section level2">
 <h2>Motivation</h2>
+<p>Two of our group members celebrated their birthday in November, and
+immediately they started wondering how many birthdays remain in their
+life, how long could they survive in this world.</p>
+<p><br> <br></p>
 </div>
-<div id="related-work" class="section level2">
-<h2>Related work</h2>
+<div id="initial-question" class="section level2">
+<h2>Initial Question</h2>
+<p>Our Initial questions are as following:</p>
+<p>What factors have a significant impact on life expectancy? Do
+different countries have significantly different life expectancy? What
+factors account for the differences in life expectancy in different
+countries and regions?</p>
+<p><br> <br></p>
 </div>
-<div id="initial-questions" class="section level2">
-<h2>Initial questions</h2>
-<div id="new-questions" class="section level3">
-<h3>new questions</h3>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>People in different regions have different life expectancies. Even in
+New York, life expectancy varies over regions due to different economic
+statuses, different infrastructures, etc. Other factors such as the
+explosion of measles and polio in the previous century also had a great
+impact on life expectancy. Studies in the course of epidemiology and the
+emergence of pandemics such as Covid-19 and SARS have shown us how
+devastating viruses can be and how vulnerable people are facing
+epidemics. In response, people produce vaccines to avoid being infected
+before becoming immune. Inspired by the course we learn, it is natural
+to wonder about the effect of vaccinations on life expectancy and
+perhaps to figure out the factors that could potentially have the most
+influential impact on life expectancy: social-economic factors, public
+health factors, or both.</p>
+<p>Longevity is one of the factors people pursue over centuries.
+Numerous articles such as The Value of Health and Longevity by <a
+href="https://www.journals.uchicago.edu/doi/full/10.1086/508033">Murphy,
+et. al.</a> and Exercise and longevity by <a
+href="https://www.sciencedirect.com/science/article/pii/S0378512212003015">Gremeaux
+et. al.</a> all stated the desire for longevity and offered various
+suggestions to maintain good health in both quantitative and theoretical
+ways. On the other hand, the emergence of Public health also aims to
+increase life expectancy by preventing, intervening, monitoring,
+evaluating diseases, environmental hazards, and promoting healthy
+behaviors. Indeed, with vast improvements in health and quality of life
+after the invention of Public Health, the global average life expectancy
+has more than doubled since 1900 <a
+href="https://ourworldindata.org/life-expectancy">Roser 2013</a>. With
+the importance of long life expectancy, Our project aims to identify the
+factors that contribute to life expectancy, both positively and
+negatively, so that individuals can make decisions on personal behavior.
+More importantly, from a macro perspective, governments for different
+countries can publish legislation such as mandatory vaccinations based
+on our results to increase average life expectancy.</p>
+<p>There are papers focused on predicting life expectancy. In the work
+by <a
+href="How%20accurate%20are%20doctors,%20nurses%20and%20medical%20students%20at%20predicting%20life%20expectancy?%20-%20ScienceDirect">Clarke
+et. al.</a>, they stratified the result predicted by different
+occupations, namely doctors nurse and medical students, and discover a
+low prediction accuracy (10%) based only on disease factors. Therefore,
+in our paper, we decide to consider more non-medical variables. On the
+other hand, the architectural model designed by <a
+href="Predictions%20of%20World%20Population%20Life%20Expectancy%20Using%20Cyclical%20Order%20Weight%20/%20Bias%20-%20IOPscience">Sormin
+et. al.</a> reaches an accuracy of 97% in predicting life expectancy on
+a global level. However, the model was over-complicated (requires a 1000
+epoch training) and it can not identify potential significant factors
+based on the model. Takes into consideration of all factors, we consider
+linear model as our main regression method and choose economic factors
+and health related factors (discuss later).</p>
+<div id="related-work" class="section level3">
+<h3>Related work</h3>
+<p>Some existing research shows that life expectancy is related to some
+factors, including genetics: A person’s genes can play a role in
+determining their lifespan. Certain genetic disorders or conditions,
+such as cystic fibrosis or Down syndrome, can shorten a person’s
+lifespan<a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6218226">Ruby,
+2018</a>. And, Lifestyle choices: Lifestyle choices, such as smoking,
+excessive alcohol consumption, and lack of exercise, can negatively
+impact life expectancy. On the other hand, healthy behaviors, such as
+regular exercise, eating a balanced diet, and avoiding harmful
+substances, can increase life expectancy<a
+href="https://www.healthaffairs.org/doi/full/10.1377/hlthaff.2016.1569">Mehta
+2017</a>. Also, Access to healthcare: Access to quality healthcare can
+play a significant role in determining life expectancy. People who have
+access to regular medical care, preventive services, and treatment for
+chronic conditions are more likely to live longer than those who do
+not<a
+href="https://journals.sagepub.com/doi/full/10.1177/1010539512454163">Chan
+2012</a>. Socioeconomic factors: Socioeconomic factors, such as income,
+education, and occupation, can also influence life expectancy. In
+general, people who have higher incomes, higher levels of education, and
+professional occupations tend to live longer than those who do not<a
+href="https://www.jstor.org/stable/48666299#metadata_info_tab_contents">Lin
+2003</a>. Additionally , Environmental factor is also important:
+Environmental factors, such as pollution, exposure to toxins, and living
+conditions, can also affect life expectancy. People who live in
+environments with high levels of pollution, toxins, or poor living
+conditions may have a lower life expectancy than those who live in
+healthier environments<a
+href="https://www.mdpi.com/1660-4601/18/16/8559">Tchounwou 2021</a>.</p>
+</div>
+<div id="sources" class="section level3">
+<h3>Sources</h3>
+<p>Our main datasets is WHO Life Exp Dataset, which covers the years
+2000-2016 for 183 countries, including 32 variables such as
+health-related factors and GNI per capita. It is extracted from the
+following website: <a
+href="https://www.kaggle.com/datasets/mmattson/who-national-life-expectancy?resource=download"
+class="uri">https://www.kaggle.com/datasets/mmattson/who-national-life-expectancy?resource=download</a></p>
+</div>
+<div id="variable-selection" class="section level3">
+<h3>Variable Selection</h3>
+<p>Based on the current research and the data we had, we decided to
+study the impressions of the variables by country on life expectancy. We
+decided to remove data related to mortality, because life expectancy is
+calculated from these data, so those are meaningless to predict life
+expectancy. Other variables can be considered relevant and for following
+study. For example, the GDP and development status of the country, local
+disease situation, education level, and the living habits of people in
+the country like alcohol consumption .</p>
+<p>Based on these ideas, we looked through several papers to generate
+more variables that we thought would relate to life expectancy.</p>
+<p>Punching above their weight: a network to understand broader
+determinants of increasing life expectancy. <a
+href="https://equityhealthj.biomedcentral.com/articles/10.1186/s12939-018-0832-y">Fran
+Baum, et al. 2018</a>. Why do some countries do better or worse in life
+expectancy relative to income? An analysis of Brazil, Ethiopia, and the
+United States of America. <a
+href="https://equityhealthj.biomedcentral.com/articles/10.1186/s12939-020-01315-z">Toby
+Freeman, et al. 2020</a>. Both of the papers introduce an idea of some
+countries achieving higher or lower life expectancy than would be
+predicted by their per capita income, and one of the reasons is the
+women’s access to education and politics—-this is explained in the
+second paper. Therefore, we decided to add a variable related to women’s
+power in the country—-percentage of women in the national parliament
+around 2015~2018.</p>
+<p>Determinants of inequalities in life expectancy: an international
+comparative study of eight risk factors.”<a
+href="https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(19)30147-1/fulltext">Mackenbach,JohanP.,et
+al. 2019</a> This article from the Lancet studies 8 different factors on
+human life expectancy, including income levels, smoking status, alcohol
+consumption levels, education levels, bmi, physical activity intensity
+and diet types. It inspires us to include income groups into our study
+as a categorical variable.</p>
+<p>Ambient PM2. 5 reduces global and regional life expectancy. <a
+href="https://pubs.acs.org/doi/10.1021/acs.estlett.8b00360">Apte, Joshua
+S., et al. 2018</a> This article inspires us to take environmental
+factors into consideration. Thus we added PM2.5 relative concentration
+as a numeric variable.</p>
+<p><br> <br></p>
 </div>
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
-<div id="data-sources" class="section level3">
-<h3>Data sources</h3>
-<ul>
-<li><ol style="list-style-type: decimal">
-<li>who_life_exp.csv, WHO Life Expectancy Dataset, from <a
-href="https://www.kaggle.com/datasets/mmattson/who-national-life-expectancy">kaggle</a>.</li>
-</ol></li>
-<li><ol start="2" style="list-style-type: decimal">
-<li>country-codes.csv, Country Code Dataset, from <a
-href="https://github.com/datasets/country-codes">github</a>.</li>
-</ol></li>
-<li><ol start="3" style="list-style-type: decimal">
-<li>pm2.5.csv, WHO Pm2.5 Dataset, from <a
-href="https://data.worldbank.org/indicator/EN.ATM.PM25.MC.M3">the world
-bank</a>.</li>
-</ol></li>
-<li><ol start="4" style="list-style-type: decimal">
-<li>income_level.csv, Income Level Dataset, from <a
-href="https://databank.worldbank.org/source/world-development-indicators">the
-world bank</a></li>
-</ol></li>
-<li><ol start="5" style="list-style-type: decimal">
-<li>around_2019_women_percent_in_national_parliaments.csv, Percent of
-Women in National Parliaments before 2019 Dataset, from <a
-href="https://data.ipu.org/women-ranking?month=1&amp;year=2019">global
-data on national parliaments</a>.</li>
-</ol></li>
-<li><ol start="6" style="list-style-type: decimal">
-<li>government_compulsory_health expenditure_from_1970_2020.csv,
-Government Health Expenditure Dataset, from <a
-href="https://ourworldindata.org/grapher/public-health-expenditure-share-gdp-owid?country=SWE~FRA~DEU~JPN~GBR~BEL~ESP~AUS~NZL~CAN~USA">our
-world in data</a>.</li>
-</ol></li>
-</ul>
+<div id="life-expectancy-dataset" class="section level3">
+<h3>Life Expectancy Dataset</h3>
+<p>We choose WHO Life Expectancy Dataset as our main dataset in our
+study. The data can be accessed <a
+href="https://www.kaggle.com/datasets/mmattson/who-national-life-expectancy?resource=download">here</a>.
+The code is read as following:</p>
+<pre class="r"><code>suppressMessages(library(tidyverse))
+suppressMessages(library(dbplyr))
+options(tibble.print_min = 5)
+
+#Get life expectancy data
+LifeExpectancy = read_csv(&quot;data/who_life_exp.csv&quot;,col_types = cols(.default = col_guess())) %&gt;% 
+  janitor::clean_names()</code></pre>
+<p>Life expectancy datasets contains a total of <code>183</code>
+countries with year ranging from <code>2000</code> to <code>2016</code>.
+There are a total of <code>32</code> variables. Out of which, we
+consider the variables and description is listed below:</p>
+<p>*<code>country</code>: country name</p>
+<p>*<code>country_code</code>: Three letter of the country id</p>
+<p>*<code>region</code>: The region of the country</p>
+<p>*<code>year</code>: year of all values stored</p>
+<p>*<code>life_expect</code>: Life expectancy at birth measured in year.
+It is continuous variable.</p>
+<p>*<code>life_exp60</code>: Life expectancy at age 60 measured in year.
+It is continuous variable.</p>
+<p>*<code>adult_mortality</code>: Adult Mortality Rates of both sexes
+(probability of dying between 15 and 60 years per 1000 population)</p>
+<p>*<code>infant_mort</code>: Death rate up to age 1</p>
+<p>*<code>age1_4mort</code>: Death rate between ages 1 and 4</p>
+<p>*<code>alcohol</code>: Alcohol, recorded per capita (15+) consumption
+(in litres of pure alcohol)</p>
+<p>*<code>bmi</code>: Mean BMI (kg/<span
+class="math inline">\(m^2\)</span>) (18+) (age-standardized
+estimate)</p>
+<p>*<code>age5_19thinness</code>: Prevalence of thinness among children
+and adolescents. This is measured in a crude estimate percentage for
+children with BMI &lt; (median - 2 s.d.)</p>
+<p>*<code>age5_19obesity</code>: Prevalence of obesity among children
+and adolescents. This is measured in a crude estimate percentage for
+children with BMI &lt; (median - 2 s.d.)</p>
+<p>*<code>hepatitis</code>: Hepatitis B (HepB) immunization coverage
+among 1-year-olds (%)</p>
+<p>*<code>measles</code>: Measles-containing-vaccine first-dose (MCV1)
+immunization coverage among 1-year-olds (%)</p>
+<p>*<code>polio</code>: Polio (Pol3) immunization coverage among
+1-year-olds (%)</p>
+<p>*<code>diphtheria</code>: Diphtheria tetanus toxoid and pertussis
+(DTP3) immunization coverage among 1-year-olds (%)</p>
+<p>*<code>basic_water</code>: Population using at least basic
+drinking-water services</p>
+<p>*<code>doctors</code>: Number of medical doctors (per 10,000)</p>
+<p>*<code>hospitals</code>: Total density of hospitals per 100 000
+population</p>
+<p>*<code>gni_capita</code>: Gross national income per capita in
+dollars. This is measured from GHO server</p>
+<p>*<code>gghe_d</code>: Domestic general government health expenditure
+(GGHE-D) as percentage of gross domestic product (GDP). This is measured
+from GHO server</p>
+<p>*<code>che_gdp</code>: Current health expenditure (CHE) as percentage
+of gross domestic product (GDP) (%)</p>
+<p>*<code>une_pop</code>: Population (thousands)</p>
+<p>*<code>une_infant</code>: Mortality rate, infant (per 1,000 live
+births). This is measured from GHO server</p>
+<p>*<code>une_life</code>: (Our response variable) Life expectancy at
+birth, total (years). This is measured from GHO server. It is contains
+less missing value than life expectancy.</p>
+<p>*<code>une_hiv</code>: Prevalence of HIV, total (% of population ages
+15-49). This is measured from GHO server</p>
+<p>*<code>une_gni</code>: GNI per capita, PPP (current international $).
+This is measured from UNESCO server</p>
+<p>*<code>une_poverty</code>: Government expenditure on education as a
+percentage of GDP (%). This is measured from UNESCO server</p>
+<p>*<code>une_edu_spend</code>: Adult literacy rate, population 15+
+years, both sexes (%). This is measured from UNESCO server</p>
+<p>*<code>une_literacy</code>: Mean years of schooling (ISCED 1 or
+higher), population 25+ years, both sexes. This is measured from UNESCO
+server</p>
+<p><br> <br></p>
 </div>
-<div id="data-cleaing" class="section level3">
-<h3>Data cleaing</h3>
+<div id="country-code-dataset" class="section level3">
+<h3>Country Code Dataset</h3>
+<p>Country code dataset contains the status of countries, such as the
+information of the independence status and its capital city. The data is
+extracted from <a
+href="https://github.com/datasets/country-codes/blob/master/data/country-codes.csv">here</a>.
+We include the variable specifies whether the country is a developed or
+developing country. The data is read in the following code and is merged
+by the code.</p>
+<pre class="r"><code>country_code = 
+  read_csv(&quot;data/country-codes.csv&quot;, show_col_types = FALSE) %&gt;% 
+  select(`ISO3166-1-Alpha-3`, `Developed / Developing Countries`)
+
+
+
+merged_data_PM = merge(LifeExpectancy, country_code, by.x = &quot;country_code&quot;, by.y = &quot;ISO3166-1-Alpha-3&quot; )</code></pre>
+<p><br> <br></p>
 </div>
+<div id="pm2.5-dataset" class="section level3">
+<h3>PM2.5 dataset</h3>
+<p>PM2.5 dataset is a dataset that specifies the percentage of total
+population exposed to levels exceeding WHO guideline value. Such value
+exists over year 1960 to 2021 but most of the value before 2010 and
+after 2017 are missing. The dataset can be accessed <a
+href="https://data.worldbank.org/indicator/EN.ATM.PM25.MC.M3">here</a>.
+The following code read and clean the dataset.</p>
+<p>merge the data with dataset contain pm 2.5 information:</p>
+<pre class="r"><code>#read pm2.5 data
+PM_dataset = 
+  read_csv(&quot;data/pm2.5.csv&quot;, show_col_types = FALSE, skip = 4) 
+
+PM_dataset_clean = 
+  PM_dataset %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(-(x1960:x1999),-(x2017:x2021)) %&gt;% 
+  pivot_longer(
+    x2000:x2016,
+    names_to = &quot;year&quot;,
+    names_prefix = &quot;x&quot;,
+    values_to = &quot;PM_value&quot;
+  ) %&gt;% 
+  select(country_code, year, PM_value) %&gt;% 
+  mutate(year = as.numeric(year))</code></pre>
+<p>The following code is used to merge with all dataset.</p>
+<pre class="r"><code>#merged data with developed/ developing countries
+merged_data_d = 
+  merged_data_PM %&gt;% 
+  left_join(PM_dataset_clean, by = c(&quot;country_code&quot;,&quot;year&quot;))</code></pre>
+<p><br> <br></p>
+</div>
+<div id="income-level-data" class="section level3">
+<h3>Income level data</h3>
+<p>Income level data is a dataset specifies the income status accessed
+<a
+href="https://databank.worldbank.org/source/world-development-indicators">here</a>.
+It is a factor variable with four levels, namely high income, low
+income, lower middle income and upper middle income. The dataset is
+cleaned and merged in the following code.</p>
+<pre class="r"><code>#read income level data
+Income_dataset = read_csv(&quot;data/income_level.csv&quot;, show_col_types = FALSE) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(country_code,income_group)
+
+#merged data with income level
+merged_data_i = merged_data_d %&gt;% 
+  left_join( Income_dataset, by = c(&quot;country_code&quot;)) %&gt;% 
+  select(country_code:une_school,PM_value,income_group,`Developed / Developing Countries`)</code></pre>
+<p><br> <br></p>
+</div>
+<div id="health-expenditure" class="section level3">
+<h3>Health expenditure</h3>
+<p>Health expenditure dataset measures the health expenditure from
+government with respect to different countries. The dataset is retrieved
+from <a
+href="https://ourworldindata.org/grapher/public-health-expenditure-share-gdp-owid?country=SWE~FRA~DEU~JPN~GBR~BEL~ESP~AUS~NZL~CAN~USA">here</a>.
+The dataset is measured in percentage of GDP or dollar value per capita.
+We choose percentage of GDP as our unit because the dataset measured in
+percentage of GDP has more complete values. Here is the coding for read,
+clean and merge the Health expenditure dataset to original dataset.</p>
+<pre class="r"><code>health_exp = read_csv(&quot;data/government_compulsory_health expenditure_from_1970_2020.csv&quot;) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  filter(measure==&quot;PC_GDP&quot;) %&gt;%
+  filter(subject==&quot;TOT&quot;) %&gt;% 
+  mutate(&quot;country_code&quot;=location,
+         &quot;year&quot; = time) %&gt;% 
+  select(country_code,year, value)
+
+merged_data_h = 
+  merged_data_i %&gt;% 
+  left_join(health_exp, by = c(&quot;country_code&quot;,&quot;year&quot;)) %&gt;% 
+  mutate(&quot;health_exp&quot; = value) %&gt;% 
+  select(country_code:une_school,PM_value,income_group,health_exp,`Developed / Developing Countries`)</code></pre>
+<p><br> <br></p>
+</div>
+<div id="parliament-information" class="section level3">
+<h3>Parliament Information</h3>
+<p>Parliament information data is a dataset that measured the percentage
+of women in national parliament around 2015~2018 for different
+countries. Since different countries have different election dates, and
+there is rare data before 2015, we choose the dataset that is around
+2015~2018. Then, we adjust the date to year 2015, and add the percentage
+of women in lower house of national parliament to the last column of the
+original dataset. The data origins from <a
+href="https://data.ipu.org/women-ranking?month=1&amp;year=2019">here</a>
+and the following code cleans and merge the data:</p>
+<pre class="r"><code>women_in_parliament &lt;-
+  read_csv(&quot;data/around_2019_women_percent_in_national_parliaments.csv&quot;, skip = 5) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(x2, elections_3, percent_w_6) %&gt;% 
+  mutate(&quot;country&quot; = x2,
+         &quot;percent_w_in_lower_house&quot; = percent_w_6,
+         &quot;year&quot; = as.double(2015)) %&gt;% 
+  select(country, year, percent_w_in_lower_house)
+
+merged_data = 
+  merged_data_h %&gt;% 
+  left_join(women_in_parliament, by = c(&quot;country&quot;,&quot;year&quot;)) %&gt;% 
+  select(country_code:une_school,PM_value,health_exp,income_group,`Developed / Developing Countries`, percent_w_in_lower_house)</code></pre>
+<p>Store the data</p>
+<pre class="r"><code>write.csv(merged_data , file = &quot;data/Merged_expectation.csv&quot;)</code></pre>
+<p><br> <br></p>
+</div>
+</div>
+<div id="impute" class="section level2">
+<h2>Impute</h2>
+<p>For the simplicity and accuracy purpose, imputation using weighted k
+nearest neighbour algorithm (w-kNN) is considered in my study. It is
+built on simple k nearest neighbour(kNN) but unlike kNN, it considers
+the weight of each dimension so that it circumvents the problem of
+neglecting the correlation between missing variables and other variables
+according to <a
+href="https://ieeexplore.ieee.org/abstract/document/5199781">Ling et.
+al.</a>. Additionally, such a non-parametric method does not make any
+assumption on the distribution of the input vector hence it is suitable
+for correlation analysis by <a
+href="https://iopscience.iop.org/article/10.1088/1742-6596/1025/1/012114/meta">mukid’s
+paper</a>. In my method, we choose Euclidean distance as my measurement
+for the similarity between authorities as it performs better than the
+other metrics, namely <a
+href="https://ieeexplore.ieee.org/abstract/document/6873626">Manhattan
+distance</a>. Thus, any missing value <span
+class="math inline">\(x_{i,j}\)</span> at time t can be imputed using an
+inverse of Euclidean distance as a weighting factor, where the subscript
+i corresponds to the <span class="math inline">\(i_{th}\)</span> country
+and subscript j represents the <span
+class="math inline">\(j_{th}\)</span> sub-indicator (or the <span
+class="math inline">\(j_{th}\)</span> variable in the dataset). \</p>
+<p>To obtain the imputation for missing value <span
+class="math inline">\(x_{i,j}\)</span>, euclidean distances between all
+underlying pairs of country <span
+class="math inline">\((a_i,a_k)\)</span> at year t without missing value
+need to be calculated. The pair with the largest euclidean distance
+$d_t(a_i,a_k) $, however, will not be considered, and instead it is
+treated as the denominator for standardization of other available
+euclidean distance values. For a pair of country <span
+class="math inline">\((a_i,a_k)\)</span> at year t, the euclidean
+distance $d_t(a_i,a_k) $ can be obtained by the following formula: <span
+class="math display">\[
+\begin{equation}
+\mathbf{d}_t(a_i,a_k)=||a_i,a_k||=\sqrt{\sum_{j=1}^J w(a_{ij}-a_{kj})^2}
+\end{equation}
+\]</span> where J is the total number of variables or non missing data
+and w is the weighting function by <a
+href="https://ieeexplore.ieee.org/abstract/document/5199781">Ling et.
+al.</a>. As my available data may have different length due to different
+number of missing values, I choose <span
+class="math inline">\(w=\frac{1}{J}\)</span> as my weight in the
+Euclidean distance. Then, I can normalize the Euclidean distance by
+dividing the largest euclidean distance in the available data set for
+country i. Without loss of generality, let <span
+class="math inline">\(\mathbf{d}_t(a_i,a_l)\)</span> be the maximum
+euclidean distance for country i. Then for <span
+class="math inline">\(k\neq l\)</span>: <span class="math display">\[
+\begin{equation}
+\mathbf{D}_t(a_i,a_k)=\frac{\mathbf{d}_t(a_i,a_k)}{\mathbf{d}_t(a_i,a_{l})}
+\end{equation}
+\]</span></p>
+<p>To balance the size of the imputed value for missing value <span
+class="math inline">\(x_{i,j}\)</span>, I consider the weight as the
+inverse of Euclidean distance. Such an approach is validated in <a
+href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3777229">Laumann
+et. al’s work</a> where they believe the imputed value will be similar
+to countries with sub-indicator that has small Euclidean distance. With
+all other things being equal, countries are replaced by authorities and
+sub-indicators are variables in my data. Hence, having computed
+euclidean distances between all possible pairs and years, the missing
+value is measured as:</p>
+<p><span class="math display">\[\begin{equation}
+x^t_{i,j}=\frac{1}{K}\sum_k \frac{1}{|\mathbf{D}_t(a_i,a_k)|}x^t_{k,j}
+\end{equation}\]</span> where K is the total number of countries that
+have values at year t for variable j.</p>
+<p>This is nicely packed in filling package in R. In our case, we choose
+k to be 4. This is according to the income level of countries. More
+detail is justified in clustering part in our analysis.</p>
+<pre class="r"><code>raw_mat = 
+  merged_data %&gt;% 
+  select(-country, -country_code, -region,-income_group, -`Developed / Developing Countries`,percent_w_in_lower_house) %&gt;% 
+  as.matrix()
+
+imputed_mat = filling::fill.KNNimpute(raw_mat, k = 2)</code></pre>
+<pre class="r"><code>#colnames_exp = colnames(LifeExpectancy)
+Imputed_expectancy = merged_data
+for (i in 1:(length(merged_data)-6)) {
+  Imputed_expectancy[i+3][[1]] = imputed_mat[[1]][,i]
+}
+head(Imputed_expectancy %&gt;% select(-percent_w_in_lower_house))</code></pre>
+<pre><code>##   country_code     country                region year life_expect life_exp60
+## 1          AFG Afghanistan Eastern Mediterranean 2000    55.89618   15.14620
+## 2          AFG Afghanistan Eastern Mediterranean 2001    56.52523   15.20886
+## 3          AFG Afghanistan Eastern Mediterranean 2002    57.43997   15.24703
+## 4          AFG Afghanistan Eastern Mediterranean 2003    57.97100   15.35566
+## 5          AFG Afghanistan Eastern Mediterranean 2004    58.42978   15.44257
+## 6          AFG Afghanistan Eastern Mediterranean 2005    58.90924   15.52284
+##   adult_mortality infant_mort age1_4mort   alcohol  bmi age5_19thinness
+## 1        316.0496    0.098245   0.011050 0.4562055 21.7            20.6
+## 2        307.2416    0.095925   0.010625 3.5850006 21.8            20.4
+## 3        292.3430    0.093330   0.010130 0.8997981 21.9            20.2
+## 4        286.4569    0.090470   0.009655 1.4059016 22.0            20.0
+## 5        281.8943    0.087595   0.009210 1.2471070 22.1            19.8
+## 6        277.1813    0.084630   0.008785 0.0162300 22.2            19.6
+##   age5_19obesity hepatitis measles polio diphtheria basic_water   doctors
+## 1            0.6  78.05475      27    24         24    27.77190 1.3880322
+## 2            0.7  78.06274      37    35         33    27.79726 1.8990000
+## 3            0.8  59.58910      35    36         36    29.90076 0.5930886
+## 4            0.9  45.72630      39    41         41    32.00507 0.5190973
+## 5            1.0  72.57173      48    50         50    34.12623 0.9575233
+## 6            1.1  73.96158      50    58         58    36.26526 0.8882858
+##    hospitals gni_capita    gghe_d  che_gdp  une_pop une_infant une_life une_hiv
+## 1  9.4945592   802.1334 0.7777427 4.704074 20779.95       90.6   55.841     0.1
+## 2 10.9270734   483.2705 2.8719383 7.475627 21606.99       88.0   56.308     0.1
+## 3  4.1405444   870.0000 0.0841800 9.443390 22600.77       85.4   56.784     0.1
+## 4  0.4056941   920.0000 0.6509600 8.941260 23680.87       82.8   57.271     0.1
+## 5  1.2506006   920.0000 0.5429300 9.808470 24726.68       80.1   57.772     0.1
+## 6  0.4201332  1020.0000 0.5291800 9.948290 25654.28       77.4   58.290     0.1
+##    une_gni une_poverty une_edu_spend une_literacy une_school PM_value
+## 1 2964.013    59.81896      3.831208     23.96308   2.145872      100
+## 2 1225.182    55.19069      3.627787     43.33783   1.906050      100
+## 3 1119.341    35.56763      3.023010     28.78254   1.996305      100
+## 4 1431.191    48.71037      3.040833     34.08148   1.965382      100
+## 5 1524.570    60.58547      3.567654     31.68558   1.907838      100
+## 6 1730.781    14.11812      1.623665     51.14937   1.904653      100
+##   health_exp income_group Developed / Developing Countries
+## 1   8.252343   Low income                       Developing
+## 2   8.247154   Low income                       Developing
+## 3   7.512855   Low income                       Developing
+## 4   7.147681   Low income                       Developing
+## 5   7.276204   Low income                       Developing
+## 6   7.305556   Low income                       Developing</code></pre>
+<pre class="r"><code>write.csv(Imputed_expectancy , file = &quot;data/Imputed_expectation.csv&quot;)</code></pre>
+<p><br> <br></p>
 </div>
 <div id="exploratory-analysis" class="section level2">
 <h2>Exploratory Analysis</h2>
@@ -470,16 +900,1138 @@ href="https://7lx8uo-txbrook.shinyapps.io/map_dashboard/#section-bmi">here</a></
 <p>We also attached our source code to the app. If you are interested in
 how we built the map using dashboard and shiny, you may click on the
 button on the top right corner.</p>
+</div>
+<div id="time-series-plot" class="section level3">
+<h3>Time series plot</h3>
+<p>With our existence data, we need to evaluate the overall trend with
+respect to different types of countries. One way to differentiate
+country is to identify that whether the country is classified as
+developed or developing country. In the work by <a
+href="https://www.journals.uchicago.edu/doi/pdf/10.1086/451180?casa_token=9gJkljIq_ukAAAAA:j3C4Kv-0Jp_gUpmVKvxFAxT1oGg8ryzRaHR_hdBX7QlqrAPGKU36A43QBGZ65AItaKU-LrLn6NE">SP
+Heyneman</a>, he claimed that the change of economic status and school
+has a big difference between developed and developing country. We treat
+these variables as our predictors to the life expectancy. Therefore, it
+is likely that the predictors are different between developed and
+developing country. On the other hand, people with different income have
+different life expectancy. According to <a
+href="https://jamanetwork.com/journals/jama/article-abstract/2513561">Chatty
+et. al.</a>, the richest 1% income group has a 14.6 years and 10.1 years
+higher life expectancy for men and women respectively against the
+poorest 1% of income group. Therefore, we plot the trends for different
+variables over time with respect to development of the country and
+income group of the country.</p>
+<pre class="r"><code>merged_data = 
+  read_csv(&quot;data/Merged_expectation.csv&quot;, show_col_types = FALSE)
+
+imputed_data = read_csv(&quot;data/Imputed_expectation.csv&quot;, show_col_types = FALSE)</code></pre>
+<pre class="r"><code>Time_series_plot = function(variable,merged_data){
+  merged_data %&gt;% 
+  group_by(year, `Developed / Developing Countries`) %&gt;% 
+  summarize_at(variable,mean,na.rm=TRUE) %&gt;% 
+  pivot_wider(
+    values_from = variable,
+    names_from = `Developed / Developing Countries`
+  ) %&gt;% 
+  ggplot()+
+  geom_line(aes(x=year, y=Developed, color=&#39;a&#39;))+
+  geom_line(aes(x=year, y=Developing, color=&#39;b&#39;))+
+  scale_color_manual(name = &#39; &#39;, 
+                     values =c(&quot;a&quot;=&#39;black&#39;,&quot;b&quot;=&#39;red&#39;), 
+                     labels = c(&#39;Developed&#39;,&#39;Developing&#39;))+
+  geom_point(aes(x=year, y=Developed, color=&#39;a&#39;),shape=19,size = 3)+
+  geom_point(aes(x=year, y=Developing, color=&#39;b&#39;),color = &quot;red&quot;, shape=19,size = 3)+
+  labs(title = sprintf(&quot;Time series plot for %s (develop)&quot;, variable) )+
+  xlab(&quot;Year&quot;)+
+  ylab(sprintf(&quot;%s&quot;,variable))
+}
+
+
+Time_series_income =  function(variable,merged_data){
+  merged_data %&gt;% 
+  group_by(year, income_group) %&gt;% 
+  summarize_at(variable,mean,na.rm=TRUE) %&gt;% 
+  pivot_wider(
+    values_from = variable,
+    names_from = income_group
+  ) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  ggplot()+
+  geom_line(aes(x=year, y=high_income, color=&#39;a&#39;))+
+  geom_line(aes(x=year, y=upper_middle_income, color=&#39;b&#39;))+
+  geom_line(aes(x=year, y=lower_middle_income, color=&#39;c&#39;))+
+  geom_line(aes(x=year, y=low_income, color=&#39;d&#39;))+
+  scale_color_manual(name = &#39; &#39;, 
+                     values =c(&quot;a&quot;=&#39;black&#39;,&quot;b&quot;=&#39;red&#39;,&quot;c&quot;=&#39;blue&#39;,&quot;d&quot;=&#39;purple&#39;), 
+                     labels = c(&#39;High&#39;,&#39;Upper middle&#39;,&#39;Lower middle&#39;,&#39;Low&#39;))+
+  geom_point(aes(x=year, y=high_income, color=&#39;a&#39;),shape=19,size = 3)+
+  geom_point(aes(x=year, y=upper_middle_income, color=&#39;b&#39;),color = &quot;red&quot;, shape=19,size = 3)+
+  geom_point(aes(x=year, y=lower_middle_income, color=&#39;c&#39;),color = &quot;blue&quot;, shape=19,size = 3)+
+  geom_point(aes(x=year, y=low_income, color=&#39;d&#39;),color = &quot;purple&quot;, shape=19,size = 3)+
+  labs(title = sprintf(&quot;Time series plot for %s (income)&quot;, variable) )+
+  xlab(&quot;Year&quot;)+
+  ylab(sprintf(&quot;%s&quot;,variable))
+}
+
+ts1 = Time_series_plot(&quot;une_life&quot;,merged_data)
+ts2 = Time_series_income(&quot;une_life&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-13-1.png" width="864" /></p>
+<p>Life expectancy as our dependent variable has similar trends for both
+developed and developing countries. Two life expectancy indices have a
+persistent increase over time. However, the expectancy for developed
+countries is 10 years higher than the developing countries over 16
+years. The similar trends also holds for different income groups but
+countries classified in low income group has a higher growth rate for
+life expectancy than other groups.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;adult_mortality&quot;,merged_data)
+ts2 = Time_series_income(&quot;adult_mortality&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-14-1.png" width="864" /></p>
+<p>Adult mortality has a similar trend with life expectancy, but in a
+reversed order. The mortality rate in developing and low income
+countries decreases with a higher rate than developed and high income
+countries.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;alcohol&quot;,merged_data)
+ts2 = Time_series_income(&quot;alcohol&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-15-1.png" width="864" /></p>
+<p>Alcohol seems to have a stable trends for all countries. However,
+alcohol consuption in developed countries have a much higher value than
+developing country, and countries classified as high and upper middle
+income have a higher alcohol consuption value than lower middle and low
+income, where countries in the latter two two categories have a value of
+2 bottles per capita.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;bmi&quot;,merged_data)
+ts2 = Time_series_income(&quot;bmi&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-16-1.png" width="864" /></p>
+<p>Over years, bmi for most of countries increases and countries in
+different categories all increases regardless of development and income
+group of the country. Interestingly, upper middle income countries
+exceed the bmi for high income countries, whereas low income countries
+has a by far lower value than other countries. Also, developing
+countries has a higher rate of increase as indicated by a steeper line
+(higher tangent) according to the time series plot.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;measles&quot;,merged_data)
+ts2 = Time_series_income(&quot;measles&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-17-1.png" width="864" /></p>
+<p>Measles vaccination coverage increases for developing countries and
+developed countries have a persistently high vaccination coverage. On
+the other hand, developing countries and low income countries has a soar
+in vaccination coverage over the time period.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;age5_19obesity&quot;,merged_data)
+ts2 = Time_series_income(&quot;age5_19obesity&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-18-1.png" width="864" /></p>
+<p>Although due to the development over time period, the problem obesity
+worsen and increases over all countries. Upper middle income and
+developing countries have a higher increase in obesity rate.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;basic_water&quot;,merged_data)
+ts2 = Time_series_income(&quot;basic_water&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-19-1.png" width="864" /></p>
+<p>Time series plot for basic water indicates an increase in percentage
+of people getting basic water over time for developing and lower income
+countries. On the other hand, high income and developed countries have a
+constant high basic water coverage.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;doctors&quot;,merged_data)
+ts2 = Time_series_income(&quot;doctors&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-20-1.png" width="864" /></p>
+<p>Time series plot for doctors per 10,000 people has interesting
+trends. Despite the constant increase in high income countries and
+developed countries, other countries seems to have a fluctuation over
+the period. There is a sudden decrease in 2004 where SARS explodes. As a
+result by <a href="https://www.mdpi.com/1648-9144/57/4/325">Magdalena
+et. al.</a>, there are 48.94% of the doctors treated infected patients
+and 7.4% of the doctors were confirmed infected during the first 6 month
+period. This could potentially lead to death of doctors in lower middle
+income, low income and developing countries.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;une_edu_spend&quot;,merged_data)
+ts2 = Time_series_income(&quot;une_edu_spend&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-21-1.png" width="864" /></p>
+<p>Education expenditure for all countries varies. High and developed
+countries have the highest expenditure among all countries over all
+years.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;une_gni&quot;,merged_data)
+ts2 = Time_series_income(&quot;une_gni&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-22-1.png" width="864" /></p>
+<p>The gni is different for developed and developing country over the
+year. While developing countries have a relative stable curve at 10000
+dollar per capita, developed countries increases from 20000 dollar to
+40000 dollar per capita. On the other hand, gni per capita for high
+income countries, which exceeds 40000 dollar per capita in year 2013,
+have by far the highest value among other countries.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;une_pop&quot;,merged_data)
+ts2 = Time_series_income(&quot;une_pop&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-23-1.png" width="864" />
+The population in developing countries is much higher than population in
+developed countries. Interestingly, when we consider the population
+among different income groups, we can see that lower middle income
+countries have the highest population, whereas low income countries and
+high income countries both have value around 20,000,000.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;une_literacy&quot;,merged_data)
+ts2 = Time_series_income(&quot;une_literacy&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-24-1.png" width="864" />
+The literacy coverage has some missing value. In particular, all
+developed countries have a missing value in year 2006. But as indicated
+in the plots, literacy coverage is higher in developed and high income
+countries. Additionally, developing countries have an increasing trend
+in literacy whereas low income countries have a fluctuation but a non
+increasing or decreasing trend.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;PM_value&quot;,merged_data)
+ts2 = Time_series_income(&quot;PM_value&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-25-1.png" width="864" /></p>
+<p>Consider only non-missing data, PM value decreases for high and
+developed countries. The countries with low and lower middle income have
+a persistent high PM value over the periods, with approximately 100
+percentage of total population exposed to levels exceeding WHO guideline
+value.</p>
+<pre class="r"><code>ts1 = Time_series_plot(&quot;gghe_d&quot;,merged_data)
+ts2 = Time_series_income(&quot;gghe_d&quot;,merged_data)
+plot_grid(ts1, ts2)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-26-1.png" width="864" /></p>
+<p>Health expenditure in developed countries soar over the years from
+2000 to 2016, from 4% to 5% of total GDP. Developing countries also have
+an increase in the health expenditure, but with a lower rate. For
+different income level, high income countries have the highest
+expenditure on health and it has an increasing trend. However, health
+expenditure measured in percentage of GDP decreases among low income
+countries.</p>
+<p><br> <br></p>
+</div>
+<div id="multi-colinearity-check" class="section level3">
+<h3>Multi-colinearity Check</h3>
+<p>First, we shall check the multi-colinearity between predictors. This
+is because multi-colinearity can cause huge swing in coefficient
+estimates and reduce the precision of estimated coefficients (<a
+href="https://statisticsbyjim.com/regression/multicollinearity-in-regression-analysis/">ref</a>).
+The correlation heat map is able to help us identify the existence of
+multi-colinearity among chosen predictors.</p>
+<pre class="r"><code>mortality_correlation = merged_data %&gt;% 
+  select(adult_mortality, infant_mort, age1_4mort, une_life)
+res = cor(mortality_correlation)
+corrplot(res, type = &quot;upper&quot;, order = &quot;hclust&quot;, 
+         tl.col = &quot;black&quot;, tl.srt = 45)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p>The heat map shows that the chosen factors, namely mortality,
+life_expectancy are very correlated. Mortality is negatively correlated
+to une life expectancy and it is directly correlated to infant mortality
+and mortality for children from age 1 to 4. This may because life
+expectancy is calculated based on mortality rate. Although linear
+relation can perfectly explain the two relation, it is not a good idea
+to include such variable as it is directly a variable for calculating
+life expectancy. Therefore, it is not a good idea to include mortality
+as our predictor.</p>
+<pre class="r"><code>disease_correlation = merged_data %&gt;% 
+  select(hepatitis, measles, polio, diphtheria) %&gt;% 
+  na.omit()
+
+res = cor(disease_correlation)
+res</code></pre>
+<pre><code>##            hepatitis   measles     polio diphtheria
+## hepatitis  1.0000000 0.6803444 0.6931866  0.7220937
+## measles    0.6803444 1.0000000 0.8979004  0.8910589
+## polio      0.6931866 0.8979004 1.0000000  0.9573546
+## diphtheria 0.7220937 0.8910589 0.9573546  1.0000000</code></pre>
+<pre class="r"><code>corrplot(res, type = &quot;upper&quot;, order = &quot;hclust&quot;, 
+         tl.col = &quot;black&quot;, tl.srt = 45)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p>In our dataset, we have a lot of vaccinations for different diseases.
+Therefore, it is natural to check whether the vaccinations data are
+correlated to each other. It seems like they are all very correlated to
+each other, with correlation value higher than 0.6. In consequence, we
+decide to only choose vaccinations for measles as our chosen vector as
+it was one of the most common disease and now almost fully controled by
+vaccination. There is still some cases remain for the people that did
+not get vaccinated according to <a
+href="https://www.cdc.gov/measles/cases-outbreaks.html">CDC
+website</a>.</p>
+<pre class="r"><code>obe_thin_correlation = merged_data %&gt;% 
+  select(age5_19thinness, age5_19obesity,bmi) %&gt;% 
+  na.omit()
+res = cor(obe_thin_correlation)
+res</code></pre>
+<pre><code>##                 age5_19thinness age5_19obesity        bmi
+## age5_19thinness       1.0000000     -0.5486009 -0.6858195
+## age5_19obesity       -0.5486009      1.0000000  0.8071426
+## bmi                  -0.6858195      0.8071426  1.0000000</code></pre>
+<pre class="r"><code>corrplot(res, type = &quot;upper&quot;, order = &quot;hclust&quot;, 
+         tl.col = &quot;black&quot;, tl.srt = 45)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p>BMI, Thinness and obesity are three variables measuring similar
+characteristics. Ideally, people that are thinner, is less likely to
+have obesity and a lower bmi value. Therefore, I make corelation heat
+map and it turns out that the three variables are quite correlated, with
+a value around -0.55. For the prevention of multi-colinearity, I choose
+bmi only in our analysis as it is more meaningful. A BMI value greater
+than 25 is classified as obesity based on <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4890841/">BMI
+Journal</a> and it is one of the problem that exists among people.
+Cardiomyopathy, for instance, is one of the leading problem due to
+obesity in recent years by <a
+href="https://www.tandfonline.com/doi/full/10.1586/14779072.2014.952283">Benoit
+et. al.</a>. Thus, we want to figure out if bmi can be used to predict
+life expectancy and whether a high bmi do lead to a decrease in life
+expectancy.</p>
+<p><br> <br></p>
+</div>
+<div id="correlation-and-scatter-plot" class="section level3">
+<h3>Correlation and Scatter Plot:</h3>
+<p>Visualization via scatter plot is a way to further discover the
+pairwise relation between two chosen variable. By plotting the scatter
+plot and fitted using best linear line, we can potential obtain the
+relationship between variables and how well linear trend can explain the
+data. Since we choose Life expectancy as our response variable, we can
+plot the scatter plot between life expectancy and other chosen
+predictors to see the correlation between variables.</p>
+<pre class="r"><code># alcohol
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, alcohol) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = alcohol, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and alcohol&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-30-1.png" width="864" /></p>
+<p>Among four years, the trend of relation between life expectancy and
+alcohol are similar. Although the line of best fit split points into an
+evenly two parts, there are more points with low alcohol values. And
+linear trend may not fully explain such relation.</p>
+<pre class="r"><code>#bmi
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, bmi) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = bmi, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and bmi&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-31-1.png" width="864" /></p>
+<p>Bmi has a positive correlation with life expectancy as shown in the
+plots, and the points for the four years are almost exactly the same.
+Linear trend seems to explain the relation well as suggested in the
+scatter plots. When bmi increases, the life expectancy is likely to have
+a higher value, although we cannot check the causation in behind.</p>
+<pre class="r"><code>#measles
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, measles) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = measles, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and measles&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-32-1.png" width="864" /></p>
+<p>Measle vaccination coverage seems to indicate a high life expectancy
+when vaccination coverage is high. But such relation may be non linear
+as there are lots of values clustered in the upper right corner.</p>
+<pre class="r"><code>#obesity
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, age5_19obesity) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = age5_19obesity, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and obesity among age 5-19&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-33-1.png" width="864" /></p>
+<p>Although linear trend works well in the scatter plot between obesity
+and life expectancy, the points suggests a non-linear, perhaps a
+quadratic trends, in the graph. There is clearly a “r” shape pattern in
+the graph. Similar to other plots, the four years have almost the same
+scatter plot.</p>
+<pre class="r"><code>#basic_water
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, basic_water) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = basic_water, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and percentag of people access to basic water &quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-34-1.png" width="864" /></p>
+<p>Linear trends fit the relation between Life Expectancy and percentag
+of people access to basic water well. There is clearly an upward
+increasing trend.</p>
+<pre class="r"><code># doctors
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, doctors) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = doctors, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and doctors&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-35-1.png" width="864" /></p>
+<p>Similar to obesity, the graph has a “r” pattern and thus, there exist
+a non linear correlation. Thus, linear relation may not be accurate to
+explain the association. However, the linear trend do include most of
+the information, so it might be sufficient to just use linear relation.
+We will check it further in later analysis.</p>
+<pre class="r"><code>#une_edu_spend
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, une_edu_spend) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = une_edu_spend, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and education expenditure&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-36-1.png" width="864" /></p>
+<p>The expenditure also suggest a linear increasing trend for all years.
+Year 2015 seems to have an outlier with a very high education
+expenditure. Otherwise, the pattern is similar for the four years. The
+scatter plot is quite spread out, so there may be some indication of non
+linear trend but we cannot conclude from the scatter plot.</p>
+<pre class="r"><code># une_gni
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, une_gni) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = une_gni, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and GNI per capita&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-37-1.png" width="864" /></p>
+<p>The association between life expectancy and GNI per capita also shows
+a non-linear correlation with a “r” patter. Therefore, non-linear
+correlation analysis may be needed.</p>
+<pre class="r"><code>#une_pop
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, une_pop) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = une_pop, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and Population&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-38-1.png" width="864" /></p>
+<p>As seen in the scatter plot, population is not very correlated to
+life expectancy and the data are very focused on low population. A
+linear relation is not quite appropriate here.</p>
+<pre class="r"><code>#une_literacy
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, une_literacy) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = une_literacy, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and Literacy Coverage&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-39-1.png" width="864" /></p>
+<p>Due to the missing values, literacy coverage does not have a lot of
+details. But linear trend do explain the over all association between
+life expectancy and percentage of people who are able to write and speak
+a language.</p>
+<pre class="r"><code># PM_value
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, PM_value) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = PM_value, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and percentage of people exposed to abnormal PM level&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-40-1.png" width="864" /></p>
+<p>Since most of people are exposed to abnormal PM level, most of the PM
+value is clustered at 100. Linear relation may be sufficient to explain
+lower PM values but it may be difficult to include all the information
+for high PM value.</p>
+<pre class="r"><code>#gghe_d
+merged_data_temp =
+merged_data %&gt;% 
+  select(year, une_life, gghe_d) %&gt;% 
+  filter(year &gt; 2012)
+
+
+
+myplots &lt;- vector(&#39;list&#39;, 4)
+for (i in 2013:2016){
+    myplots[[i-2012]] =
+      merged_data_temp %&gt;% 
+      filter(year == i) %&gt;% 
+      ggplot(aes(x = gghe_d, y = une_life))+geom_point()+geom_smooth(method = &#39;lm&#39;, se = TRUE, color = &#39;red&#39;)+
+      labs(title = sprintf(&quot;year %s&quot;, i))
+  
+  }
+  
+plot_row1 &lt;- plot_grid(myplots[[1]], myplots[[2]])
+plot_row2 &lt;- plot_grid(myplots[[3]], myplots[[4]])
+# title
+title &lt;- ggdraw() + 
+  draw_label(
+    &quot;Scatter Plot for Life Expectancy and Health expenditure&quot;,
+    fontface = &#39;bold&#39;,
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+
+plot_grid(title,plot_row1,plot_row2 ,ncol=1,  label_size = 12,rel_heights=c(0.1, 1,1))</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-41-1.png" width="864" /></p>
+<p>Health expenditure is positively correlated with life expectancy.
+However, there may be non linear trend as there is a curve bending at
+health expenditure = 3% of GDP.</p>
+<p><br> <br></p>
+</div>
+</div>
+<div id="correlation" class="section level2">
+<h2>Correlation:</h2>
+<p>Although scatter plot gives us some visualization of correlation
+between variables, we can not know to what extend the two variables are
+correlated. Therefore, correlation, as a numeric value, is of a great
+help to resolve the problem. The correlation value gives us a value that
+indicates how correlated two variables are using Pearson method or
+distance methods.</p>
+<p><br></p>
+<div id="pearson-correlation" class="section level3">
+<h3>Pearson Correlation</h3>
+<div id="theory" class="section level4">
+<h4>Theory</h4>
+<p>Pearson correlation is a common EDA method that measures the strength
+of the linear relation between two variables <a
+href="https://link.springer.com/chapter/10.1007/978-3-642-00296-0_5">paper</a>.
+It has the formula defined in following definition:</p>
+<p><br> <br></p>
+<div id="definition-pearson" class="section level5">
+<h5>Definition Pearson</h5>
+<p>Let x and y be two random variables with zero mean and <span
+class="math inline">\(x,y\in \mathbb R\)</span>, the pearson correlation
+coefficient is defined as:</p>
+<p><span class="math display">\[
+\rho (x,y) = \frac{cov(x,y)}{\sigma_x\sigma_y}
+\]</span></p>
+<p>where <span class="math inline">\(\sigma_x=\sqrt{var(x)}\)</span> and
+<span class="math inline">\(\sigma_y=\sqrt{var(y)}\)</span>.</p>
+<p><br> <br></p>
+<p>The coefficient as a value between <span
+class="math inline">\(-1\leq\rho(x,y)\leq1\)</span>. If the coefficient
+is zero, then x and y does not have correlation at all. If the
+coefficient is closer to a value of +1 or -1, then the correlation
+between the two variable is stronger. A +1 coefficient means the two
+variables have a perfect positive correlation whereas a -1 value means
+the two variables have a perfect negative correlation.</p>
+</div>
+</div>
+<div id="results" class="section level4">
+<h4>Results</h4>
+<p>Over the time:</p>
+<pre class="r"><code>Pearson_Correlation = function(varnum, merged_data){
+  
+  correlation_result = tibble(&quot;date&quot;=2000:2016, &quot;Pearson_cor&quot;=0,&quot;Pearson_pval&quot;=0)
+  
+  for (t in 2000:2016){
+    merged_data_temp = 
+      merged_data %&gt;% 
+      filter(year==t)
+    
+    correlation_result$Pearson_cor[t-1999] = 
+    round(cor(merged_data_temp[,varnum], merged_data_temp$une_life, method = &quot;pearson&quot;,use = &quot;complete.obs&quot;)[1],2)
+    
+    correlation_result$Pearson_pval[t-1999] = 
+    round(cor.test(merged_data_temp[,varnum][[1]], merged_data_temp$une_life, method = &quot;pearson&quot;,use = &quot;complete.obs&quot;)$p.value,2)
+    
+  }
+  
+  return(correlation_result)
+  
+}
+
+#Pearson_Correlation(6,merged_data)
+
+Pearson_Correlation_result = tibble(&quot;date&quot;=2000:2016)
+
+
+colname = colnames(merged_data)
+
+
+
+Pearson_Corr_res = 
+Pearson_Correlation_result %&gt;%
+  mutate(mortality = Pearson_Correlation(8,merged_data)$Pearson_cor,
+         alcohol = Pearson_Correlation(11,merged_data)$Pearson_cor,
+         bmi = Pearson_Correlation(12,merged_data)$Pearson_cor,
+         obesity = Pearson_Correlation(14,merged_data)$Pearson_cor,
+         measles = Pearson_Correlation(16,merged_data)$Pearson_cor,
+         water = Pearson_Correlation(19,merged_data)$Pearson_cor,
+         doctors = Pearson_Correlation(20,merged_data)$Pearson_cor,
+         )
+
+Pearson_Corr_res2 = 
+Pearson_Correlation_result %&gt;%
+  mutate(edu_expenditure = Pearson_Correlation(31,merged_data)$Pearson_cor,
+         gni_capita = Pearson_Correlation(29,merged_data)$Pearson_cor,
+         population = Pearson_Correlation(25,merged_data)$Pearson_cor,
+         literacy = Pearson_Correlation(32,merged_data)$Pearson_cor,
+         #PM_value = Pearson_Correlation(34,merged_data)$Pearson_cor,
+         health_expenditure = Pearson_Correlation(23,merged_data)$Pearson_cor)
+
+Pearson_Corr_pval = 
+Pearson_Correlation_result %&gt;%
+  mutate(mortality = Pearson_Correlation(8,merged_data)$Pearson_pval,
+         alcohol = Pearson_Correlation(11,merged_data)$Pearson_pval,
+         bmi = Pearson_Correlation(12,merged_data)$Pearson_pval,
+         obesity = Pearson_Correlation(14,merged_data)$Pearson_pval,
+         measles = Pearson_Correlation(16,merged_data)$Pearson_pval,
+         water = Pearson_Correlation(19,merged_data)$Pearson_pval,
+         doctors = Pearson_Correlation(20,merged_data)$Pearson_pval,
+         edu_expenditure = Pearson_Correlation(31,merged_data)$Pearson_pval,
+         gni_capita = Pearson_Correlation(29,merged_data)$Pearson_pval,
+         population = Pearson_Correlation(25,merged_data)$Pearson_pval,
+         literacy = Pearson_Correlation(32,merged_data)$Pearson_pval,
+         #PM_value = Pearson_Correlation(34,merged_data)$Pearson_pval,
+         health_expenditure = Pearson_Correlation(23,merged_data)$Pearson_pval
+         )
+         
+
+grid.table(Pearson_Corr_res)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<pre class="r"><code>grid.table(Pearson_Corr_res2)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<p>As indicated in the table, bmi, obesity, measles vaccination, gni per
+capita and health expenditure all have a high correlation with life
+expectancy, with a value close to 0.6. The correlation with water access
+and literacy is even higher, over 0.8 for all years. As discussed, life
+expectancy is calculated from mortality and therefore it has a really
+high correlation. We will not include such data. On the other hand,
+population is not likely to be correlated with life expectancy, as the
+correlations are all approximately 0.03.</p>
+<p><br> <br></p>
+</div>
+</div>
+<div id="distance-correlation" class="section level3">
+<h3>Distance Correlation</h3>
+<div id="theory-1" class="section level4">
+<h4>Theory</h4>
+<p>Although Pearson Correlation may be sufficient to explore the
+association between variables and life expectancy, there is some
+non-linear trends exist between variables, such as obesity, GNI per
+capita, doctors, health expenditure, and life expectancy. Therefore, it
+is necessary to use a non-linear method to account for such
+scenarios.</p>
+<p>Distance correlation is a novel developed technique to discover the
+joint dependence of random variables developed by <a
+href="https://projecteuclid.org/journals/annals-of-statistics/volume-35/issue-6/Measuring-and-testing-dependence-by-correlation-of-distances/10.1214/009053607000000505.full">Székely
+et al</a>. Unlike Pearson correlation, such Pairwise distance
+correlation is a distance method and therefore it can take into
+consideration of the non-linear relationship between two random
+variables, namely <span class="math inline">\(X\in \mathbb{R}^p\)</span>
+and <span class="math inline">\(Y\in \mathbb{R}^q\)</span> that can have
+arbitrary dimensions (p and q can be non-equal) to some extend. The
+correlation between two variables is said to be independent of distance
+correlation <span class="math inline">\(\mathcal{R}(X,Y)=0\)</span>.</p>
+<p>Denote the scalar product of two vectors <span
+class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span> as &lt;<span
+class="math inline">\(a,b\)</span>&gt; and conjugate of complex function
+f as <span class="math inline">\(f\)</span>. Also define norm <span
+class="math inline">\(|x|_p\)</span> as Euclidean norm for <span
+class="math inline">\(x\in\mathbb{R}^p\)</span></p>
+<p><br> <br></p>
+<div id="definition-1" class="section level5">
+<h5>Definition 1</h5>
+<p>In weighted <span class="math inline">\(l_2\)</span> space, the <span
+class="math inline">\(||\cdot||_w\)</span>-norm for any complex function
+<span class="math inline">\(\zeta \in
+\mathbb{R}^p\times\mathbb{R}^q\)</span> is defined by: <span
+class="math display">\[
+\begin{equation}
+    ||\zeta( a, b )||^2
+_w =\int_{\mathbb{R}^{p+q}}|\zeta( a, b)|^2 w( a, b)\,d a\, d b
+\end{equation}
+\]</span> where <span class="math inline">\(w(a,b)\)</span> can be any
+arbitrary positive weighting function as long as the integral is
+well-defined.</p>
+<p><br> <br></p>
+</div>
+<div id="definition-2" class="section level5">
+<h5>Definition 2</h5>
+<p>Define the measure of dependence as: <span class="math display">\[
+\begin{equation}
+V^2(X,Y;w) = ||f_{X,Y}(a,b)-f_X(a)f_Y(b)||^2_w=
+\int_{\mathbb{R}^{p+q}}|f_{X,Y}(a,b)-f_X(a)f_Y(b)|^2 w( a, b)\,d a\, d b
+\end{equation}
+\]</span></p>
+</div>
+<div id="proof" class="section level5">
+<h5>Proof</h5>
+<p><em>The criterion of independent means that for vectors <span
+class="math inline">\(a\)</span>, <span
+class="math inline">\(b\)</span>, the probability density function <span
+class="math inline">\(f_X(a)\)</span>, <span
+class="math inline">\(f_Y(b)\)</span> and their joint probability
+density function <span class="math inline">\(f_{X,Y}(a,b)\)</span>
+satisfies <span
+class="math inline">\(f_{X,Y}(a,b)=f_X(a)f_Y(b)\)</span>. Therefore, I
+have <span class="math inline">\(V^2(X,Y;w)=||0||^2_w=0\)</span> if they
+are independent hence the equation satisfy the condition that <span
+class="math inline">\(V^2=0\)</span> only if variables are independent.
+(see <a
+href="https://d1wqtxts1xzle7.cloudfront.net/61217354/solucionario_estadistica_papoulis20191114-47174-4f1occ-with-cover-page-v2.pdf?Expires=1669433644&amp;Signature=PaZvHQ0E9kQ6FyxALEPJ5A1LFgJ3-4zYvgbzSUP7obp~cfIuvZe~8QTXle4i6usOg6MOXKs-KkOUzwVgAz60n4dm5r595qPuZPhzyfu9pE~2hydHWubyH8dfZa-59DF07O3hPFdPgPDrvSGiOWFtfuD2HXBXN2IQ4nm~UJ94pPMG7K8q0jh4WYqDp7WbQ-9WQ5hFULnUKGIH2ok7rwAFEbHqMBR6FAIHJO8gtUjaTtMhc6K4OIAmzBnoqgSOInEE6kXy4agsg1sboDLyxxJMOfJa33GPNRlwrU1Yv69wcb3rsjtjL2s9JGM4mJATS6xpRspz0RBDDZqXSIngfjmE0w__&amp;Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA">paper</a>)</em></p>
+<p><br> <br></p>
+<p>The choice of weighting function must satisfy invariance under
+transformations of random variables up to multiplication of a positive
+constant <span class="math inline">\(\epsilon\)</span>: <span
+class="math inline">\((X,Y)\rightarrow (\epsilon X, \epsilon Y)\)</span>
+and positiveness for any dependent variables. By the work of Szekely et.
+al., only non-integrable functions satisfy the condition for weight
+function. In order to specify the formula, I need the following
+lemma</p>
+<p><br> <br></p>
+</div>
+<div id="lemma-1" class="section level5">
+<h5>Lemma 1</h5>
+<p>For all x in <span class="math inline">\(\mathbb{R}^d\)</span>: <span
+class="math display">\[
+\begin{equation}
+\int_{\mathbb{R}^d}\frac{1-cos&lt;y,x&gt;
+}{|y|^{d+1}_{d}}dy=c_d|x|=\frac{\pi ^{(1+d/2)}}{2 \Gamma ((d+1)/2)}|x|
+\end{equation}
+\]</span> where <span class="math inline">\(\Gamma(\cdot)\)</span> is
+the gamma function. This is proved by <a
+href="https://home.ipipan.waw.pl/j.mielniczuk/Szekely-Rizzo_2005.pdf">Szekely
+et. al.</a></p>
+<p><br> <br></p>
+<p>Now I can choose weight function as following: <span
+class="math display">\[
+\begin{equation}
+w(a,b) = (c_p c_q |a|
+^{1+p}_p |b|
+^{1+q}_q )^{-1}
+\end{equation}
+\]</span></p>
+<p>By using such weight function and lemma 3.1, the definition of
+distance covariance will be well-defined. Note by the weight, I have
+<span class="math inline">\(dw = (c_p c_q |a| ^{1+p}_p |b| ^{1+q}_q
+)^{-1}dadb\)</span>. This is proven in the following definition. \</p>
+<p><br> <br></p>
+</div>
+<div id="deinition-4" class="section level5">
+<h5>Deinition 4</h5>
+<p>Define the distance covariance (dCov) for random vectors <span
+class="math inline">\(X\)</span> and <span
+class="math inline">\(Y\)</span> with finite expectation as the
+following non-negative figure: <span class="math display">\[
+\begin{equation}
+    V^2(X,Y) = ||f_{X,Y} (a,b)- f_X(a)f_Y (b)||^2
+= \frac{1}{c_pc_q}\int_{\mathbb{R}^{p+q}}\frac{|f_{X,Y} (a,b) -
+f_X(a)f_Y (b)|^2}{|a|^{1+p}_p|b|^{1+q}_q}da db
+\end{equation}
+\]</span> where <span class="math inline">\(a\in \mathbb{R}^p\)</span>,
+<span class="math inline">\(b\in \mathbb{R}^q\)</span> are two vectors
+that <span class="math inline">\(a\in X\)</span> and <span
+class="math inline">\(b\in Y\)</span></p>
+<p><br> <br></p>
+<p>Different to the Pearson method, the distance correlation have a
+non-negative value as it is a distance method. Therefore, although we
+have a better ability to measure non-linear correlation, we cannot
+identify the direction of the correlation. In other word, we cannot tell
+whether the correlation is positively correlated or negatively
+correlated.</p>
+<p><br></p>
+</div>
+</div>
+<div id="result" class="section level4">
+<h4>Result</h4>
+<pre class="r"><code>Distance_Correlation = function(varnum, merged_data){
+  
+  correlation_result = tibble(&quot;date&quot;=2000:2016, &quot;Distance_cor&quot;=0,&quot;Distance_pval&quot;=0)
+  
+  for (t in 2000:2016){
+    merged_data_temp = 
+      merged_data %&gt;% 
+      filter(year==t) %&gt;% 
+      select(27,varnum) %&gt;% 
+      na.omit()
+    
+    correlation_result$Distance_cor[t-1999] = 
+    round(dcor(merged_data_temp[,2], merged_data_temp$une_life,)[1],2)
+    
+    correlation_result$Distance_pval[t-1999] = 
+    round(dcor.test(merged_data_temp[,2][[1]], merged_data_temp$une_life,R=1000)$p.value,2)
+    
+  }
+  
+  return(correlation_result)
+  
+}
+
+
+
+Distance_Correlation_result = tibble(&quot;date&quot;=2000:2016)
+
+colname = colnames(merged_data)
+
+result_corr = 
+Distance_Correlation_result %&gt;%
+  mutate(mortality = Distance_Correlation(8,merged_data)$Distance_cor,
+         alcohol = Distance_Correlation(11,merged_data)$Distance_cor,
+         bmi = Distance_Correlation(12,merged_data)$Distance_cor,
+         obesity = Distance_Correlation(14,merged_data)$Distance_cor,
+         measles = Distance_Correlation(16,merged_data)$Distance_cor,
+         water = Distance_Correlation(19,merged_data)$Distance_cor,
+         doctors = Distance_Correlation(20,merged_data)$Distance_cor,
+         )
+   
+
+result_corr2 = 
+Distance_Correlation_result %&gt;%
+  mutate(edu_expenditure = Distance_Correlation(31,merged_data)$Distance_cor,
+         gni_capita = Distance_Correlation(29,merged_data)$Distance_cor,
+         population = Distance_Correlation(25,merged_data)$Distance_cor,
+         literacy = Distance_Correlation(32,merged_data)$Distance_cor,
+         #PM_value = Distance_Correlation(34,merged_data)$Distance_cor,
+         health_expenditure = Distance_Correlation(23,merged_data)$Distance_cor)
+
+
+result_pval = 
+  Distance_Correlation_result %&gt;%
+  mutate(mortality = Distance_Correlation(8,merged_data)$Distance_pval,
+         alcohol = Distance_Correlation(11,merged_data)$Distance_pval,
+         bmi = Distance_Correlation(12,merged_data)$Distance_pval,
+         obesity = Distance_Correlation(14,merged_data)$Distance_pval,
+         measles = Distance_Correlation(16,merged_data)$Distance_pval,
+         water = Distance_Correlation(19,merged_data)$Distance_pval,
+         doctors = Distance_Correlation(20,merged_data)$Distance_pval,
+         edu_expenditure = Distance_Correlation(31,merged_data)$Distance_pval,
+         gni_capita = Distance_Correlation(29,merged_data)$Distance_pval,
+         population = Distance_Correlation(25,merged_data)$Distance_pval,
+         literacy = Distance_Correlation(32,merged_data)$Distance_pval,
+         #PM_value = Distance_Correlation(34,merged_data)$Distance_pval,
+         health_expenditure = Distance_Correlation(23,merged_data)$Distance_pval
+         )
+
+
+grid.table(result_corr)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+<pre class="r"><code>grid.table(result_corr2)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
+<p>After take in consideration of non-linear trend, bmi, obesity,
+education expenditure, gni per capita has an average of approximately
+0.07 increase in the correlation. Population also increases from 0.03 to
+0.1. Such increase is not significant because high correlation values
+are still highly correlated. Therefore, it provides some evidence that
+linear model may be sufficient to use in our data analysis.</p>
  
+</div>
 </div>
 </div>
 <div id="statistical-analysis" class="section level2">
 <h2>Statistical Analysis</h2>
  
  
-</div>
-<div id="life-expectation-by-regions" class="section level2">
-<h2>1. Life Expectation by Regions</h2>
+<div id="life-expectation-by-regions" class="section level3">
+<h3>1. Life Expectation by Regions</h3>
 <pre class="r"><code>data %&gt;% 
   janitor::clean_names() %&gt;% 
   group_by(region) %&gt;% 
@@ -539,7 +2091,7 @@ the lowest.</p></li>
   xlab(&quot;Region&quot;) +
   ylab(&quot;Life Expectancy&quot;) + 
   theme(axis.text.x = element_text(hjust = 1, angle = 10,size = 8))</code></pre>
-<p><img src="Project-report_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
  
 <ul>
 <li><p>The boxplot shows the distribution of life expectancy in each
@@ -596,9 +2148,9 @@ should perform t.test between two selected regions separately.</p>
 </div>
 <div
 id="t.test-compare-mean-life-expectancy-between-americas-and-europe"
-class="section level2">
-<h2>2. t.test : Compare Mean Life Expectancy Between Americas and
-Europe</h2>
+class="section level3">
+<h3>2. t.test : Compare Mean Life Expectancy Between Americas and
+Europe</h3>
  
 <p>From the boxplot above, we find that the life expectancy in Americas
 and Europe distribute almost in the same interval. Though the median of
@@ -749,9 +2301,9 @@ smaller than Europe.</p>
 </div>
 <div
 id="prop.test-compare-the-proportion-of-life-expectancy-over-70-between-western-pacific-and-south-east-asia"
-class="section level2">
-<h2>3. prop.test : Compare the Proportion of Life Expectancy Over 70
-Between Western Pacific and South-East Asia</h2>
+class="section level3">
+<h3>3. prop.test : Compare the Proportion of Life Expectancy Over 70
+Between Western Pacific and South-East Asia</h3>
  
 <p>We can tell from the boxplot above that the boxes of Western Pacific
 and South-East Asia are almost overlapping. The majority of them seem to
@@ -854,8 +2406,8 @@ Pacific is the same as in South-East Asia.</p>
  
 </div>
 <div id="average-life-expectancy-by-region-year-combination"
-class="section level2">
-<h2>4. Average Life Expectancy by (region, year) Combination</h2>
+class="section level3">
+<h3>4. Average Life Expectancy by (region, year) Combination</h3>
 <pre class="r"><code>data %&gt;% 
   janitor::clean_names() %&gt;% 
   group_by(region,year) %&gt;% 
@@ -1048,7 +2600,7 @@ class="section level2">
   summarise(avg_by_year_region = mean(une_life,na.rm = T)) %&gt;% 
   ggplot(aes(x = year, y = avg_by_year_region, color = region)) +
   geom_line() + geom_point() + labs(title = &quot;Average Life Expectancy by Region, Year&quot;) + ylab (&quot;Average Life Expectancy&quot;)</code></pre>
-<p><img src="Project-report_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-56-1.png" width="672" /></p>
  
 <ul>
 <li>The table and line graph above show the descriptive statistics and
@@ -1058,8 +2610,8 @@ expectancy than the other regions.</li>
 </ul>
  
 </div>
-<div id="life-expectancy-by-income-level" class="section level2">
-<h2>5. Life Expectancy by Income Level</h2>
+<div id="life-expectancy-by-income-level" class="section level3">
+<h3>5. Life Expectancy by Income Level</h3>
 <pre class="r"><code>data %&gt;% 
   janitor::clean_names()  %&gt;% 
   filter(!is.na(income_group)) %&gt;%  
@@ -1102,7 +2654,7 @@ expectancy than the other regions.</li>
   labs(title = &quot;Boxplot of Life Expectancy by Income Groups&quot;) +
   xlab(&quot;Income Groups&quot;) +
   ylab(&quot;Life Expectancy&quot;)</code></pre>
-<p><img src="Project-report_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-57-1.png" width="672" /></p>
  
 <ul>
 <li>The boxes of different income groups are almost not overlapping with
@@ -1131,8 +2683,8 @@ process here.</li>
 </ul>
  
 </div>
-<div id="life-expectancy-by-development-status" class="section level2">
-<h2>6. Life Expectancy by Development Status</h2>
+<div id="life-expectancy-by-development-status" class="section level3">
+<h3>6. Life Expectancy by Development Status</h3>
 <pre class="r"><code>data %&gt;% 
   janitor::clean_names() %&gt;% 
   group_by(developed_developing_countries) %&gt;% 
@@ -1164,7 +2716,7 @@ process here.</li>
   labs(title = &quot;Boxplot of Life Expectancy by Development Status&quot;) +
   xlab(&quot;Development Status&quot;) +
   ylab(&quot;Life Expectancy&quot;)</code></pre>
-<p><img src="Project-report_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
  
 <ul>
 <li>The boxes of different development status are almost not overlapping
@@ -1194,8 +2746,8 @@ here.</li>
 </ul>
  
 </div>
-<div id="summary" class="section level2">
-<h2>Summary</h2>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
 <p>In this part, we applied statistical analysis to studying the
 differences in life expectancy caused by various factors. We first
 examine the distribution features and then choose appropriate tests to
@@ -1215,12 +2767,929 @@ groups and development status groups. People with higher income and from
 more developed countries tend to live longer.</p></li>
 </ul>
  
-<div id="linear-model" class="section level3">
-<h3>Linear Model</h3>
 </div>
+</div>
+<div id="linear-model" class="section level2">
+<h2>Linear Model</h2>
+<div id="introduction-1" class="section level3">
+<h3>Introduction</h3>
+<p>After our EDA and statistical analysis, we consider to generate a
+linear regression to better express the relationship between Life
+Expectancy and other variables. In particular, we set une_life as our
+response variable and we only look at the year of 2015.</p>
+</div>
+<div id="dataset-preparation" class="section level3">
+<h3>Dataset Preparation</h3>
+<p>In the beginnig, to prepare our dataset for multiple linear
+regression, we delete mortality related variables, delete une_pop, which
+is not a good predictor of life expenctancy, and also delete variables
+that have high correlation values presented in EDA section.
+Specifically, we use “measles” to be the representative of vaccination
+variables–hepatitis, measles, polio, and diphtheria. Moreover, we use
+“bmi” to be another representative of age5_19thinness, age5_19obesity,
+and bmi.</p>
+<p>In the end, we limit the data to year 2015, and set the Income
+Reference Group to Low Income.</p>
+<pre class="r"><code>data &lt;-
+  read_csv(&quot;data/Merged_expectation.csv&quot;) %&gt;%
+  filter(year == 2015) %&gt;% 
+  select(alcohol:percent_w_in_lower_house) %&gt;% 
+  select(-hepatitis, -polio, -diphtheria, -age5_19thinness, -age5_19obesity, -une_infant, -une_pop) %&gt;% 
+  mutate(income_group = as.factor(income_group),
+         income_group = relevel(income_group, ref = &quot;Low income&quot;))</code></pre>
+<div id="model-1" class="section level4">
+<h4>Model 1</h4>
+<p>First, we look at the number of missing data we have on each column,
+at year 2015. The table below shows variables that have less than 5%
+NA’s.</p>
+<pre class="r"><code>NA_table_1 &lt;- data %&gt;% 
+  is.na() %&gt;% 
+  colSums()
+NA_table_1[NA_table_1 &lt;= 10] %&gt;% 
+    knitr::kable(col.names = c(&quot;Counts of NA&quot;))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Counts of NA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">alcohol</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">bmi</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">measles</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">basic_water</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">gghe_d</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">che_gdp</td>
+<td align="right">7</td>
+</tr>
+<tr class="odd">
+<td align="left">une_life</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">une_gni</td>
+<td align="right">7</td>
+</tr>
+<tr class="odd">
+<td align="left">PM_value</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">income_group</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Developed / Developing Countries</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">percent_w_in_lower_house</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+<p>Limited to the variables that we have less than 5% NA’s (which is
+less than 10 NAs), also exclude variables that have high correlation
+value, we could generate our first basic linear model, with selected
+variables of alcohol, bmi, measles, basic_water, che_gdp (health
+expenditure per gdp, gghe_d is deleted since it represents similar
+aspects), une_gni, PM_value, income_group (Developed/Developing
+Countries is deleted since it is similar to income_group),
+percent_w_in_lower_house, and our response variable of une_life.</p>
+<ul>
+<li>Model 1: une_life ~ alcohol + bmi + measles + basic_water + che_gdp
++ une_gni + PM_value + income_group * percent_w_in_lower_house</li>
+</ul>
+<p>The following table shows the distribution of all numerical variables
+here.</p>
+<pre class="r"><code>colname &lt;- c(&quot;alcohol&quot;, &quot;bmi&quot;, &quot;measles&quot;, &quot;basic_water&quot;, &quot;che_gdp&quot;, &quot;une_gni&quot;, &quot;PM_value&quot;, &quot;percent_w_in_lower_house&quot;)
+par(mfrow=c(2, 4))
+data_1_a &lt;- data.frame(data)
+for (i in 1:8) {
+  variable &lt;- data_1_a[colname[i]][ ,1]
+  hist(variable, main = paste(&quot;Histogram of&quot;, colname[i], sep = &quot; &quot;), xlab = colname[i])
+}</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-62-1.png" width="672" /></p>
+<p>Delete all the NA rows in the data, consider intersection between
+income_group and percent_w_in_lower_house, using step function with
+backwards direction. Then we generate our first model.</p>
+<pre class="r"><code># delete all the Na columns
+data_1 &lt;- data %&gt;% 
+  select(une_life, alcohol, bmi, measles, basic_water, che_gdp, une_gni, PM_value, income_group, percent_w_in_lower_house) %&gt;% 
+  drop_na()</code></pre>
+<pre class="r"><code># fit the model one
+m &lt;- lm(une_life ~ alcohol + bmi + measles + basic_water + che_gdp + une_gni + PM_value + income_group * percent_w_in_lower_house, data = data_1)
+# use stepwise function
+m1 &lt;- step(m, direction = &quot;backward&quot;, trace = FALSE)</code></pre>
+<pre class="r"><code># create table for regression output
+m1 %&gt;%
+  summary() %&gt;%
+  broom::tidy() %&gt;%
+  select(term, estimate, p.value) %&gt;% 
+  knitr::kable(
+      caption = &quot;Estimate and P-value of Model 1 for Year 2015 Life Expectancy (Income Reference Group is Low Income)&quot;, 
+      col.names = c(&quot;Predictor&quot;, &quot;Estimate&quot;, &quot;P-value&quot;),
+      digits = 3
+  )</code></pre>
+<table>
+<caption>Estimate and P-value of Model 1 for Year 2015 Life Expectancy
+(Income Reference Group is Low Income)</caption>
+<colgroup>
+<col width="77%" />
+<col width="12%" />
+<col width="10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Predictor</th>
+<th align="right">Estimate</th>
+<th align="right">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">37.297</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">alcohol</td>
+<td align="right">-0.164</td>
+<td align="right">0.102</td>
+</tr>
+<tr class="odd">
+<td align="left">measles</td>
+<td align="right">0.066</td>
+<td align="right">0.035</td>
+</tr>
+<tr class="even">
+<td align="left">basic_water</td>
+<td align="right">0.271</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">income_groupHigh income</td>
+<td align="right">6.368</td>
+<td align="right">0.009</td>
+</tr>
+<tr class="even">
+<td align="left">income_groupLower middle income</td>
+<td align="right">3.437</td>
+<td align="right">0.068</td>
+</tr>
+<tr class="odd">
+<td align="left">income_groupUpper middle income</td>
+<td align="right">4.358</td>
+<td align="right">0.065</td>
+</tr>
+<tr class="even">
+<td align="left">percent_w_in_lower_house</td>
+<td align="right">0.156</td>
+<td align="right">0.012</td>
+</tr>
+<tr class="odd">
+<td align="left">income_groupHigh income:percent_w_in_lower_house</td>
+<td align="right">-0.003</td>
+<td align="right">0.973</td>
+</tr>
+<tr class="even">
+<td align="left">income_groupLower middle
+income:percent_w_in_lower_house</td>
+<td align="right">-0.151</td>
+<td align="right">0.041</td>
+</tr>
+<tr class="odd">
+<td align="left">income_groupUpper middle
+income:percent_w_in_lower_house</td>
+<td align="right">-0.152</td>
+<td align="right">0.054</td>
+</tr>
+</tbody>
+</table>
+<p>From the above, variables like bmi, che_gdp, une_gni, PM_value are
+deleted according to backwards step function. One way to explain this is
+that these variables have high correlation with income_group–in higher
+income countries(une_gni), people have more access to healthy foods and
+healthy life styles (bmi), governments also spend more money on public
+health(che_gdp), as well as on building a clean
+environment(PM_value).</p>
+<p>From the estimates, we can conclude that, increase of alcohol
+consumption has negative effects on life expectancy. Increasing access
+to vaccines and clean water, the empowerment of women, and higher income
+will lead to a longer life.</p>
+<p>Another thing that needs to be aware of is that the intersection of
+income group and women in parliament(percent_w_in_lower_house). The
+variable percent_w_in_lower_house is significant itself, but it is more
+significant in middle income and upper income groups. In other words,
+after a country reaches a certain level of income, increasing women’s
+voice in the country actually helps people live longer, which follows
+the intention that we chose to include this variable in the first place.
+(Since 0.156 - 0.152 &gt; 0, keeping other variables constant,
+percent_w_in_lower_house increases, the predicted life expectancy will
+increase.)</p>
+<p>The model 1’s R-adjusted score reaches 0.7808107.</p>
+<p>Below are the analysis plots of the model. These plot shows that the
+residuals are normally distributed, independent, but may not have a
+constant variance–it has a linear trend in the end according to the
+third plot. In second plot, the points follows the line, so the
+regression function is linear. Therefore, maybe we don’t need to add
+transformation to our response variable.</p>
+<pre class="r"><code>par(mfrow=c(2,2))
+plot(m1)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
+<ul>
+<li>The final Model 1 is une_life ~ alcohol + measles + basic_water +
+income_group * percent_w_in_lower_house</li>
+</ul>
+</div>
+<div id="model-2" class="section level4">
+<h4>Model 2</h4>
+<p>Second, we only look at the countries with existing une_literacy data
+and found out the number of NA in other variables of these countries, at
+year 2015. The table below shows variables that have less than 5%
+NA’s.</p>
+<pre class="r"><code>NA_table_2 &lt;- data %&gt;% 
+  filter(is.na(une_literacy) == FALSE) %&gt;% 
+  is.na() %&gt;% 
+  colSums()
+NA_table_2[NA_table_2 &lt;= 3] %&gt;% 
+    knitr::kable(col.names = c(&quot;Counts of NA&quot;))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Counts of NA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">alcohol</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">bmi</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">measles</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">basic_water</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">gghe_d</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">che_gdp</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">une_life</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">une_gni</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">une_literacy</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">PM_value</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">income_group</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Developed / Developing Countries</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">percent_w_in_lower_house</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+<p>Here, limited to the variable that we have less than 5% NA’s (which
+is less than 3 NAs), also exclude variables that have high correlation
+value, we could generate our second basic linear model, with selected
+variables of alcohol, bmi, measles, basic_water, che_gdp, une_gni,
+une_literacy, PM_value, income_group, percent_w_in_lower_house, and our
+response variable of une_life.</p>
+<ul>
+<li>Model 2: une_life ~ alcohol + bmi + measles + basic_water + che_gdp
++ une_gni + une_literacy + PM_value + income_group +
+percent_w_in_lower_house + income_group * percent_w_in_lower_house</li>
+</ul>
+<p>(Also consider intersection here)</p>
+<p>The following table shows the distribution of all numerical variables
+here.</p>
+<pre class="r"><code># delete all the Na columns, and limit to countries with existing une_literacy data
+data_2 &lt;- data %&gt;% 
+  filter(is.na(une_literacy) == FALSE) %&gt;% 
+  select(une_life, alcohol, bmi, measles, basic_water, che_gdp, une_gni, une_literacy, PM_value, income_group, percent_w_in_lower_house) %&gt;% 
+  drop_na()</code></pre>
+<pre class="r"><code>colname &lt;- c(&quot;alcohol&quot;, &quot;bmi&quot;, &quot;measles&quot;, &quot;basic_water&quot;, &quot;che_gdp&quot;, &quot;une_gni&quot;, &quot;une_literacy&quot;, &quot;PM_value&quot;, &quot;percent_w_in_lower_house&quot;)
+par(mfrow=c(3, 3))
+data_2_a &lt;- data.frame(data_2)
+for (i in 1:9) {
+  variable &lt;- data_2_a[colname[i]][ ,1]
+  hist(variable, main = paste(&quot;Histogram of&quot;, colname[i], sep = &quot; &quot;), xlab = colname[i])
+}</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-69-1.png" width="672" /></p>
+<p>Delete all the NA rows in the data, consider intersection between
+income_group and percent_w_in_lower_house, using step function with
+backwards direction. Then we generate our second model.</p>
+<pre class="r"><code># fit the model two
+m &lt;- lm(une_life ~ alcohol + bmi + measles + basic_water + che_gdp + une_gni + une_literacy + PM_value + income_group * percent_w_in_lower_house, data = data_2)
+# use stepwise function
+m2 &lt;- step(m, direction = &quot;backward&quot;, trace = FALSE)</code></pre>
+<pre class="r"><code># create table for regression output
+m2 %&gt;%
+  summary() %&gt;%
+  broom::tidy() %&gt;%
+  select(term, estimate, p.value) %&gt;% 
+  knitr::kable(
+      caption = &quot;Estimate and P-value of Model 2 for Year 2015 Life Expectancy Only in Countries With Existing Literacy Data&quot;, 
+      col.names = c(&quot;Predictor&quot;, &quot;Estimate&quot;, &quot;P-value&quot;),
+      digits = 3
+  )</code></pre>
+<table>
+<caption>Estimate and P-value of Model 2 for Year 2015 Life Expectancy
+Only in Countries With Existing Literacy Data</caption>
+<thead>
+<tr class="header">
+<th align="left">Predictor</th>
+<th align="right">Estimate</th>
+<th align="right">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">48.798</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">bmi</td>
+<td align="right">-0.521</td>
+<td align="right">0.126</td>
+</tr>
+<tr class="odd">
+<td align="left">measles</td>
+<td align="right">0.102</td>
+<td align="right">0.100</td>
+</tr>
+<tr class="even">
+<td align="left">basic_water</td>
+<td align="right">0.185</td>
+<td align="right">0.002</td>
+</tr>
+<tr class="odd">
+<td align="left">che_gdp</td>
+<td align="right">0.464</td>
+<td align="right">0.088</td>
+</tr>
+<tr class="even">
+<td align="left">income_groupHigh income</td>
+<td align="right">13.186</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">income_groupLower middle income</td>
+<td align="right">6.742</td>
+<td align="right">0.005</td>
+</tr>
+<tr class="even">
+<td align="left">income_groupUpper middle income</td>
+<td align="right">8.695</td>
+<td align="right">0.002</td>
+</tr>
+</tbody>
+</table>
+<p>From the above, variables like alcohol, une_gni, une_literacy,
+PM_value, income_group:percent_w_in_lower_houseare,
+percent_w_in_lower_houseare are deleted according to backwards step
+function. It is very different from the model 1 when we limit to 37
+countries. Moreover, even though we specifically make sure every country
+has literacy data, literacy is not significant enough to be included in
+the linear regression model.</p>
+<p>The intersection of income group and women in
+parliament(percent_w_in_lower_house) is also been deleted. Therefore, we
+can conclude that the model we generate in a small range of countries
+with complete literacy data entries is very different from the model
+generated from a larger dataset, while literacy data is not significant
+in the small range of countries. To conclude, we should discard literacy
+variable, and also discard model 2.</p>
+<p>The model 2’s R-adjusted score reaches 0.857607. This is reasonable,
+since we generate model 2 in a small range of countries.</p>
+<ul>
+<li>Therefore, we should discard literacy variable, and also discard
+model 2. We should consider Model 1 as a great subset of the full
+model.</li>
+</ul>
+</div>
+<div id="compare-model-1-with-full-model" class="section level4">
+<h4>Compare Model 1 with Full Model</h4>
+<p>Full Model is the Year 2015 full dataset except mortality rate and
+except variables with more than 5% NAs.</p>
+<ul>
+<li>Full Model: uni_life ~ hepatitis + polio + diphtheria +
+age5_19thinness + age5_19obesity + une_pop + alcohol + bmi + measles +
+basic_water + gghe_d + che_gdp + une_pop + une_gni + PM_value +
+income_group + percent_w_in_lower_house + Developed/Developing
+Countries</li>
+</ul>
+<pre class="r"><code># generate the Year 2015 full dataset except mortality rate
+data_full &lt;-
+  read_csv(&quot;data/Merged_expectation.csv&quot;) %&gt;% 
+  filter(year == 2015) %&gt;% 
+  select(une_life, hepatitis, polio, diphtheria, age5_19thinness, age5_19obesity, une_pop , alcohol, bmi, measles, basic_water, gghe_d, che_gdp, une_pop, une_gni, PM_value, income_group, percent_w_in_lower_house, `Developed / Developing Countries`) %&gt;%
+  drop_na()
+m_full &lt;- lm(une_life ~ ., data = data_full)</code></pre>
+<pre class="r"><code>m1 %&gt;%
+  summary() %&gt;% 
+  broom::glance() %&gt;%
+  bind_rows(summary(m_full) %&gt;% broom::glance()) %&gt;%
+  mutate(model = c(&quot;Model 1&quot;, &quot;Full Model&quot;)) %&gt;%
+  select(model, everything()) %&gt;% 
+  knitr::kable(
+      caption = &quot;Comparision of Model 1 and Full Model&quot;, 
+      digits = 3
+  )</code></pre>
+<table>
+<caption>Comparision of Model 1 and Full Model</caption>
+<colgroup>
+<col width="13%" />
+<col width="12%" />
+<col width="17%" />
+<col width="7%" />
+<col width="12%" />
+<col width="10%" />
+<col width="3%" />
+<col width="15%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">model</th>
+<th align="right">r.squared</th>
+<th align="right">adj.r.squared</th>
+<th align="right">sigma</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+<th align="right">df</th>
+<th align="right">df.residual</th>
+<th align="right">nobs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Model 1</td>
+<td align="right">0.794</td>
+<td align="right">0.781</td>
+<td align="right">3.693</td>
+<td align="right">59.777</td>
+<td align="right">0</td>
+<td align="right">10</td>
+<td align="right">155</td>
+<td align="right">166</td>
+</tr>
+<tr class="even">
+<td align="left">Full Model</td>
+<td align="right">0.817</td>
+<td align="right">0.791</td>
+<td align="right">3.541</td>
+<td align="right">31.710</td>
+<td align="right">0</td>
+<td align="right">19</td>
+<td align="right">135</td>
+<td align="right">155</td>
+</tr>
+</tbody>
+</table>
+<p>From the above table, Model 1 and Full Model do not have big
+difference on adjusted R^2, but Model 1 has less predictors, which is
+much better.</p>
+</div>
+<div id="transformation-on-response-variable-of-model-1"
+class="section level4">
+<h4>Transformation on Response Variable of Model 1</h4>
+<p>First, we want to find whether response variable une_life needs
+transformation.</p>
+<pre class="r"><code>inverseResponsePlot(m1, key = TRUE)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-74-1.png" width="672" /></p>
+<pre><code>##     lambda      RSS
+## 1  2.17794 1637.306
+## 2 -1.00000 1953.745
+## 3  0.00000 1782.892
+## 4  1.00000 1678.616</code></pre>
+<p>From the above plot, the best <span
+class="math inline">\(\lambda\)</span> for model 1 is 2.17794, which is
+different from 1. Therefore, we will apply <span
+class="math inline">\(\lambda\)</span> equal to 2.17794 to une_life.</p>
+<pre class="r"><code># Fit model 1 with une_life^2.17794
+m1_tr &lt;- lm((une_life)^2.17794 ~ alcohol + measles + basic_water + income_group * percent_w_in_lower_house, data = data_1)
+# create table for regression output
+m1_tr %&gt;%
+  summary() %&gt;%
+  broom::tidy() %&gt;%
+  select(term, estimate, p.value) %&gt;% 
+  knitr::kable(
+      caption = &quot;Estimate and P-value of Transformed Model 1 for Year 2015 Life Expectancy&quot;, 
+      col.names = c(&quot;Predictor&quot;, &quot;Estimate&quot;, &quot;P-value&quot;),
+      digits = 3
+  )</code></pre>
+<table>
+<caption>Estimate and P-value of Transformed Model 1 for Year 2015 Life
+Expectancy</caption>
+<colgroup>
+<col width="77%" />
+<col width="12%" />
+<col width="10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Predictor</th>
+<th align="right">Estimate</th>
+<th align="right">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">695.168</td>
+<td align="right">0.403</td>
+</tr>
+<tr class="even">
+<td align="left">alcohol</td>
+<td align="right">-52.404</td>
+<td align="right">0.099</td>
+</tr>
+<tr class="odd">
+<td align="left">measles</td>
+<td align="right">19.506</td>
+<td align="right">0.047</td>
+</tr>
+<tr class="even">
+<td align="left">basic_water</td>
+<td align="right">82.789</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">income_groupHigh income</td>
+<td align="right">1960.037</td>
+<td align="right">0.011</td>
+</tr>
+<tr class="even">
+<td align="left">income_groupLower middle income</td>
+<td align="right">942.528</td>
+<td align="right">0.112</td>
+</tr>
+<tr class="odd">
+<td align="left">income_groupUpper middle income</td>
+<td align="right">1248.515</td>
+<td align="right">0.093</td>
+</tr>
+<tr class="even">
+<td align="left">percent_w_in_lower_house</td>
+<td align="right">43.753</td>
+<td align="right">0.025</td>
+</tr>
+<tr class="odd">
+<td align="left">income_groupHigh income:percent_w_in_lower_house</td>
+<td align="right">12.999</td>
+<td align="right">0.603</td>
+</tr>
+<tr class="even">
+<td align="left">income_groupLower middle
+income:percent_w_in_lower_house</td>
+<td align="right">-42.804</td>
+<td align="right">0.065</td>
+</tr>
+<tr class="odd">
+<td align="left">income_groupUpper middle
+income:percent_w_in_lower_house</td>
+<td align="right">-41.973</td>
+<td align="right">0.091</td>
+</tr>
+</tbody>
+</table>
+<p>The transformed model 1’s R-adjusted score reaches 0.7886281. The
+adjusted R square increases ~0.01 after transformation, which is close
+to the adjusted R square of the full model. However, while the
+difference of adjusted R square is small, for better interpretation, we
+decide to choose the original Model 1.</p>
+<p>Finally, our linear regression model on life expectancy is une_life ~
+alcohol + measles + basic_water + income_group *
+percent_w_in_lower_house.</p>
+</div>
+</div>
+<div id="cross-validation" class="section level3">
+<h3>Cross Validation</h3>
+<ul>
+<li>Model: une_life ~ alcohol + measles + basic_water + income_group *
+percent_w_in_lower_house.</li>
+</ul>
+<p>We divides the Year 2015 dataset to train ans test two datasets 100
+times. The graph below shows RMSE distribution in test datasets.</p>
+<pre class="r"><code># generate a cv dataframe 
+cv_df &lt;-
+  crossv_mc(data_1, 100) %&gt;% 
+  mutate(
+    train = map(train, as_tibble),
+    test = map(test, as_tibble))
+# fit the model to the generated CV dataframe
+cv_df &lt;-
+  cv_df %&gt;% 
+  mutate(
+    model  = map(train, ~lm(une_life ~ alcohol + measles + basic_water + income_group * percent_w_in_lower_house, data = .x)),
+    rmse = map2_dbl(model, test, ~rmse(model = .x, data = .y)))
+# plot the prediction error
+cv_df %&gt;% 
+  select(rmse) %&gt;% 
+  pivot_longer(
+    everything(),
+    names_to = &quot;model&quot;, 
+    values_to = &quot;rmse&quot;) %&gt;% 
+  ggplot(aes(x= model, y = rmse)) + 
+  geom_violin() +
+  labs(
+    title = &quot;Prediction Errors For Our Model Under CV&quot;,
+    x = &quot;Model 1&quot;,
+    y = &quot;Prediction Errors&quot;
+  ) </code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-76-1.png" width="672" /></p>
+<p>From the plot, RMSE is around 4.0, and spreads from 3.0 to 5.0, which
+is relatively a small and concentrated RMSE.</p>
+</div>
+<div id="prediction" class="section level3">
+<h3>Prediction</h3>
+<p>The below graphs will show our prediction on Year 2016 data. Since we
+only have percent_w_in_lower_house data in year 2015, we will still use
+the same value for year 2016.</p>
+<pre class="r"><code># predict on merged_data year 2016
+data_2016 &lt;-
+  read_csv(&quot;data/Merged_expectation.csv&quot;) %&gt;%
+  filter(year == 2016) %&gt;% 
+  select(une_life, alcohol, measles, basic_water, income_group) %&gt;% 
+  bind_cols(data[&quot;percent_w_in_lower_house&quot;]) %&gt;% 
+  drop_na() %&gt;% 
+  mutate(income_group = as.factor(income_group),
+         income_group = relevel(income_group, ref = &quot;Low income&quot;))
+prediction_2016 &lt;- predict(m1, newdata = data_2016)
+# draw ggplot1
+ggp1 &lt;- prediction_2016 %&gt;% 
+  bind_cols(data_2016[&quot;une_life&quot;])  %&gt;% 
+  ggplot(aes(x = une_life, y = prediction_2016)) +
+  geom_point() + 
+  geom_abline(intercept = 0, slope = 1, color = &quot;red&quot;) +
+  labs(
+    title = &quot;Prediction V.S. Actual Life Expectancy On Year 2016 In Original Dataset&quot;,
+    x = &quot;Actual Life Expectancy&quot;,
+    y = &quot;Prediction&quot;
+  )
+
+# predict on imputed_data year 2016
+data_2016_im &lt;-
+  read_csv(&quot;data/Imputed_expectation.csv&quot;) %&gt;%
+  filter(year == 2016) %&gt;% 
+  select(une_life, alcohol, measles, basic_water, income_group) %&gt;% 
+  bind_cols(data[&quot;percent_w_in_lower_house&quot;]) %&gt;% 
+  drop_na() %&gt;% 
+  mutate(income_group = as.factor(income_group),
+         income_group = relevel(income_group, ref = &quot;Low income&quot;))
+prediction_2016_im &lt;- predict(m1, newdata = data_2016_im)
+# draw ggplot2
+ggp2 &lt;- prediction_2016_im %&gt;% 
+  bind_cols(data_2016_im[&quot;une_life&quot;])  %&gt;% 
+  ggplot(aes(x = une_life, y = prediction_2016_im)) +
+  geom_point() + 
+  geom_abline(intercept = 0, slope = 1, color = &quot;red&quot;) +
+  labs(
+    title = &quot;Prediction V.S. Actual Life Expectancy On Year 2016 In Imputed Dataset&quot;,
+    x = &quot;Actual Life Expectancy&quot;,
+    y = &quot;Prediction&quot;
+  )
+ggp1 / ggp2</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-77-1.png" width="672" /></p>
+<p>The graph above is shown that almost every prediction is in a + or -
+5 years range, and there is no difference in imputed dataset and
+original dataset–possibly there is no data imputed on these variables of
+Year 2016.</p>
+<p>If we consider a range in 3 years (+ or - 1.5 years) is a good
+prediction, lets see the percentage of predicted life expectancy in this
+range on Year 2016.</p>
+<pre class="r"><code>actual &lt;- data_2016[&quot;une_life&quot;]
+percent &lt;- sum(prediction_2016 &gt;= actual - 1.5 &amp; prediction_2016 &lt;= actual + 1.5) / length(prediction_2016)
+paste(&quot;The calculated result is &quot;, round(percent, 3), &quot;.&quot;)</code></pre>
+<pre><code>## [1] &quot;The calculated result is  0.369 .&quot;</code></pre>
+<p>Therefore, if we consider a range in 3 years (+ or - 1.5 years) is a
+good prediction, 0.369 of predicted life expectancy will be in this
+range on Year 2016.</p>
+<p><br> <br></p>
+</div>
+</div>
+<div id="clustering" class="section level2">
+<h2>Clustering</h2>
+<p>Clustering Analysis is an unsupervised method that cluster the
+countries of interest into groups in a high dimensional vector space,
+based on the information of predictors values, i.e. alcohol consumption,
+bmi value, measle vaccinations and etc in our analysis. Different from
+prediction, we focus on how countries are correlated with each other
+based on their predictors and more importantly, the optimal number of
+groups we can partition into based on all predictors. Based on the
+optimal number of groups, we can essentially impute our model using k
+mean clustering method. In our data cleaning, we impute our data using
+k=4. Here, we check whether k=4 is a good choice based on k mean
+clustering. The following code runs over k groups where k is between 1
+to 10.</p>
+<pre class="r"><code>merged_data =
+  read_csv(&quot;data/Merged_expectation.csv&quot;) %&gt;% 
+  filter(year == 2015) %&gt;% 
+  select(une_life,alcohol, bmi, measles, basic_water, che_gdp, une_gni, une_literacy, PM_value) %&gt;% 
+  drop_na()
+
+X_var = 
+  merged_data %&gt;% 
+  select(alcohol, bmi, measles, basic_water, che_gdp, une_gni, une_literacy, PM_value)
+Y_var = 
+outcomes = merged_data %&gt;% 
+  select(une_life)
+
+
+#Scale X variable
+Scale_X = X_var %&gt;% 
+  na.omit() %&gt;% 
+  scale()
+
+
+fviz_nbclust(Scale_X, kmeans, method = &quot;silhouette&quot;) + 
+  theme_bw()</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-79-1.png" width="672" /></p>
+<p>Here, we use silhouette method, which focus on how similar a point is
+within-cluster in comparison with other clusters <a
+href="https://www.analyticsvidhya.com/blog/2021/05/k-mean-getting-the-optimal-number-of-clusters/#:~:text=The%20silhouette%20coefficient%20or%20silhouette,to%20other%20clusters%20(separation).">paper</a>.
+Based on the result, we discover that k =2,3 and 4 all has the highest
+sihouette width. k reaches its optimal value when k=4 and the optimal
+value coincide with our chosen k for k mean imputation value.</p>
+<pre class="r"><code># get the kmean result and get the clusters
+k_result = 
+  kmeans(x = X_var, centers = 4)
+
+#Create the overall dataframe with combined Xvar Yvar and cluster
+Allvalues = 
+  X_var %&gt;% 
+  broom::augment(k_result, .) %&gt;% 
+  cbind(Y_var,.)
+
+
+
+
+# Plot predictor clusters against outcomes
+ggplot(data = Allvalues, aes(x = une_gni, y = une_life, color = .cluster)) + 
+  geom_point(size=3) + 
+  labs(x = &quot;GNI&quot;, y = &quot;Life Expectancy&quot;, title = &quot;Life expectancy vs GNI after clustered&quot;, color = &quot;Cluster&quot;)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-80-1.png" width="672" /></p>
+<p>Although the algorithm is high dimensional, it is always better to
+visualize in a lower dimensional case when we only consider life
+expectancy and the predictor values. Here I choose GNI as an example.
+After clustering, we can clearly see that GNI with different clustered
+are clustered at different locations. This clustering may coincide with
+our previous classification with respect to different income group. High
+income group indicated by yellow color clearly has a relatively high
+life expectancy whereas low income group with low GNI value implied by
+the green group has a low life expectancy.</p>
+<pre class="r"><code># Visualize cluster plot with reduction to two dimensions
+fviz_cluster(k_result, data = X_var, palette = &quot;Set2&quot;)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-81-1.png" width="672" /></p>
+<p>On the other hand, we plot based on the two highest variance
+explained dimension determined by principal component analysis (PCA).
+Most information are explained in the dimension 1 (44.4%) and dimension
+2 (20.4%). As seen in the plot, only cluster 4 is clearly different from
+the other clusters. Cluster 1,2 and 3 are all intercorrelated with each
+other. This coincide with some of the time series plot in EDA part,
+i.e. number of doctors per 10,000 people and educational spend, which
+income groups overlapped with each other.</p>
+<pre class="r"><code>imputed_data =
+  read_csv(&quot;data/Imputed_expectation.csv&quot;) %&gt;% 
+  filter(year == 2015)
+
+X_var_imp = 
+  imputed_data %&gt;% 
+  select(alcohol, bmi, measles, basic_water, che_gdp, une_gni, une_literacy, PM_value)%&gt;% 
+  na.omit() %&gt;% 
+  scale()
+
+Y_var_imp = 
+outcomes = imputed_data %&gt;% 
+  select(une_life)
+
+# get the kmean result and get the clusters
+k_result_imp = 
+  kmeans(x = X_var_imp, centers = 4)
+
+fviz_cluster(k_result_imp, data = X_var_imp, palette = &quot;Set2&quot;)</code></pre>
+<p><img src="Project-report_files/figure-html/unnamed-chunk-82-1.png" width="672" /></p>
+<p>After imputation with k=4 mean clustering, the four groups are now
+separated from each other. This is reasonable because we impute with k=4
+groups. Although the information may be biased, We can visualize that a
+high dimension 1 will lead to a high values in dimension 2. To our
+surprise, a low value in dimension 1 may also have a high value in
+dimension 2. This may because that some of the low income countries with
+low economic-related values may also have a high PM value.</p>
 </div>
 <div id="discussion" class="section level2">
 <h2>Discussion</h2>
+<div id="findings-and-conclusion" class="section level3">
+<h3>Findings and Conclusion</h3>
+<p>In our report, we first cleaned our data and utilized the k-means
+imputation to deal with missing value.</p>
+<p>After exploratory analysis, we discover a potential discrepancy
+between countries with different development status and income levels.
+We also compare the Pearson correlation with Distance correlation and
+discover little difference between linear and non-linear methods.</p>
+<p>The statistical tests we performed tells us that the mean life
+expectancy in Europe and Americas are significantly different and they
+have the top 2 life expectancy. Africa has the lowest life expectancy.
+Average life span is significantly different among distinct income level
+groups and development status groups. People with higher income and from
+more developed countries tend to live longer.</p>
+<p>From the regression, we concluded that the access to vaccines and
+basic clean water is really important, they have positive effects, while
+higher income and less alcohol will also lead to a longer life. Most
+importantly, we showed that the empowerment of women is significant to
+life expectancy, especially in middle income and upper income groups,
+which means increasing women’s voice in the country actually helps
+people live longer. Our model’s adjusted R^2 is 0.78.</p>
+<p>By using clustering analysis on the data in 2015, we validate that k
+mean imputation with 4 groups is the optimal choice for imputation. We
+also show the result of k mean clustering of the imputed data in the two
+dimensions with highest explained variance.</p>
+</div>
+<div id="challenges" class="section level3">
+<h3>Challenges</h3>
+<p>In our major dataset, many variables have missing values over the
+years 2000 to 2016. We tried to impute them using a clustering method.
+However, for the variables that have more than 10% NAs, the validity of
+imputation is greatly reduced. So, in the end, the imputation effect is
+not ideal enough.</p>
+<p>Additionally, we think it necessary to include more variables to
+cover the aspects of society, economics, environment, health, and so on.
+Human lifespan is the result of complex influence of multiple factors.
+The variables we have now are not comprehensive enough to build a better
+model and make more accurate predictions.</p>
+</div>
+<div id="limitation-insights-further-improvements"
+class="section level3">
+<h3>Limitation, Insights, Further Improvements</h3>
+<p>Our project focuses on a general level of countries in the world—for
+instance, the difference of life expectancy in developed countries and
+developing countries. While we gained some generality of the idea, we
+lost some specificity. We have less idea of countries within the same
+income level, especially lower income countries. At the same time, we
+did not explore the difference of life expectancy in states or regions
+within a country, like comparison of Urban versus rural areas, which
+should be conducted in further studies.</p>
+<p>To solve the imputation problem in our project, we could consider two
+methods—on one hand, we may research more advanced methods for
+imputation, on the other hand, we can also try to find other data
+sources to fill in the missing values.</p>
+<p>To solve the insufficient variable problem, we propose that a deeper
+understanding of human longevity is needed to discover more relevant
+factors. We should do more research in this field and try to broaden our
+data sources.</p>
+<p>The conclusion from the regression model that the empowerment of
+women is significant to life expectancy inspires us to further study the
+mechanism of how improving women’s status may expand a countrywide
+human’s lifespan. Moreover, the access to basic clean water is the most
+significant contributor to longer life expectancy–a further study could
+be introduced in order to explore the reasons behind the relationship of
+basic water and life expectancy.</p>
+</div>
 </div>
 </div>
 

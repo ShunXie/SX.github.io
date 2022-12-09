@@ -17,6 +17,18 @@ knitr::opts_chunk$set(echo = TRUE)
 Two of our group members celebrated their birthday in November, and immediately they started wondering how many birthdays remain in their life, how long could they survive in this world.
 
 
+# Initial Question
+
+Initial questions:
+
+What factors have a significant impact on life expectancy?
+
+Do different countries have significantly different life expectancy?
+
+What factors account for the differences in life expectancy in different countries and regions?
+
+
+
 # Introduction
 
 People in different regions have different life expectancies. Even in New York, life expectancy varies over regions due to different economic statuses, different infrastructures, etc. Other factors such as the explosion of measles and polio in the previous century also had a great impact on life expectancy. Studies in the course of epidemiology and the emergence of pandemics such as Covid-19 and SARS have shown us how devastating viruses can be and how vulnerable people are facing epidemics. In response, people produce vaccines to avoid being infected before becoming immune. Inspired by the course we learn, it is natural to wonder about the effect of vaccinations on life expectancy and perhaps to figure out the factors that could potentially have the most influential impact on life expectancy: social-economic factors, public health factors, or both.

@@ -1,18 +1,12 @@
 ---
-title: "Project report"
-date: "2022-11-23"
+title: "Project report:World Life Expectancy—Live to thrive"
 output: 
   html_document:
     toc: true
     toc_float: true
     theme: cosmo
 ---
-
-
-
-# World Life Expectancy—Live to thrive
-<br>
-<br>
+**Shun Xie, Jingyi Yao, Youlan Shen, Yuchen Zhang**
 
 ## Motivation
 
@@ -22,8 +16,6 @@ Two of our group members celebrated their birthday in November, and immediately 
 <br>
 
 ## Initial Question
-
-Our Initial questions are as following:
 
 What factors have a significant impact on life expectancy? Do different countries have significantly different life expectancy? What factors account for the differences in life expectancy in different countries and regions?
 
@@ -50,9 +42,9 @@ Our main datasets is WHO Life Exp Dataset, which covers the years 2000-2016 for 
  
 ### Variable Selection
  
-Based on the current research and the data we had, we decided to study the impressions of the variables by country on life expectancy. We decided to remove data related to mortality, because life expectancy is calculated from these data, so those are meaningless to predict life expectancy. Other variables can be considered relevant and for following study. For example, the GDP and development status of the country, local disease situation, education level, and the living habits of people in the country like alcohol consumption . 
+Based on the current research and the data we had, we decided to study the impressions of the variables by country on life expectancy. We decided to remove data related to mortality, because life expectancy is calculated from these data, so those are meaningless to predict life expectancy. Other variables can be considered relevant and for following study. For example, the GDP and development status of the country, local disease situation, education level, and the living habits of people in the country like alcohol consumption. 
  
-Based on these ideas, we looked through several papers to generate more variables that we thought would relate to life expectancy.
+Based on previous ideas, we looked through several papers to generate more variables that we thought would relate to life expectancy.
  
 Punching above their weight: a network to understand broader determinants of increasing life expectancy. [Fran Baum, et al. 2018]( https://equityhealthj.biomedcentral.com/articles/10.1186/s12939-018-0832-y).
 Why do some countries do better or worse in life expectancy relative to income? An analysis of Brazil, Ethiopia, and the United States of America. [Toby Freeman, et al. 2020](https://equityhealthj.biomedcentral.com/articles/10.1186/s12939-020-01315-z).

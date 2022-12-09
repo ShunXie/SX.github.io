@@ -10,9 +10,8 @@
 
 
 
-<meta name="date" content="2022-11-23" />
 
-<title>Project report</title>
+<title>Project report:World Life Expectancy—Live to thrive</title>
 
 <script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -376,15 +375,13 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Project report</h1>
-<h4 class="date">2022-11-23</h4>
+<h1 class="title toc-ignore">Project report:World Life Expectancy—Live
+to thrive</h1>
 
 </div>
 
 
-<div id="world-life-expectancylive-to-thrive" class="section level1">
-<h1>World Life Expectancy—Live to thrive</h1>
-<p><br> <br></p>
+<p><strong>Shun Xie, Jingyi Yao, Youlan Shen, Yuchen Zhang</strong></p>
 <div id="motivation" class="section level2">
 <h2>Motivation</h2>
 <p>Two of our group members celebrated their birthday in November, and
@@ -394,7 +391,6 @@ life, how long could they survive in this world.</p>
 </div>
 <div id="initial-question" class="section level2">
 <h2>Initial Question</h2>
-<p>Our Initial questions are as following:</p>
 <p>What factors have a significant impact on life expectancy? Do
 different countries have significantly different life expectancy? What
 factors account for the differences in life expectancy in different
@@ -502,8 +498,8 @@ calculated from these data, so those are meaningless to predict life
 expectancy. Other variables can be considered relevant and for following
 study. For example, the GDP and development status of the country, local
 disease situation, education level, and the living habits of people in
-the country like alcohol consumption .</p>
-<p>Based on these ideas, we looked through several papers to generate
+the country like alcohol consumption.</p>
+<p>Based on previous ideas, we looked through several papers to generate
 more variables that we thought would relate to life expectancy.</p>
 <p>Punching above their weight: a network to understand broader
 determinants of increasing life expectancy. <a
@@ -832,38 +828,38 @@ head(Imputed_expectancy %&gt;% select(-percent_w_in_lower_house))</code></pre>
 ##   adult_mortality infant_mort age1_4mort   alcohol  bmi age5_19thinness
 ## 1        316.0496    0.098245   0.011050 0.4562055 21.7            20.6
 ## 2        307.2416    0.095925   0.010625 3.5850006 21.8            20.4
-## 3        292.3430    0.093330   0.010130 0.8997981 21.9            20.2
+## 3        292.3430    0.093330   0.010130 2.4964202 21.9            20.2
 ## 4        286.4569    0.090470   0.009655 1.4059016 22.0            20.0
 ## 5        281.8943    0.087595   0.009210 1.2471070 22.1            19.8
 ## 6        277.1813    0.084630   0.008785 0.0162300 22.2            19.6
 ##   age5_19obesity hepatitis measles polio diphtheria basic_water   doctors
-## 1            0.6  78.05475      27    24         24    27.77190 1.3880322
+## 1            0.6  77.62282      27    24         24    27.77190 1.5501406
 ## 2            0.7  78.06274      37    35         33    27.79726 1.8990000
-## 3            0.8  59.58910      35    36         36    29.90076 0.5930886
-## 4            0.9  45.72630      39    41         41    32.00507 0.5190973
-## 5            1.0  72.57173      48    50         50    34.12623 0.9575233
-## 6            1.1  73.96158      50    58         58    36.26526 0.8882858
+## 3            0.8  45.92634      35    36         36    29.90076 0.8132858
+## 4            0.9  45.72630      39    41         41    32.00507 0.3993718
+## 5            1.0  48.48146      48    50         50    34.12623 0.3929220
+## 6            1.1  77.74015      50    58         58    36.26526 0.8882858
 ##    hospitals gni_capita    gghe_d  che_gdp  une_pop une_infant une_life une_hiv
-## 1  9.4945592   802.1334 0.7777427 4.704074 20779.95       90.6   55.841     0.1
-## 2 10.9270734   483.2705 2.8719383 7.475627 21606.99       88.0   56.308     0.1
-## 3  4.1405444   870.0000 0.0841800 9.443390 22600.77       85.4   56.784     0.1
-## 4  0.4056941   920.0000 0.6509600 8.941260 23680.87       82.8   57.271     0.1
-## 5  1.2506006   920.0000 0.5429300 9.808470 24726.68       80.1   57.772     0.1
-## 6  0.4201332  1020.0000 0.5291800 9.948290 25654.28       77.4   58.290     0.1
-##    une_gni une_poverty une_edu_spend une_literacy une_school PM_value
-## 1 2964.013    59.81896      3.831208     23.96308   2.145872      100
-## 2 1225.182    55.19069      3.627787     43.33783   1.906050      100
-## 3 1119.341    35.56763      3.023010     28.78254   1.996305      100
-## 4 1431.191    48.71037      3.040833     34.08148   1.965382      100
-## 5 1524.570    60.58547      3.567654     31.68558   1.907838      100
-## 6 1730.781    14.11812      1.623665     51.14937   1.904653      100
+## 1  0.5642345   802.1334 0.7777427 4.704074 20779.95       90.6   55.841     0.1
+## 2  0.4540770   832.8501 0.2326549 8.428715 21606.99       88.0   56.308     0.1
+## 3  0.4370062   870.0000 0.0841800 9.443390 22600.77       85.4   56.784     0.1
+## 4 27.1530249   920.0000 0.6509600 8.941260 23680.87       82.8   57.271     0.1
+## 5 26.7830689   920.0000 0.5429300 9.808470 24726.68       80.1   57.772     0.1
+## 6  7.1954148  1020.0000 0.5291800 9.948290 25654.28       77.4   58.290     0.1
+##     une_gni une_poverty une_edu_spend une_literacy une_school PM_value
+## 1  931.0142    62.83715      3.687038     23.96308   1.506483      100
+## 2 1225.1817    53.04912      3.563636     49.04104   1.508050      100
+## 3 1164.8368    46.09203      3.085146     34.93168   1.910940      100
+## 4  911.7163    51.89337      3.040833     38.24146   2.314959      100
+## 5 1038.9849    52.61218      3.567654     31.68558   4.020649      100
+## 6 1157.3764    33.86415      2.268477     45.34053   4.558332      100
 ##   health_exp income_group Developed / Developing Countries
-## 1   8.252343   Low income                       Developing
-## 2   8.247154   Low income                       Developing
-## 3   7.512855   Low income                       Developing
-## 4   7.147681   Low income                       Developing
-## 5   7.276204   Low income                       Developing
-## 6   7.305556   Low income                       Developing</code></pre>
+## 1   7.049560   Low income                       Developing
+## 2   5.625295   Low income                       Developing
+## 3   4.251933   Low income                       Developing
+## 4   4.252295   Low income                       Developing
+## 5   4.251630   Low income                       Developing
+## 6   4.250147   Low income                       Developing</code></pre>
 <pre class="r"><code>write.csv(Imputed_expectancy , file = &quot;data/Imputed_expectation.csv&quot;)</code></pre>
 <p><br> <br></p>
 </div>
@@ -3689,7 +3685,6 @@ human’s lifespan. Moreover, the access to basic clean water is the most
 significant contributor to longer life expectancy–a further study could
 be introduced in order to explore the reasons behind the relationship of
 basic water and life expectancy.</p>
-</div>
 </div>
 </div>
 

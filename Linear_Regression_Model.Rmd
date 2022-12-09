@@ -22,6 +22,9 @@ library(factoextra)
 
 After our EDA and statistical analysis, we consider to generate a linear regression to better express the relationship between Life Expectancy and other variables. In particular, we set une_life as our response variable and we only look at the year of 2015. 
 
+<br>
+<br>
+
 # Dataset Preparation
 
 In the beginnig, to prepare our dataset for multiple linear regression, we delete mortality related variables, delete une_pop, which is not a good predictor of life expenctancy, and also delete variables that have high correlation values presented in EDA section. Specifically, we use "measles" to be the representative of vaccination variables--hepatitis, measles, polio, and diphtheria. Moreover, we use "bmi" to be another representative of age5_19thinness, age5_19obesity, and bmi. 
@@ -37,6 +40,10 @@ data <-
   mutate(income_group = as.factor(income_group),
          income_group = relevel(income_group, ref = "Low income"))
 ```
+
+
+<br>
+<br>
 
 # Model 1
 
@@ -115,6 +122,10 @@ plot(m1)
 * The final Model 1 is
 une_life ~ alcohol + measles + basic_water + income_group * percent_w_in_lower_house
 
+
+<br>
+<br>
+
 # Model 2
 
 Second, we only look at the countries with existing une_literacy data and found out the number of NA in other variables of these countries, at year 2015. The table below shows variables that have less than 5% NA's.
@@ -185,6 +196,10 @@ The model 2's R-adjusted score reaches `r summary(m2)$adj.r.squared`. This is re
 
 * Therefore, we should discard literacy variable, and also discard model 2. We should consider Model 1 as a great subset of the full model.
 
+
+<br>
+<br>
+
 # Compare Model 1 with Full Model
 
 Full Model is the Year 2015 full dataset except mortality rate and except variables with more than 5% NAs.
@@ -216,6 +231,10 @@ m1 %>%
 
 From the above table, Model 1 and Full Model do not have big difference on adjusted R^2, but Model 1 has less predictors, which is much better.
 
+
+<br>
+<br>
+
 # Transformation on Response Variable of Model 1
 
 First, we want to find whether response variable une_life needs transformation.
@@ -244,6 +263,10 @@ m1_tr %>%
 The transformed model 1's R-adjusted score reaches `r summary(m1_tr)$adj.r.squared`. The adjusted R square increases ~0.01 after transformation, which is close to the adjusted R square of the full model. However, while the difference of adjusted R square is small, for better interpretation, we decide to choose the original Model 1.
 
 Finally, our linear regression model on life expectancy is une_life ~ alcohol + measles + basic_water + income_group * percent_w_in_lower_house.
+
+
+<br>
+<br>
 
 # Cross Validation
 
@@ -281,6 +304,10 @@ cv_df %>%
 ```
 
 From the plot, RMSE is around 4.0, and spreads from 3.0 to 5.0, which is relatively a small and concentrated RMSE.
+
+
+<br>
+<br>
 
 # Prediction
 

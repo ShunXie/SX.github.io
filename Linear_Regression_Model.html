@@ -405,6 +405,7 @@ library(factoextra)</code></pre>
 linear regression to better express the relationship between Life
 Expectancy and other variables. In particular, we set une_life as our
 response variable and we only look at the year of 2015.</p>
+<p><br> <br></p>
 </div>
 <div id="dataset-preparation" class="section level1">
 <h1>Dataset Preparation</h1>
@@ -425,6 +426,7 @@ Reference Group to Low Income.</p>
   select(-hepatitis, -polio, -diphtheria, -age5_19thinness, -age5_19obesity, -une_infant, -une_pop) %&gt;% 
   mutate(income_group = as.factor(income_group),
          income_group = relevel(income_group, ref = &quot;Low income&quot;))</code></pre>
+<p><br> <br></p>
 </div>
 <div id="model-1" class="section level1">
 <h1>Model 1</h1>
@@ -647,6 +649,7 @@ plot(m1)</code></pre>
 <li>The final Model 1 is une_life ~ alcohol + measles + basic_water +
 income_group * percent_w_in_lower_house</li>
 </ul>
+<p><br> <br></p>
 </div>
 <div id="model-2" class="section level1">
 <h1>Model 2</h1>
@@ -840,6 +843,7 @@ since we generate model 2 in a small range of countries.</p>
 model 2. We should consider Model 1 as a great subset of the full
 model.</li>
 </ul>
+<p><br> <br></p>
 </div>
 <div id="compare-model-1-with-full-model" class="section level1">
 <h1>Compare Model 1 with Full Model</h1>
@@ -923,6 +927,7 @@ m_full &lt;- lm(une_life ~ ., data = data_full)</code></pre>
 <p>From the above table, Model 1 and Full Model do not have big
 difference on adjusted R^2, but Model 1 has less predictors, which is
 much better.</p>
+<p><br> <br></p>
 </div>
 <div id="transformation-on-response-variable-of-model-1"
 class="section level1">
@@ -1035,6 +1040,7 @@ decide to choose the original Model 1.</p>
 <p>Finally, our linear regression model on life expectancy is une_life ~
 alcohol + measles + basic_water + income_group *
 percent_w_in_lower_house.</p>
+<p><br> <br></p>
 </div>
 <div id="cross-validation" class="section level1">
 <h1>Cross Validation</h1>
@@ -1073,6 +1079,7 @@ cv_df %&gt;%
 <p><img src="Linear_Regression_Model_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p>From the plot, RMSE is around 4.0, and spreads from 3.0 to 5.0, which
 is relatively a small and concentrated RMSE.</p>
+<p><br> <br></p>
 </div>
 <div id="prediction" class="section level1">
 <h1>Prediction</h1>

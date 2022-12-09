@@ -380,7 +380,72 @@ div.tocify {
 </div>
 
 
-
+<div id="findings-and-conclusion" class="section level1">
+<h1>Findings and Conclusion</h1>
+<p>In our report, we first cleaned our data and utilized the k-means
+imputation to deal with missing value.</p>
+<p>After exploratory analysis, we discover a potential discrepancy
+between countries with different development status and income levels.
+We also compare the Pearson correlation with Distance correlation and
+discover little difference between linear and non-linear methods.</p>
+<p>The statistical tests we performed tells us that the mean life
+expectancy in Europe and Americas are significantly different and they
+have the top 2 life expectancy. Africa has the lowest life expectancy.
+Average life span is significantly different among distinct income level
+groups and development status groups. People with higher income and from
+more developed countries tend to live longer.</p>
+<p>From the regression, we concluded that the access to vaccines and
+basic clean water is really important, they have positive effects, while
+higher income and less alcohol will also lead to a longer life. Most
+importantly, we showed that the empowerment of women is significant to
+life expectancy, especially in middle income and upper income groups,
+which means increasing women’s voice in the country actually helps
+people live longer. Our model’s adjusted R^2 is 0.78.</p>
+<p>By using clustering analysis on the data in 2015, we validate that k
+mean imputation with 4 groups is the optimal choice for imputation. We
+also show the result of k mean clustering of the imputed data in the two
+dimensions with highest explained variance.</p>
+</div>
+<div id="challenges" class="section level1">
+<h1>Challenges</h1>
+<p>In our major dataset, many variables have missing values over the
+years 2000 to 2016. We tried to impute them using a clustering method.
+However, for the variables that have more than 10% NAs, the validity of
+imputation is greatly reduced. So, in the end, the imputation effect is
+not ideal enough.</p>
+<p>Additionally, we think it necessary to include more variables to
+cover the aspects of society, economics, environment, health, and so on.
+Human lifespan is the result of complex influence of multiple factors.
+The variables we have now are not comprehensive enough to build a better
+model and make more accurate predictions.</p>
+</div>
+<div id="limitation-insights-further-improvements"
+class="section level1">
+<h1>Limitation, Insights, Further Improvements</h1>
+<p>Our project focuses on a general level of countries in the world—for
+instance, the difference of life expectancy in developed countries and
+developing countries. While we gained some generality of the idea, we
+lost some specificity. We have less idea of countries within the same
+income level, especially lower income countries. At the same time, we
+did not explore the difference of life expectancy in states or regions
+within a country, like comparison of Urban versus rural areas, which
+should be conducted in further studies.</p>
+<p>To solve the imputation problem in our project, we could consider two
+methods—on one hand, we may research more advanced methods for
+imputation, on the other hand, we can also try to find other data
+sources to fill in the missing values.</p>
+<p>To solve the insufficient variable problem, we propose that a deeper
+understanding of human longevity is needed to discover more relevant
+factors. We should do more research in this field and try to broaden our
+data sources.</p>
+<p>The conclusion from the regression model that the empowerment of
+women is significant to life expectancy inspires us to further study the
+mechanism of how improving women’s status may expand a countrywide
+human’s lifespan. Moreover, the access to basic clean water is the most
+significant contributor to longer life expectancy–a further study could
+be introduced in order to explore the reasons behind the relationship of
+basic water and life expectancy.</p>
+</div>
 
 
 

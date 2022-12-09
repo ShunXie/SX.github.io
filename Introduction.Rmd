@@ -35,18 +35,13 @@ Some existing research shows that life expectancy is related to some factors, in
  
 Our main datasets is WHO Life Exp Dataset, which covers the years 2000-2016 for 183 countries, including 32 variables  such as health-related factors and GNI per capita. It is extracted from the following website: https://www.kaggle.com/datasets/mmattson/who-national-life-expectancy?resource=download
  
-Variable Selection
+### Variable Selection
  
 Based on the current research and the data we had, we decided to study the impressions of the variables by country on life expectancy. We decided to remove data related to mortality, because life expectancy is calculated from these data, so those are meaningless to predict life expectancy. Other variables can be considered relevant and for following study. For example, the GDP and development status of the country, local disease situation, education level, and the living habits of people in the country like alcohol consumption . 
  
- 
- 
- 
- 
- 
 Based on these ideas, we looked through several papers to generate more variables that we thought would relate to life expectancy.
  
-Punching above their weight: a network to understand broader determinants of increasing life expectancy. [Fran Baum, et al. 2018] ( https://equityhealthj.biomedcentral.com/articles/10.1186/s12939-018-0832-y).
+Punching above their weight: a network to understand broader determinants of increasing life expectancy. [Fran Baum, et al. 2018]( https://equityhealthj.biomedcentral.com/articles/10.1186/s12939-018-0832-y).
 Why do some countries do better or worse in life expectancy relative to income? An analysis of Brazil, Ethiopia, and the United States of America. [Toby Freeman, et al. 2020](https://equityhealthj.biomedcentral.com/articles/10.1186/s12939-020-01315-z).
 Both of the papers introduce an idea of some countries achieving higher or lower life expectancy than would be predicted by their per capita income, and one of the reasons is the women’s access to education and politics—-this is explained in the second paper. 
 Therefore, we decided to add a variable related to women’s power in the country—-percentage of women in the national parliament around 2015~2018.

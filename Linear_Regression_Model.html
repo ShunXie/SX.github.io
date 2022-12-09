@@ -405,7 +405,7 @@ library(factoextra)</code></pre>
 linear regression to better express the relationship between Life
 Expectancy and other variables. In particular, we set une_life as our
 response variable and we only look at the year of 2015.</p>
-<p><br> <br></p>
+<p><br></p>
 </div>
 <div id="dataset-preparation" class="section level1">
 <h1>Dataset Preparation</h1>
@@ -426,7 +426,7 @@ Reference Group to Low Income.</p>
   select(-hepatitis, -polio, -diphtheria, -age5_19thinness, -age5_19obesity, -une_infant, -une_pop) %&gt;% 
   mutate(income_group = as.factor(income_group),
          income_group = relevel(income_group, ref = &quot;Low income&quot;))</code></pre>
-<p><br> <br></p>
+<p><br></p>
 </div>
 <div id="model-1" class="section level1">
 <h1>Model 1</h1>

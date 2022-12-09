@@ -65,9 +65,9 @@ Life expectancy as well as other included variables changes over decades. A way 
 ![](images/shiny_app.png)
 
 
-\ \par
-\ \par
-\ \par
+<br>
+<br>
+
 # Time series plot
 
 With our existence data, we need to evaluate the overall trend with respect to different types of countries. One way to differentiate country is to identify that whether the country is classified as developed or developing country. In the work by [SP Heyneman](https://www.journals.uchicago.edu/doi/pdf/10.1086/451180?casa_token=9gJkljIq_ukAAAAA:j3C4Kv-0Jp_gUpmVKvxFAxT1oGg8ryzRaHR_hdBX7QlqrAPGKU36A43QBGZ65AItaKU-LrLn6NE), he claimed that the change of economic status and school has a big difference between developed and developing country. We treat these variables as our predictors to the life expectancy. Therefore, it is likely that the predictors are different between developed and developing country. On the other hand, people with different income have different life expectancy. According to [Chatty et. al.](https://jamanetwork.com/journals/jama/article-abstract/2513561), the richest 1% income group has a 14.6 years and 10.1 years higher life expectancy for men and women respectively against the poorest 1% of income group. Therefore, we plot the trends for different variables over time with respect to development of the country and income group of the country. 

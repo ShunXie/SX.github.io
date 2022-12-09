@@ -11,7 +11,7 @@
 
 
 
-<title>Project report:World Life Expectancy—Live to thrive</title>
+<title>Project report : World Life Expectancy—Live to thrive</title>
 
 <script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -375,19 +375,20 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Project report:World Life Expectancy—Live
+<h1 class="title toc-ignore">Project report : World Life Expectancy—Live
 to thrive</h1>
 
 </div>
 
 
 <p><strong>Shun Xie, Jingyi Yao, Youlan Shen, Yuchen Zhang</strong></p>
+ 
 <div id="motivation" class="section level2">
 <h2>Motivation</h2>
 <p>Two of our group members celebrated their birthday in November, and
 immediately they started wondering how many birthdays remain in their
 life, how long could they survive in this world.</p>
-<p><br> <br></p>
+<p><br></p>
 </div>
 <div id="initial-question" class="section level2">
 <h2>Initial Question</h2>
@@ -395,7 +396,7 @@ life, how long could they survive in this world.</p>
 different countries have significantly different life expectancy? What
 factors account for the differences in life expectancy in different
 countries and regions?</p>
-<p><br> <br></p>
+<p><br></p>
 </div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
@@ -447,6 +448,7 @@ epoch training) and it can not identify potential significant factors
 based on the model. Takes into consideration of all factors, we consider
 linear model as our main regression method and choose economic factors
 and health related factors (discuss later).</p>
+ 
 <div id="related-work" class="section level3">
 <h3>Related work</h3>
 <p>Some existing research shows that life expectancy is related to some
@@ -479,6 +481,7 @@ environments with high levels of pollution, toxins, or poor living
 conditions may have a lower life expectancy than those who live in
 healthier environments<a
 href="https://www.mdpi.com/1660-4601/18/16/8559">Tchounwou 2021</a>.</p>
+ 
 </div>
 <div id="sources" class="section level3">
 <h3>Sources</h3>
@@ -488,6 +491,7 @@ health-related factors and GNI per capita. It is extracted from the
 following website: <a
 href="https://www.kaggle.com/datasets/mmattson/who-national-life-expectancy?resource=download"
 class="uri">https://www.kaggle.com/datasets/mmattson/who-national-life-expectancy?resource=download</a></p>
+ 
 </div>
 <div id="variable-selection" class="section level3">
 <h3>Variable Selection</h3>
@@ -528,11 +532,12 @@ href="https://pubs.acs.org/doi/10.1021/acs.estlett.8b00360">Apte, Joshua
 S., et al. 2018</a> This article inspires us to take environmental
 factors into consideration. Thus we added PM2.5 relative concentration
 as a numeric variable.</p>
-<p><br> <br></p>
+<p><br></p>
 </div>
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
+ 
 <div id="life-expectancy-dataset" class="section level3">
 <h3>Life Expectancy Dataset</h3>
 <p>We choose WHO Life Expectancy Dataset as our main dataset in our
@@ -610,7 +615,7 @@ years, both sexes (%). This is measured from UNESCO server</p>
 <p>*<code>une_literacy</code>: Mean years of schooling (ISCED 1 or
 higher), population 25+ years, both sexes. This is measured from UNESCO
 server</p>
-<p><br> <br></p>
+<p><br></p>
 </div>
 <div id="country-code-dataset" class="section level3">
 <h3>Country Code Dataset</h3>
@@ -628,7 +633,7 @@ by the code.</p>
 
 
 merged_data_PM = merge(LifeExpectancy, country_code, by.x = &quot;country_code&quot;, by.y = &quot;ISO3166-1-Alpha-3&quot; )</code></pre>
-<p><br> <br></p>
+<p><br></p>
 </div>
 <div id="pm2.5-dataset" class="section level3">
 <h3>PM2.5 dataset</h3>
@@ -660,7 +665,7 @@ PM_dataset_clean =
 merged_data_d = 
   merged_data_PM %&gt;% 
   left_join(PM_dataset_clean, by = c(&quot;country_code&quot;,&quot;year&quot;))</code></pre>
-<p><br> <br></p>
+<p><br></p>
 </div>
 <div id="income-level-data" class="section level3">
 <h3>Income level data</h3>
@@ -679,7 +684,7 @@ Income_dataset = read_csv(&quot;data/income_level.csv&quot;, show_col_types = FA
 merged_data_i = merged_data_d %&gt;% 
   left_join( Income_dataset, by = c(&quot;country_code&quot;)) %&gt;% 
   select(country_code:une_school,PM_value,income_group,`Developed / Developing Countries`)</code></pre>
-<p><br> <br></p>
+<p><br></p>
 </div>
 <div id="health-expenditure" class="section level3">
 <h3>Health expenditure</h3>
@@ -704,7 +709,7 @@ merged_data_h =
   left_join(health_exp, by = c(&quot;country_code&quot;,&quot;year&quot;)) %&gt;% 
   mutate(&quot;health_exp&quot; = value) %&gt;% 
   select(country_code:une_school,PM_value,income_group,health_exp,`Developed / Developing Countries`)</code></pre>
-<p><br> <br></p>
+<p><br></p>
 </div>
 <div id="parliament-information" class="section level3">
 <h3>Parliament Information</h3>
@@ -735,8 +740,8 @@ merged_data =
 <p><br> <br></p>
 </div>
 </div>
-<div id="impute" class="section level2">
-<h2>Impute</h2>
+<div id="imputation" class="section level2">
+<h2>Imputation</h2>
 <p>For the simplicity and accuracy purpose, imputation using weighted k
 nearest neighbour algorithm (w-kNN) is considered in my study. It is
 built on simple k nearest neighbour(kNN) but unlike kNN, it considers
@@ -828,43 +833,44 @@ head(Imputed_expectancy %&gt;% select(-percent_w_in_lower_house))</code></pre>
 ##   adult_mortality infant_mort age1_4mort   alcohol  bmi age5_19thinness
 ## 1        316.0496    0.098245   0.011050 0.4562055 21.7            20.6
 ## 2        307.2416    0.095925   0.010625 3.5850006 21.8            20.4
-## 3        292.3430    0.093330   0.010130 2.4964202 21.9            20.2
+## 3        292.3430    0.093330   0.010130 2.8226608 21.9            20.2
 ## 4        286.4569    0.090470   0.009655 1.4059016 22.0            20.0
 ## 5        281.8943    0.087595   0.009210 1.2471070 22.1            19.8
 ## 6        277.1813    0.084630   0.008785 0.0162300 22.2            19.6
 ##   age5_19obesity hepatitis measles polio diphtheria basic_water   doctors
-## 1            0.6  77.62282      27    24         24    27.77190 1.5501406
-## 2            0.7  78.06274      37    35         33    27.79726 1.8990000
-## 3            0.8  45.92634      35    36         36    29.90076 0.8132858
-## 4            0.9  45.72630      39    41         41    32.00507 0.3993718
-## 5            1.0  48.48146      48    50         50    34.12623 0.3929220
-## 6            1.1  77.74015      50    58         58    36.26526 0.8882858
-##    hospitals gni_capita    gghe_d  che_gdp  une_pop une_infant une_life une_hiv
-## 1  0.5642345   802.1334 0.7777427 4.704074 20779.95       90.6   55.841     0.1
-## 2  0.4540770   832.8501 0.2326549 8.428715 21606.99       88.0   56.308     0.1
-## 3  0.4370062   870.0000 0.0841800 9.443390 22600.77       85.4   56.784     0.1
-## 4 27.1530249   920.0000 0.6509600 8.941260 23680.87       82.8   57.271     0.1
-## 5 26.7830689   920.0000 0.5429300 9.808470 24726.68       80.1   57.772     0.1
-## 6  7.1954148  1020.0000 0.5291800 9.948290 25654.28       77.4   58.290     0.1
+## 1            0.6  77.71900      27    24         24    27.77190 1.3880322
+## 2            0.7  72.86391      37    35         33    27.79726 1.8990000
+## 3            0.8  59.58910      35    36         36    29.90076 0.8537491
+## 4            0.9  45.72630      39    41         41    32.00507 0.5131754
+## 5            1.0  72.57173      48    50         50    34.12623 0.9575233
+## 6            1.1  66.42667      50    58         58    36.26526 0.8882858
+##   hospitals gni_capita    gghe_d  che_gdp  une_pop une_infant une_life une_hiv
+## 1 0.5569708   802.1334 0.7777427 4.704074 20779.95       90.6   55.841     0.1
+## 2 0.5052059  1060.0000 2.8719383 7.475627 21606.99       88.0   56.308     0.1
+## 3 0.4347964   870.0000 0.0841800 9.443390 22600.77       85.4   56.784     0.1
+## 4 0.4328662   920.0000 0.6509600 8.941260 23680.87       82.8   57.271     0.1
+## 5 0.4409349   920.0000 0.5429300 9.808470 24726.68       80.1   57.772     0.1
+## 6 7.3942716  1020.0000 0.5291800 9.948290 25654.28       77.4   58.290     0.1
 ##     une_gni une_poverty une_edu_spend une_literacy une_school PM_value
-## 1  931.0142    62.83715      3.687038     23.96308   1.506483      100
-## 2 1225.1817    53.04912      3.563636     49.04104   1.508050      100
-## 3 1164.8368    46.09203      3.085146     34.93168   1.910940      100
-## 4  911.7163    51.89337      3.040833     38.24146   2.314959      100
-## 5 1038.9849    52.61218      3.567654     31.68558   4.020649      100
-## 6 1157.3764    33.86415      2.268477     45.34053   4.558332      100
+## 1  931.0142    78.12283      3.268848     29.35904   2.393836      100
+## 2 1225.1817    69.83018      3.633757     34.93685   1.476000      100
+## 3 1084.1678    39.43323      3.170392     30.97499   1.772724      100
+## 4 1431.1906    52.79583      3.040833     34.43209   2.511337      100
+## 5 1524.5696    53.99754      3.567654     29.82903   2.712640      100
+## 6 1312.1564    51.94328      2.268477     63.96930   2.474883      100
 ##   health_exp income_group Developed / Developing Countries
-## 1   7.049560   Low income                       Developing
-## 2   5.625295   Low income                       Developing
-## 3   4.251933   Low income                       Developing
-## 4   4.252295   Low income                       Developing
-## 5   4.251630   Low income                       Developing
-## 6   4.250147   Low income                       Developing</code></pre>
+## 1   8.381542   Low income                       Developing
+## 2   8.355995   Low income                       Developing
+## 3   8.777258   Low income                       Developing
+## 4   8.806917   Low income                       Developing
+## 5   8.807001   Low income                       Developing
+## 6   8.807037   Low income                       Developing</code></pre>
 <pre class="r"><code>write.csv(Imputed_expectancy , file = &quot;data/Imputed_expectation.csv&quot;)</code></pre>
 <p><br> <br></p>
 </div>
 <div id="exploratory-analysis" class="section level2">
 <h2>Exploratory Analysis</h2>
+ 
  
 <div id="world-life-expectancy-and-interactive-world-map"
 class="section level3">
@@ -896,6 +902,7 @@ href="https://7lx8uo-txbrook.shinyapps.io/map_dashboard/#section-bmi">here</a></
 <p>We also attached our source code to the app. If you are interested in
 how we built the map using dashboard and shiny, you may click on the
 button on the top right corner.</p>
+ 
 </div>
 <div id="time-series-plot" class="section level3">
 <h3>Time series plot</h3>
@@ -1100,7 +1107,7 @@ different income level, high income countries have the highest
 expenditure on health and it has an increasing trend. However, health
 expenditure measured in percentage of GDP decreases among low income
 countries.</p>
-<p><br> <br></p>
+<p><br></p>
 </div>
 <div id="multi-colinearity-check" class="section level3">
 <h3>Multi-colinearity Check</h3>
@@ -1176,7 +1183,7 @@ href="https://www.tandfonline.com/doi/full/10.1586/14779072.2014.952283">Benoit
 et. al.</a>. Thus, we want to figure out if bmi can be used to predict
 life expectancy and whether a high bmi do lead to a decrease in life
 expectancy.</p>
-<p><br> <br></p>
+<p><br></p>
 </div>
 <div id="correlation-and-scatter-plot" class="section level3">
 <h3>Correlation and Scatter Plot:</h3>
@@ -1682,7 +1689,7 @@ health expenditure = 3% of GDP.</p>
 </div>
 </div>
 <div id="correlation" class="section level2">
-<h2>Correlation:</h2>
+<h2>Correlation</h2>
 <p>Although scatter plot gives us some visualization of correlation
 between variables, we can not know to what extend the two variables are
 correlated. Therefore, correlation, as a numeric value, is of a great
@@ -1698,7 +1705,7 @@ distance methods.</p>
 of the linear relation between two variables <a
 href="https://link.springer.com/chapter/10.1007/978-3-642-00296-0_5">paper</a>.
 It has the formula defined in following definition:</p>
-<p><br> <br></p>
+ 
 <div id="definition-pearson" class="section level5">
 <h5>Definition Pearson</h5>
 <p>Let x and y be two random variables with zero mean and <span
@@ -1717,10 +1724,7 @@ coefficient is closer to a value of +1 or -1, then the correlation
 between the two variable is stronger. A +1 coefficient means the two
 variables have a perfect positive correlation whereas a -1 value means
 the two variables have a perfect negative correlation.</p>
-</div>
-</div>
-<div id="results" class="section level4">
-<h4>Results</h4>
+<p><br> <br> #### Results</p>
 <p>Over the time:</p>
 <pre class="r"><code>Pearson_Correlation = function(varnum, merged_data){
   
@@ -1803,6 +1807,7 @@ high correlation. We will not include such data. On the other hand,
 population is not likely to be correlated with life expectancy, as the
 correlations are all approximately 0.03.</p>
 <p><br> <br></p>
+</div>
 </div>
 </div>
 <div id="distance-correlation" class="section level3">
@@ -2018,7 +2023,7 @@ education expenditure, gni per capita has an average of approximately
 0.1. Such increase is not significant because high correlation values
 are still highly correlated. Therefore, it provides some evidence that
 linear model may be sufficient to use in our data analysis.</p>
- 
+<p><br> <br></p>
 </div>
 </div>
 </div>
@@ -2068,7 +2073,6 @@ linear model may be sufficient to use in our data analysis.</p>
 </tr>
 </tbody>
 </table>
- 
 <ul>
 <li><p>The table shows the arranged average life expectancy of each
 region from 2000 to 2016.</p></li>
@@ -2088,7 +2092,6 @@ the lowest.</p></li>
   ylab(&quot;Life Expectancy&quot;) + 
   theme(axis.text.x = element_text(hjust = 1, angle = 10,size = 8))</code></pre>
 <p><img src="Project-report_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
- 
 <ul>
 <li><p>The boxplot shows the distribution of life expectancy in each
 region.</p></li>
@@ -2102,7 +2105,6 @@ statistical test to check heteroscedasticity</p></li>
  
 <div id="test-of-equal-variances" class="section level4">
 <h4>test of equal variances</h4>
- 
 <p><span class="math display">\[H_0:  Equal\ \ variance \ \ among\ \
 regions \ \text { vs } \ H_1: Unequal\ \ variance \]</span></p>
 <pre class="r"><code>bartlett.test(une_life ~ factor(region),data = data) %&gt;% 
@@ -2132,7 +2134,6 @@ regions \ \text { vs } \ H_1: Unequal\ \ variance \]</span></p>
 </tr>
 </tbody>
 </table>
- 
 <p>The null hypothesis for Bartlett test is that the variances are
 equal. The result shows that the p-value is less than 0.05. Thus, we may
 reject the null and conclude that the variances of life expectancy among
@@ -2167,7 +2168,6 @@ Europe &lt;- data %&gt;%
   janitor::clean_names() %&gt;% 
   filter(region == &quot;Europe&quot;) %&gt;% 
   pull(une_life) </code></pre>
- 
 <p>In order to decide on which type of t.test we should perform, we need
 to compare the variance in Americas and Europe first.</p>
 <p>We can roughly tell from the boxplot that Americas has a smaller
@@ -2178,7 +2178,6 @@ relationship.</p>
 </div>
 <div id="test-equal-variance" class="section level4">
 <h4>test equal variance</h4>
- 
 <p><span class="math display">\[H_0:  \sigma^2_{Americas}
 =\  \sigma^2_{Europe}\ \text { vs } \ H_1: \sigma^2_{Americas}
 \neq\  \sigma^2_{Europe} \]</span></p>
@@ -2225,7 +2224,6 @@ relationship.</p>
 </tr>
 </tbody>
 </table>
- 
 <p>The null hypothesis for the variance test is that the two variance
 are equal. The result shows that the p-value is much less than 0.05.
 Thus, we may reject the null hypothesis and conclude that the variances
@@ -2236,7 +2234,6 @@ unequal variance.</p>
 <div id="sample-t.test-with-unknown-unequal-variances"
 class="section level4">
 <h4>2 sample t.test with unknown unequal variances</h4>
- 
 <p><span class="math display">\[H_0:  \text{mean life_exp}_{Americas} =
 \ \text{mean life_exp}_{Europe}\ \text { vs } \ H_1: \text{mean
 life_exp}_{Americas} \neq \text{mean life_exp}_{Europe} \]</span></p>
@@ -2285,7 +2282,6 @@ life_exp}_{Americas} \neq \text{mean life_exp}_{Europe} \]</span></p>
 </tr>
 </tbody>
 </table>
- 
 <p>The null hypothesis for the t.test is that the two variance are
 equal. The result shows that the p-value is much less than 0.05. Thus,
 we may reject the null hypothesis and conclude that the mean of life
@@ -2305,7 +2301,6 @@ Between Western Pacific and South-East Asia</h3>
 and South-East Asia are almost overlapping. The majority of them seem to
 be over 65 years. Thus we are interested in comparing the proportion of
 life expectancy over 65 year in the two regions.</p>
- 
 <p><span class="math display">\[H_0:  \text{Proportion}_{Western\
 Pacific} = \ \text{Proportion}_{South-East\ Asia}\ \text { vs } \ H_1:
 \text{mean life_exp}_{Western\ Pacific} \neq \text{mean
@@ -2393,7 +2388,6 @@ continuity correction</td>
 </tr>
 </tbody>
 </table>
- 
 <p>The null hypothesis for the prop.test is that the two proportions are
 equal. The result shows that the p-value is approximately 0.104. Thus,
 under the significance level of 0.05, we fail to reject the null. We
@@ -2597,7 +2591,6 @@ class="section level3">
   ggplot(aes(x = year, y = avg_by_year_region, color = region)) +
   geom_line() + geom_point() + labs(title = &quot;Average Life Expectancy by Region, Year&quot;) + ylab (&quot;Average Life Expectancy&quot;)</code></pre>
 <p><img src="Project-report_files/figure-html/unnamed-chunk-56-1.png" width="672" /></p>
- 
 <ul>
 <li>The table and line graph above show the descriptive statistics and
 overall trend.</li>
@@ -2651,7 +2644,6 @@ expectancy than the other regions.</li>
   xlab(&quot;Income Groups&quot;) +
   ylab(&quot;Life Expectancy&quot;)</code></pre>
 <p><img src="Project-report_files/figure-html/unnamed-chunk-57-1.png" width="672" /></p>
- 
 <ul>
 <li>The boxes of different income groups are almost not overlapping with
 each other.</li>
@@ -2713,7 +2705,6 @@ process here.</li>
   xlab(&quot;Development Status&quot;) +
   ylab(&quot;Life Expectancy&quot;)</code></pre>
 <p><img src="Project-report_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
- 
 <ul>
 <li>The boxes of different development status are almost not overlapping
 with each other.</li>
@@ -2762,17 +2753,19 @@ proportion of life expectancy over 65.</p></li>
 groups and development status groups. People with higher income and from
 more developed countries tend to live longer.</p></li>
 </ul>
- 
+<p><br> <br></p>
 </div>
 </div>
 <div id="linear-model" class="section level2">
 <h2>Linear Model</h2>
+<p><br></p>
 <div id="introduction-1" class="section level3">
 <h3>Introduction</h3>
 <p>After our EDA and statistical analysis, we consider to generate a
 linear regression to better express the relationship between Life
 Expectancy and other variables. In particular, we set une_life as our
 response variable and we only look at the year of 2015.</p>
+<p><br></p>
 </div>
 <div id="dataset-preparation" class="section level3">
 <h3>Dataset Preparation</h3>
@@ -2793,6 +2786,7 @@ Reference Group to Low Income.</p>
   select(-hepatitis, -polio, -diphtheria, -age5_19thinness, -age5_19obesity, -une_infant, -une_pop) %&gt;% 
   mutate(income_group = as.factor(income_group),
          income_group = relevel(income_group, ref = &quot;Low income&quot;))</code></pre>
+<p><br></p>
 <div id="model-1" class="section level4">
 <h4>Model 1</h4>
 <p>First, we look at the number of missing data we have on each column,
@@ -3014,6 +3008,7 @@ plot(m1)</code></pre>
 <li>The final Model 1 is une_life ~ alcohol + measles + basic_water +
 income_group * percent_w_in_lower_house</li>
 </ul>
+<p><br></p>
 </div>
 <div id="model-2" class="section level4">
 <h4>Model 2</h4>
@@ -3207,6 +3202,7 @@ since we generate model 2 in a small range of countries.</p>
 model 2. We should consider Model 1 as a great subset of the full
 model.</li>
 </ul>
+<p><br></p>
 </div>
 <div id="compare-model-1-with-full-model" class="section level4">
 <h4>Compare Model 1 with Full Model</h4>
@@ -3290,6 +3286,7 @@ m_full &lt;- lm(une_life ~ ., data = data_full)</code></pre>
 <p>From the above table, Model 1 and Full Model do not have big
 difference on adjusted R^2, but Model 1 has less predictors, which is
 much better.</p>
+<p><br></p>
 </div>
 <div id="transformation-on-response-variable-of-model-1"
 class="section level4">
@@ -3402,6 +3399,7 @@ decide to choose the original Model 1.</p>
 <p>Finally, our linear regression model on life expectancy is une_life ~
 alcohol + measles + basic_water + income_group *
 percent_w_in_lower_house.</p>
+<p><br></p>
 </div>
 </div>
 <div id="cross-validation" class="section level3">
@@ -3441,6 +3439,7 @@ cv_df %&gt;%
 <p><img src="Project-report_files/figure-html/unnamed-chunk-76-1.png" width="672" /></p>
 <p>From the plot, RMSE is around 4.0, and spreads from 3.0 to 5.0, which
 is relatively a small and concentrated RMSE.</p>
+<p><br></p>
 </div>
 <div id="prediction" class="section level3">
 <h3>Prediction</h3>
@@ -3617,9 +3616,11 @@ high dimension 1 will lead to a high values in dimension 2. To our
 surprise, a low value in dimension 1 may also have a high value in
 dimension 2. This may because that some of the low income countries with
 low economic-related values may also have a high PM value.</p>
+<p><br> <br></p>
 </div>
 <div id="discussion" class="section level2">
 <h2>Discussion</h2>
+ 
 <div id="findings-and-conclusion" class="section level3">
 <h3>Findings and Conclusion</h3>
 <p>In our report, we first cleaned our data and utilized the k-means
@@ -3645,6 +3646,7 @@ people live longer. Our model’s adjusted R^2 is 0.78.</p>
 mean imputation with 4 groups is the optimal choice for imputation. We
 also show the result of k mean clustering of the imputed data in the two
 dimensions with highest explained variance.</p>
+<p><br></p>
 </div>
 <div id="challenges" class="section level3">
 <h3>Challenges</h3>
@@ -3658,6 +3660,7 @@ cover the aspects of society, economics, environment, health, and so on.
 Human lifespan is the result of complex influence of multiple factors.
 The variables we have now are not comprehensive enough to build a better
 model and make more accurate predictions.</p>
+<p><br></p>
 </div>
 <div id="limitation-insights-further-improvements"
 class="section level3">

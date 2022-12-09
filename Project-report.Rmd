@@ -1,5 +1,5 @@
 ---
-title: "Project report:World Life Expectancy—Live to thrive"
+title: "Project report : World Life Expectancy—Live to thrive"
 output: 
   html_document:
     toc: true
@@ -8,19 +8,20 @@ output:
 ---
 **Shun Xie, Jingyi Yao, Youlan Shen, Yuchen Zhang**
 
+\ \par
 ## Motivation
 
 Two of our group members celebrated their birthday in November, and immediately they started wondering how many birthdays remain in their life, how long could they survive in this world.
 
 <br>
-<br>
+
 
 ## Initial Question
 
 What factors have a significant impact on life expectancy? Do different countries have significantly different life expectancy? What factors account for the differences in life expectancy in different countries and regions?
 
 <br>
-<br>
+
 
 ## Introduction
 
@@ -31,15 +32,18 @@ Longevity is one of the factors people pursue over centuries. Numerous articles 
 There are papers focused on predicting life expectancy. In the work by [Clarke et. al.](How accurate are doctors, nurses and medical students at predicting life expectancy? - ScienceDirect), they stratified the result predicted by different occupations, namely doctors nurse and medical students, and  discover a low prediction accuracy (10%) based only on disease factors. Therefore, in our paper, we decide to consider more non-medical variables. On the other hand, the architectural model designed by [Sormin et. al.](Predictions of World Population Life Expectancy Using Cyclical Order Weight / Bias - IOPscience) reaches an accuracy of 97% in predicting life expectancy on a global level. However, the model was over-complicated (requires a 1000 epoch training) and it can not identify potential significant factors based on the model. Takes into consideration of all factors, we consider linear model as our main regression method and choose economic factors and health related factors (discuss later). 
 
 
+\ \par
 ### Related work
  
 Some existing research shows that life expectancy is related to some factors, including genetics: A person's genes can play a role in determining their lifespan. Certain genetic disorders or conditions, such as cystic fibrosis or Down syndrome, can shorten a person's lifespan[Ruby, 2018](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6218226). And, Lifestyle choices: Lifestyle choices, such as smoking, excessive alcohol consumption, and lack of exercise, can negatively impact life expectancy. On the other hand, healthy behaviors, such as regular exercise, eating a balanced diet, and avoiding harmful substances, can increase life expectancy[Mehta 2017](https://www.healthaffairs.org/doi/full/10.1377/hlthaff.2016.1569). Also, Access to healthcare: Access to quality healthcare can play a significant role in determining life expectancy. People who have access to regular medical care, preventive services, and treatment for chronic conditions are more likely to live longer than those who do not[Chan 2012](https://journals.sagepub.com/doi/full/10.1177/1010539512454163). Socioeconomic factors: Socioeconomic factors, such as income, education, and occupation, can also influence life expectancy. In general, people who have higher incomes, higher levels of education, and professional occupations tend to live longer than those who do not[Lin 2003](https://www.jstor.org/stable/48666299#metadata_info_tab_contents). Additionally , Environmental factor is also important: Environmental factors, such as pollution, exposure to toxins, and living conditions, can also affect life expectancy. People who live in environments with high levels of pollution, toxins, or poor living conditions may have a lower life expectancy than those who live in healthier environments[Tchounwou 2021](https://www.mdpi.com/1660-4601/18/16/8559).
  
  
+\ \par
 ### Sources
  
 Our main datasets is WHO Life Exp Dataset, which covers the years 2000-2016 for 183 countries, including 32 variables  such as health-related factors and GNI per capita. It is extracted from the following website: https://www.kaggle.com/datasets/mmattson/who-national-life-expectancy?resource=download
  
+\ \par
 ### Variable Selection
  
 Based on the current research and the data we had, we decided to study the impressions of the variables by country on life expectancy. We decided to remove data related to mortality, because life expectancy is calculated from these data, so those are meaningless to predict life expectancy. Other variables can be considered relevant and for following study. For example, the GDP and development status of the country, local disease situation, education level, and the living habits of people in the country like alcohol consumption. 
@@ -58,10 +62,10 @@ Ambient PM2. 5 reduces global and regional life expectancy. [Apte, Joshua S., et
 
 
 <br>
-<br>
-
 
 ## Data
+
+\ \par
 
 ### Life Expectancy Dataset
 
@@ -144,8 +148,6 @@ Life expectancy datasets contains a total of ```r length(unique(LifeExpectancy$c
 
 
 
-
-<br>
 <br>
 
 ### Country Code Dataset
@@ -165,7 +167,6 @@ merged_data_PM = merge(LifeExpectancy, country_code, by.x = "country_code", by.y
 ```
 
 
-<br>
 <br>
 
 
@@ -203,7 +204,7 @@ merged_data_d =
 ```
 
 
-<br>
+
 <br>
 
 ### Income level data
@@ -222,9 +223,8 @@ merged_data_i = merged_data_d %>%
   select(country_code:une_school,PM_value,income_group,`Developed / Developing Countries`)
 ```
 
-<br>
-<br>
 
+<br>
 
 ### Health expenditure
 
@@ -246,7 +246,6 @@ merged_data_h =
   select(country_code:une_school,PM_value,income_group,health_exp,`Developed / Developing Countries`)
 ```
 
-<br>
 <br>
 
 
@@ -277,10 +276,11 @@ Store the data
 write.csv(merged_data , file = "data/Merged_expectation.csv")
 ```
 
+
 <br>
 <br>
 
-## Impute
+## Imputation
 
 For the simplicity and accuracy purpose, imputation using weighted k nearest neighbour algorithm (w-kNN) is considered in my study. It is built on simple k nearest neighbour(kNN) but unlike kNN, it considers the weight of each dimension so that it circumvents the problem of neglecting the correlation between missing variables and other variables according to [Ling et. al.](https://ieeexplore.ieee.org/abstract/document/5199781). Additionally, such a non-parametric method does not make any assumption on the distribution of the input vector hence it is suitable for correlation analysis by [mukid's paper](https://iopscience.iop.org/article/10.1088/1742-6596/1025/1/012114/meta). In my method, we choose Euclidean distance as my measurement for the similarity between authorities as it performs better than the other metrics, namely [Manhattan distance](https://ieeexplore.ieee.org/abstract/document/6873626). Thus, any missing value $x_{i,j}$ at time t can be imputed using an inverse of Euclidean distance as a weighting factor, where the subscript i corresponds to the $i_{th}$ country and subscript j represents the $j_{th}$ sub-indicator (or the $j_{th}$ variable in the dataset).  \\
 
@@ -332,7 +332,6 @@ write.csv(Imputed_expectancy , file = "data/Imputed_expectation.csv")
 <br>
 
 
-
 ## Exploratory Analysis
 \ \par
 ```{r,message=FALSE,echo=FALSE,warning=FALSE}
@@ -354,6 +353,7 @@ suppressMessages(library(energy))
 suppressMessages(library(bookdown))
 ```
 
+\ \par
 ### World Life Expectancy and Interactive World Map
 \ \par
 We designed a shiny app to display several variables' distribution around the world on an interactive world map. The variables include life expectancy, adult mortality rate, infant mortality rate, alcohol consumption level, Body Mass Index (BMI) and Current Health Expenditure (CHE). 
@@ -371,6 +371,7 @@ You may have access to our shiny app by clicking on the link at the navigation b
 We also attached our source code to the app. If you are interested in how we built the map using dashboard and shiny, you may click on the button on the top right corner.
 
 
+\ \par
 ### Time series plot
 
 With our existence data, we need to evaluate the overall trend with respect to different types of countries. One way to differentiate country is to identify that whether the country is classified as developed or developing country. In the work by [SP Heyneman](https://www.journals.uchicago.edu/doi/pdf/10.1086/451180?casa_token=9gJkljIq_ukAAAAA:j3C4Kv-0Jp_gUpmVKvxFAxT1oGg8ryzRaHR_hdBX7QlqrAPGKU36A43QBGZ65AItaKU-LrLn6NE), he claimed that the change of economic status and school has a big difference between developed and developing country. We treat these variables as our predictors to the life expectancy. Therefore, it is likely that the predictors are different between developed and developing country. On the other hand, people with different income have different life expectancy. According to [Chatty et. al.](https://jamanetwork.com/journals/jama/article-abstract/2513561), the richest 1% income group has a 14.6 years and 10.1 years higher life expectancy for men and women respectively against the poorest 1% of income group. Therefore, we plot the trends for different variables over time with respect to development of the country and income group of the country. 
@@ -511,13 +512,6 @@ Time series plot for doctors per 10,000 people has interesting trends. Despite t
 
 
 
-
-
-
-
-
-
-
 ```{r,message = FALSE, warning = FALSE,fig.width=9}
 ts1 = Time_series_plot("une_edu_spend",merged_data)
 ts2 = Time_series_income("une_edu_spend",merged_data)
@@ -579,7 +573,6 @@ plot_grid(ts1, ts2)
 Health expenditure in developed countries soar over the years from 2000 to 2016, from 4% to 5% of total GDP. Developing countries also have an increase in the health expenditure, but with a lower rate. For different income level, high income countries have the highest expenditure on health and it has an increasing trend. However, health expenditure measured in percentage of GDP decreases among low income countries. 
 
 <br>
-<br>
 
 
 ### Multi-colinearity Check
@@ -625,18 +618,12 @@ BMI, Thinness and obesity are three variables measuring similar characteristics.
 
 
 
-
-
-<br>
 <br>
 
 
 ### Correlation and Scatter Plot:
 
 Visualization via scatter plot is a way to further discover the pairwise relation between two chosen variable. By plotting the scatter plot and fitted using best linear line, we can potential obtain the relationship between variables and how well linear trend can explain the data. Since we choose Life expectancy as our response variable, we can plot the scatter plot between life expectancy and other chosen predictors to see the correlation between variables. 
-
-
-
 
 
 
@@ -1189,7 +1176,7 @@ Health expenditure is positively correlated with life expectancy. However, there
 <br>
 
 
-## Correlation:
+## Correlation
 
 Although scatter plot gives us some visualization of correlation between variables, we can not know to what extend the two variables are correlated. Therefore, correlation, as a numeric value, is of a great help to resolve the problem. The correlation value gives us a value that indicates how correlated two variables are using Pearson method or distance methods. 
 
@@ -1202,9 +1189,8 @@ Although scatter plot gives us some visualization of correlation between variabl
 Pearson correlation is a common EDA method that measures the strength of the linear relation between
 two variables [paper](https://link.springer.com/chapter/10.1007/978-3-642-00296-0_5). It has the formula defined in following definition:
 
-<br>
-<br>
 
+\ \par
 ##### Definition Pearson
 
 Let x and y be two random variables with zero mean and $x,y\in \mathbb R$, the pearson correlation coefficient is defined as:
@@ -1220,6 +1206,8 @@ where $\sigma_x=\sqrt{var(x)}$ and $\sigma_y=\sqrt{var(y)}$.
 
 The coefficient as a value between $-1\leq\rho(x,y)\leq1$. If the coefficient is zero, then x and y does not have correlation at all. If the coefficient is closer to a value of +1 or -1, then the correlation between the two variable is stronger. A +1 coefficient means the two variables have a perfect positive correlation whereas a -1 value means the two variables have a perfect negative correlation. 
 
+<br>
+<br>
 #### Results
 
 Over the time:
@@ -1491,7 +1479,9 @@ After take in consideration of non-linear trend, bmi, obesity, education expendi
 
 
 
-\ \par
+<br>
+<br>
+
 ## Statistical Analysis
 
 
@@ -1527,7 +1517,6 @@ data %>%
   knitr::kable(digits = 3)
 ```
 
-\ \par
 
   * The table shows the arranged average life expectancy of each region from 2000 to 2016. 
   
@@ -1551,7 +1540,7 @@ data %>%
         
 ```
 
-\ \par
+
 
   * The boxplot shows the distribution of life expectancy in each region.
   
@@ -1565,7 +1554,7 @@ data %>%
 \ \par
 #### test of equal variances
 
-\ \par
+
 $$H_0:  Equal\ \ variance \ \ among\ \ regions \ \text { vs } \ H_1: Unequal\ \ variance $$
 
 ```{r}
@@ -1576,7 +1565,7 @@ bartlett.test(une_life ~ factor(region),data = data) %>%
 ```
 
 
-\ \par
+
 The null hypothesis for Bartlett test is that the variances are equal. The
 result shows that the p-value is less than 0.05. Thus, we may reject the null and conclude that the variances of life expectancy among different regions is not equal.
 Consequently, we cannot perform ANOVA to test the difference of mean life expectancy in all the six regions. We should perform t.test between two selected regions separately.
@@ -1606,16 +1595,16 @@ Europe <- data %>%
 ```
 
 
-\ \par
 
 In order to decide on which type of t.test we should perform, we need to compare the variance in Americas and Europe first. 
 
 We can roughly tell from the boxplot that Americas has a smaller variance. But there also exist many outliers with low life expectancy values in Americas. Thus, we turn to statistical test to decide on the relationship.
 
+
 \ \par
 #### test equal variance
 
-\ \par
+
 $$H_0:  \sigma^2_{Americas} =\  \sigma^2_{Europe}\ \text { vs } \ H_1: \sigma^2_{Americas} \neq\  \sigma^2_{Europe} $$
 
 
@@ -1627,15 +1616,13 @@ var.test(Americas,Europe,alternative = "two.sided",conf.level = 0.95) %>%
 ```
 
 
-
-\ \par
 The null hypothesis for the variance test is that the two variance are equal. The result shows that the p-value is much less than 0.05. Thus, we may reject the null hypothesis and conclude that the variances are not equal. Next, we should perform 2 sample t.test with unknown and unequal variance.
 
 
 \ \par
 #### 2 sample t.test with unknown unequal variances
 
-\ \par
+
 $$H_0:  \text{mean life_exp}_{Americas} = \ \text{mean life_exp}_{Europe}\ \text { vs } \ H_1: \text{mean life_exp}_{Americas} \neq \text{mean life_exp}_{Europe} $$
 
 ```{r}
@@ -1647,7 +1634,6 @@ t.test(Americas,Europe,alternative = "less",conf.level = 0.95,paired = F,var.equ
 
 
 
-\ \par
 The null hypothesis for the t.test is that the two variance are equal. The result shows that the p-value is much less than 0.05. Thus, we may reject the null hypothesis and conclude that the mean of life expectancy in Americas and Europe are different. Since the test statistics is negative, we know that mean life expectancy in Americas is smaller than Europe. 
 
 
@@ -1660,7 +1646,7 @@ The null hypothesis for the t.test is that the two variance are equal. The resul
 We can tell from the boxplot above that the boxes of Western Pacific and South-East Asia are almost overlapping. The majority of them seem to be over 65 years. Thus we are interested in comparing the proportion of life expectancy over 65 year in the two regions.
 
 
-\ \par
+
 $$H_0:  \text{Proportion}_{Western\ Pacific} = \ \text{Proportion}_{South-East\ Asia}\ \text { vs } \ H_1: \text{mean life_exp}_{Western\ Pacific} \neq \text{mean life_exp}_{South-East\ Asia} $$
 
 
@@ -1688,7 +1674,6 @@ prop.test(c(304,149),n = c(357,187),correct = F) %>%
 
 
 
-\ \par
 The null hypothesis for the prop.test is that the two proportions are equal. The result shows that the p-value is approximately 0.104. Thus, under the significance level of 0.05, we fail to reject the null. We have evidence that the proportion of life expectancy above 65 in Western Pacific is the same as in South-East Asia.
 
 
@@ -1722,8 +1707,6 @@ data %>%
 ```
 
 
-\ \par
-
   * The table and line graph above show the descriptive statistics and overall trend.
   * It is clearly shown in the plot that Africa has a much lower life expectancy than the other regions.
 
@@ -1753,7 +1736,7 @@ data %>%
 
 ```
 
-\ \par
+
 
   * The boxes of different income groups are almost not overlapping with each other. 
   * The pattern is clear that people from higher income group tend to have a higher life expectancy.
@@ -1792,7 +1775,7 @@ data %>%
 
 ```
 
-\ \par
+
 
   * The boxes of different development status are almost not overlapping with each other. 
   * The pattern is clear that people in developed countries tend to have a higher life expectancy.
@@ -1830,7 +1813,9 @@ We draw the following conclusions from the tests and plots result :
 
 
 
-\ \par
+<br>
+<br>
+
 ## Linear Model
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
@@ -1843,9 +1828,13 @@ library(patchwork)
 library(factoextra)
 ```
 
+<br>
+
 ### Introduction
 
 After our EDA and statistical analysis, we consider to generate a linear regression to better express the relationship between Life Expectancy and other variables. In particular, we set une_life as our response variable and we only look at the year of 2015. 
+
+<br>
 
 ### Dataset Preparation
 
@@ -1862,6 +1851,8 @@ data <-
   mutate(income_group = as.factor(income_group),
          income_group = relevel(income_group, ref = "Low income"))
 ```
+
+<br>
 
 #### Model 1
 
@@ -1940,6 +1931,9 @@ plot(m1)
 * The final Model 1 is
 une_life ~ alcohol + measles + basic_water + income_group * percent_w_in_lower_house
 
+
+<br>
+
 #### Model 2
 
 Second, we only look at the countries with existing une_literacy data and found out the number of NA in other variables of these countries, at year 2015. The table below shows variables that have less than 5% NA's.
@@ -2010,6 +2004,8 @@ The model 2's R-adjusted score reaches `r summary(m2)$adj.r.squared`. This is re
 
 * Therefore, we should discard literacy variable, and also discard model 2. We should consider Model 1 as a great subset of the full model.
 
+<br>
+
 #### Compare Model 1 with Full Model
 
 Full Model is the Year 2015 full dataset except mortality rate and except variables with more than 5% NAs.
@@ -2041,6 +2037,8 @@ m1 %>%
 
 From the above table, Model 1 and Full Model do not have big difference on adjusted R^2, but Model 1 has less predictors, which is much better.
 
+<br>
+
 #### Transformation on Response Variable of Model 1
 
 First, we want to find whether response variable une_life needs transformation.
@@ -2069,6 +2067,8 @@ m1_tr %>%
 The transformed model 1's R-adjusted score reaches `r summary(m1_tr)$adj.r.squared`. The adjusted R square increases ~0.01 after transformation, which is close to the adjusted R square of the full model. However, while the difference of adjusted R square is small, for better interpretation, we decide to choose the original Model 1.
 
 Finally, our linear regression model on life expectancy is une_life ~ alcohol + measles + basic_water + income_group * percent_w_in_lower_house.
+
+<br>
 
 ### Cross Validation
 
@@ -2106,6 +2106,9 @@ cv_df %>%
 ```
 
 From the plot, RMSE is around 4.0, and spreads from 3.0 to 5.0, which is relatively a small and concentrated RMSE.
+
+
+<br>
 
 ### Prediction
 
@@ -2266,8 +2269,12 @@ fviz_cluster(k_result_imp, data = X_var_imp, palette = "Set2")
 
 After imputation with k=4 mean clustering, the four groups are now separated from each other. This is reasonable because we impute with k=4 groups. Although the information may be biased, We can visualize that a high dimension 1 will lead to a high values in dimension 2. To our surprise, a low value in dimension 1 may also have a high value in dimension 2. This may because that some of the low income countries with low economic-related values may also have a high PM value. 
 
+<br>
+<br>
 
 ## Discussion
+
+\ \par
 
 ### Findings and Conclusion
 
@@ -2280,14 +2287,17 @@ After imputation with k=4 mean clustering, the four groups are now separated fro
   From the regression, we concluded that the access to vaccines and basic clean water is really important, they have positive effects, while higher income and less alcohol will also lead to a longer life. Most importantly, we showed that the empowerment of women is significant to life expectancy, especially in middle income and upper income groups, which means increasing women’s voice in the country actually helps people live longer. Our model’s adjusted R^2 is 0.78.
   
   By using clustering analysis on the data in 2015, we validate that k mean imputation with 4 groups is the optimal choice for imputation. We also show the result of k mean clustering of the imputed data in the two dimensions with highest explained variance. 
- 
+
+<br>
+
 ### Challenges
 
   In our major dataset, many variables have missing values over the years 2000 to 2016. We tried to impute them using a clustering method. However, for the variables that have more than 10% NAs, the validity of imputation is greatly reduced. So, in the end, the imputation effect is not ideal enough.
   
   Additionally, we think it necessary to include more variables to cover the aspects of society, economics, environment, health, and so on. Human lifespan is the result of complex influence of multiple factors. The variables we have now are not comprehensive enough to build a better model and make more accurate predictions.
  
- 
+<br>
+
 ### Limitation, Insights, Further Improvements
 
   Our project focuses on a general level of countries in the world—for instance, the difference of life expectancy in developed countries and developing countries. While we gained some generality of the idea, we lost some specificity. We have less idea of countries within the same income level, especially lower income countries. At the same time, we did not explore the difference of life expectancy in states or regions within a country, like comparison of Urban versus rural areas, which should be conducted in further studies.

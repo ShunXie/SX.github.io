@@ -59,7 +59,7 @@ scale_fill_discrete   = scale_fill_viridis_d
 \ \par
 # Shiny App
 
-Life expectancy as well as other included variables changes over decades. A way of seeing the trend is via shiny app [here](https://7lx8uo-txbrook.shinyapps.io/map_dashboard/#section-current-health-expenditure) developed by our teammate, which illustrates the life expectancy for individual countries in the world wide scale. A screen shot is as following:
+Life expectancy as well as other included variables changes over decades. A way of seeing the trend is via shiny app [here](https://7lx8uo-txbrook.shinyapps.io/map_dashboard/)) developed by our teammate, which illustrates the life expectancy for individual countries in the world wide scale. A screen shot is as following:
 
 
 ![](images/shiny_app.png)

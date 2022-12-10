@@ -847,36 +847,36 @@ head(Imputed_expectancy %&gt;% select(-percent_w_in_lower_house))</code></pre>
 ## 2        307.2416    0.095925   0.010625 3.5850006 21.8            20.4
 ## 3        292.3430    0.093330   0.010130 2.4964202 21.9            20.2
 ## 4        286.4569    0.090470   0.009655 1.4059016 22.0            20.0
-## 5        281.8943    0.087595   0.009210 0.8534847 22.1            19.8
+## 5        281.8943    0.087595   0.009210 1.2471070 22.1            19.8
 ## 6        277.1813    0.084630   0.008785 0.0162300 22.2            19.6
 ##   age5_19obesity hepatitis measles polio diphtheria basic_water   doctors
-## 1            0.6  78.54075      27    24         24    27.77190 1.3880322
-## 2            0.7  78.06274      37    35         33    27.79726 1.8990000
-## 3            0.8  75.94442      35    36         36    29.90076 0.7370904
-## 4            0.9  45.72630      39    41         41    32.00507 0.7011373
-## 5            1.0  72.57173      48    50         50    34.12623 0.3734900
-## 6            1.1  54.10581      50    58         58    36.26526 0.8882858
+## 1            0.6  77.62282      27    24         24    27.77190 1.2678726
+## 2            0.7  67.94286      37    35         33    27.79726 1.8990000
+## 3            0.8  62.66890      35    36         36    29.90076 0.8168644
+## 4            0.9  45.72630      39    41         41    32.00507 1.3268483
+## 5            1.0  63.28501      48    50         50    34.12623 0.3734900
+## 6            1.1  77.74015      50    58         58    36.26526 0.8882858
 ##    hospitals gni_capita    gghe_d  che_gdp  une_pop une_infant une_life une_hiv
-## 1  0.5930135   802.1334 0.7777427 4.704074 20779.95       90.6   55.841     0.1
-## 2  3.5862127  1060.0000 2.8719383 7.475627 21606.99       88.0   56.308     0.1
-## 3  0.3755792   870.0000 0.0841800 9.443390 22600.77       85.4   56.784     0.1
-## 4 11.0042898   920.0000 0.6509600 8.941260 23680.87       82.8   57.271     0.1
-## 5  0.3753655   920.0000 0.5429300 9.808470 24726.68       80.1   57.772     0.1
-## 6  0.3758583  1020.0000 0.5291800 9.948290 25654.28       77.4   58.290     0.1
-##     une_gni une_poverty une_edu_spend une_literacy une_school PM_value
-## 1  931.0142    70.30954      3.573519     27.51197   1.466663      100
-## 2 1225.1817    55.53447      3.633757     45.62872   1.434573      100
-## 3 1164.8368    44.05501      2.835121     41.76070   1.996305      100
-## 4 1431.1906    56.79214      2.701828     35.35999   2.437842      100
-## 5 1524.5696    57.64468      3.567654     35.61038   2.410280      100
-## 6 1157.3764    45.70719      1.857205     46.24063   1.890466      100
+## 1 12.4650696   802.1334 0.7777427 4.346243 20779.95       90.6   55.841     0.1
+## 2 13.3939031  1060.0000 2.8719383 7.475627 21606.99       88.0   56.308     0.1
+## 3 13.3556872   870.0000 0.0841800 9.443390 22600.77       85.4   56.784     0.1
+## 4  1.8731261   920.0000 0.6509600 8.941260 23680.87       82.8   57.271     0.1
+## 5  0.4306135   920.0000 0.5429300 9.808470 24726.68       80.1   57.772     0.1
+## 6  0.4394367  1020.0000 0.5291800 9.948290 25654.28       77.4   58.290     0.1
+##    une_gni une_poverty une_edu_spend une_literacy une_school PM_value
+## 1 1205.792    78.67887      3.268848     37.48128   1.642183      100
+## 2 1225.182    49.84488      3.615959     51.51289   1.470061      100
+## 3 1164.837    45.26258      3.049848     54.67731   1.334528      100
+## 4 1431.191    49.68057      3.040833     38.24146   1.945833      100
+## 5 1524.570    58.93284      3.567654     35.61038   2.464335      100
+## 6 1312.156    74.46558      3.553610     69.39830   2.656285      100
 ##   health_exp income_group Developed / Developing Countries
-## 1   5.050149   Low income                       Developing
-## 2   4.502149   Low income                       Developing
-## 3   5.506958   Low income                       Developing
-## 4   4.333902   Low income                       Developing
-## 5   4.259336   Low income                       Developing
-## 6   4.244491   Low income                       Developing</code></pre>
+## 1   7.361711   Low income                       Developing
+## 2   7.452143   Low income                       Developing
+## 3   7.018372   Low income                       Developing
+## 4   7.168840   Low income                       Developing
+## 5   7.219890   Low income                       Developing
+## 6   6.289743   Low income                       Developing</code></pre>
 <pre class="r"><code>write.csv(Imputed_expectancy , file = &quot;data/Imputed_expectation.csv&quot;)</code></pre>
 <p><br> <br></p>
 </div>
@@ -3640,10 +3640,10 @@ low economic-related values may also have a high PM value.</p>
 <h3>Findings and Conclusion</h3>
 <p>In our report, we first cleaned our data and utilized the k-means
 imputation to deal with missing value.</p>
-<p>After exploratory analysis, we discover a potential discrepancy
+<p>After exploratory analysis, we discovered a potential discrepancy
 between countries with different development status and income levels.
-We also compare the Pearson correlation with Distance correlation and
-discover little difference between linear and non-linear methods.</p>
+We also compared the Pearson correlation with Distance correlation and
+discoverd little difference between linear and non-linear methods.</p>
 <p>The statistical tests we performed tells us that the mean life
 expectancy in Europe and Americas are significantly different and they
 have the top 2 life expectancy. Africa has the lowest life expectancy.
@@ -3657,10 +3657,10 @@ importantly, we showed that the empowerment of women is significant to
 life expectancy, especially in middle income and upper income groups,
 which means increasing women’s voice in the country actually helps
 people live longer. Our model’s adjusted R^2 is 0.78.</p>
-<p>By using clustering analysis on the data in 2015, we validate that k
+<p>By using clustering analysis on the data in 2015, we validated that k
 mean imputation with 4 groups is the optimal choice for imputation. We
-also show the result of k mean clustering of the imputed data in the two
-dimensions with highest explained variance.</p>
+also showed the result of k mean clustering of the imputed data in the
+two dimensions with highest explained variance.</p>
 <p><br></p>
 </div>
 <div id="challenges" class="section level3">
@@ -3682,12 +3682,12 @@ class="section level3">
 <h3>Limitation, Insights, Further Improvements</h3>
 <p>Our project focuses on a general level of countries in the world—for
 instance, the difference of life expectancy in developed countries and
-developing countries. While we gained some generality of the idea, we
-lost some specificity. We have less idea of countries within the same
-income level, especially lower income countries. At the same time, we
-did not explore the difference of life expectancy in states or regions
-within a country, like comparison of Urban versus rural areas, which
-should be conducted in further studies.</p>
+developing countries. While we gained generality of the idea, we lost
+specificity. We have less idea of countries within the same income
+level, especially lower income countries. At the same time, we did not
+explore the difference of life expectancy in states or regions within a
+country, like comparison of urban versus rural areas, which should be
+conducted in further studies.</p>
 <p>To solve the imputation problem in our project, we could consider two
 methods—on one hand, we may research more advanced methods for
 imputation, on the other hand, we can also try to find other data

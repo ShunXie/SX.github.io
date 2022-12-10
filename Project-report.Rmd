@@ -2,6 +2,7 @@
 title: "Project report : World Life Expectancy—Live to thrive"
 output: 
   html_document:
+    code_folding: hide
     toc: true
     toc_float: true
     theme: cosmo
